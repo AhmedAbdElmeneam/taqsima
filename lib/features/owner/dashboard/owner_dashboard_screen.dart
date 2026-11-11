@@ -74,7 +74,7 @@ class _Dashboard extends ConsumerWidget {
               color: AppColors.warningLight,
               child: Row(
                 children: [
-                  const Icon(AppIcons.clock, color: AppColors.slotManual),
+                  Icon(AppIcons.clock, color: AppColors.slotManual),
                   const SizedBox(width: 10),
                   Expanded(child: Text(S.underReviewHint, style: t.bodyMedium)),
                 ],
@@ -94,7 +94,7 @@ class _Dashboard extends ConsumerWidget {
                       const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   child: Row(
                     children: [
-                      const Icon(AppIcons.bellRinging,
+                      Icon(AppIcons.bellRinging,
                           color: AppColors.info, size: 20),
                       const SizedBox(width: 10),
                       Expanded(
@@ -102,8 +102,7 @@ class _Dashboard extends ConsumerWidget {
                             style:
                                 t.titleMedium?.copyWith(color: AppColors.info)),
                       ),
-                      const Icon(AppIcons.forward,
-                          color: AppColors.info, size: 18),
+                      Icon(AppIcons.forward, color: AppColors.info, size: 18),
                     ],
                   ),
                 ),
@@ -128,6 +127,7 @@ class _Dashboard extends ConsumerWidget {
                         child: _StatCard(
                           label: S.todaysRevenue,
                           value: S.price(revenueOf(list)),
+                          amount: revenueOf(list),
                           icon: AppIcons.moneyFill,
                           highlight: true,
                         ),
@@ -166,7 +166,8 @@ class _Dashboard extends ConsumerWidget {
                       title: S.closedThisDay,
                     )
                   else
-                    for (final s in list) _HourRow(slot: s),
+                    for (final (i, s) in list.indexed)
+                      FadeSlideIn(index: i, child: _HourRow(slot: s)),
                 ],
               );
             },
@@ -183,12 +184,16 @@ class _StatCard extends StatelessWidget {
     required this.value,
     required this.icon,
     this.highlight = false,
+    this.amount,
   });
 
   final String label;
   final String value;
   final IconData icon;
   final bool highlight;
+
+  /// When set, the number counts up from 0 (formatted as a price).
+  final int? amount;
 
   @override
   Widget build(BuildContext context) {
@@ -200,10 +205,10 @@ class _StatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: highlight ? null : AppColors.surface,
         gradient: highlight
-            ? const LinearGradient(
+            ? LinearGradient(
                 begin: AlignmentDirectional.topStart,
                 end: AlignmentDirectional.bottomEnd,
-                colors: [Color(0xFF22A049), AppColors.primaryDark],
+                colors: [AppColors.primary, AppColors.primaryDark],
               )
             : null,
         borderRadius: BorderRadius.circular(18),
@@ -224,8 +229,15 @@ class _StatCard extends StatelessWidget {
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   alignment: AlignmentDirectional.centerStart,
-                  child: Text(value,
-                      style: t.titleLarge?.copyWith(color: fg, fontSize: 16)),
+                  child: amount == null
+                      ? Text(value,
+                          style:
+                              t.titleLarge?.copyWith(color: fg, fontSize: 16))
+                      : CountUp(
+                          value: amount!,
+                          format: S.price,
+                          style:
+                              t.titleLarge?.copyWith(color: fg, fontSize: 16)),
                 ),
               ),
             ],

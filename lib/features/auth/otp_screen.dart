@@ -65,8 +65,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            const Icon(AppIcons.lockOutline,
-                size: 40, color: AppColors.primary),
+            Icon(AppIcons.lockOutline, size: 40, color: AppColors.primary),
             const SizedBox(height: 8),
             Text(S.otpTitle,
                 style: t.headlineMedium, textAlign: TextAlign.center),
@@ -94,7 +93,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
               padding: const EdgeInsets.all(12),
               child: Row(
                 children: [
-                  const Icon(AppIcons.info, color: AppColors.info),
+                  Icon(AppIcons.info, color: AppColors.info),
                   const SizedBox(width: 8),
                   Expanded(
                       child: Text(S.otpDemoHint,

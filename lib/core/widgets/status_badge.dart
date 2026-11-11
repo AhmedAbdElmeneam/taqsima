@@ -66,12 +66,12 @@ class PitchStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => switch (status) {
-        PitchStatus.active => const AppBadge(
+        PitchStatus.active => AppBadge(
             label: S.active,
             color: AppColors.success,
             background: AppColors.successLight,
             icon: AppIcons.verified),
-        PitchStatus.pending => const AppBadge(
+        PitchStatus.pending => AppBadge(
             label: S.underReview,
             color: AppColors.slotManual,
             background: AppColors.warningLight,

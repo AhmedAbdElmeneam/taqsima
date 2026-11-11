@@ -51,57 +51,64 @@ class SlotChip extends StatelessWidget {
         ? (subtitle ?? state.label)
         : (state == SlotState.available ? null : S.legendBooked);
 
-    return Opacity(
-      opacity: slot.isPast ? .45 : 1,
-      child: Material(
-        color: bg,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-          side: BorderSide(color: border, width: 1.5),
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
-          onTap: disabled ? null : onTap,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: AppSpacing.slotHeight),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    Fmt.time(slot.startAt),
-                    style: t.titleMedium?.copyWith(
-                      color: selected
-                          ? Colors.white
-                          : state == SlotState.available
-                              ? AppColors.ink
-                              : fg,
-                      decoration: !ownerView && state != SlotState.available
-                          ? TextDecoration.lineThrough
-                          : null,
+    return AnimatedScale(
+      // Small "pop" when a slot gets selected.
+      scale: selected ? 1.05 : 1,
+      duration: const Duration(milliseconds: 180),
+      curve: Curves.easeOutBack,
+      child: Opacity(
+        opacity: slot.isPast ? .45 : 1,
+        child: Material(
+          color: bg,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+            side: BorderSide(color: border, width: 1.5),
+          ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+            onTap: disabled ? null : onTap,
+            child: ConstrainedBox(
+              constraints:
+                  const BoxConstraints(minHeight: AppSpacing.slotHeight),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      Fmt.time(slot.startAt),
+                      style: t.titleMedium?.copyWith(
+                        color: selected
+                            ? Colors.white
+                            : state == SlotState.available
+                                ? AppColors.ink
+                                : fg,
+                        decoration: !ownerView && state != SlotState.available
+                            ? TextDecoration.lineThrough
+                            : null,
+                      ),
                     ),
-                  ),
-                  if (label != null)
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (ownerView) ...[
-                          Icon(state.icon, size: 14, color: fg),
-                          const SizedBox(width: 3),
-                        ],
-                        Flexible(
-                          child: Text(
-                            label,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: t.bodySmall?.copyWith(
-                                color: fg, fontWeight: FontWeight.w700),
+                    if (label != null)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (ownerView) ...[
+                            Icon(state.icon, size: 16, color: fg),
+                            const SizedBox(width: 3),
+                          ],
+                          Flexible(
+                            child: Text(
+                              label,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: t.bodySmall?.copyWith(
+                                  color: fg, fontWeight: FontWeight.w700),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                ],
+                        ],
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

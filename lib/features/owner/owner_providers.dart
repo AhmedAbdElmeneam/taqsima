@@ -58,3 +58,26 @@ int revenueOf(Iterable<TimeSlot> slots) => slots
     .fold(0, (sum, b) => sum + b.price);
 
 DateTime todayDate() => Fmt.dateOnly(DateTime.now());
+
+/// Text typed in the requests search box.
+final requestSearchProvider = StateProvider.autoDispose<String>((ref) => '');
+
+/// Pending requests filtered by player name or pitch name.
+final filteredRequestsProvider =
+    FutureProvider.autoDispose<List<Booking>>((ref) async {
+  final requests = await ref.watch(ownerRequestsProvider.future);
+  final query = Fmt.normalizeArabic(ref.watch(requestSearchProvider));
+  if (query.isEmpty) return requests;
+
+  final users = ref.watch(userRepositoryProvider);
+  final pitches = ref.watch(pitchRepositoryProvider);
+  final result = <Booking>[];
+  for (final b in requests) {
+    final player = b.userId == null ? null : await users.getUser(b.userId!);
+    final pitch = await pitches.getPitch(b.pitchId);
+    final haystack = Fmt.normalizeArabic(
+        '${player?.name ?? ''} ${b.customerName ?? ''} ${pitch?.name ?? ''}');
+    if (haystack.contains(query)) result.add(b);
+  }
+  return result;
+});

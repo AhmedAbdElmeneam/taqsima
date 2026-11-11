@@ -27,36 +27,96 @@ Future<void> answerRequest(BuildContext context, WidgetRef ref, Booking b,
   if (context.mounted) showSnack(context, accept ? S.accepted : S.rejected);
 }
 
-class BookingRequestsScreen extends ConsumerWidget {
+class BookingRequestsScreen extends ConsumerStatefulWidget {
   const BookingRequestsScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final requests = ref.watch(ownerRequestsProvider);
+  ConsumerState<BookingRequestsScreen> createState() =>
+      _BookingRequestsScreenState();
+}
+
+class _BookingRequestsScreenState extends ConsumerState<BookingRequestsScreen> {
+  final _search = TextEditingController();
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final all = ref.watch(ownerRequestsProvider).valueOrNull ?? const [];
+    final requests = ref.watch(filteredRequestsProvider);
+    final searching = ref.watch(requestSearchProvider).trim().isNotEmpty;
+
     return Scaffold(
       appBar: AppBar(title: const Text(S.bookingRequests)),
-      body: AsyncView(
-        value: requests,
-        builder: (list) => list.isEmpty
-            ? const EmptyState(
-                icon: AppIcons.inbox,
-                title: S.noRequests,
-                message: S.noRequestsHint,
-              )
-            : ListView.separated(
-                padding: const EdgeInsets.fromLTRB(
-                    20, 16, 20, AppSpacing.navBarClearance),
-                itemCount: list.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (_, i) => _RequestCard(booking: list[i]),
+      body: Column(
+        children: [
+          // Only show the search box when there is something to search.
+          if (all.isNotEmpty || searching)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+              child: TextField(
+                controller: _search,
+                textInputAction: TextInputAction.search,
+                onChanged: (v) =>
+                    ref.read(requestSearchProvider.notifier).state = v,
+                decoration: InputDecoration(
+                  hintText: S.searchRequestsHint,
+                  prefixIcon: const Icon(AppIcons.search, size: 20),
+                  suffixIcon: searching
+                      ? IconButton(
+                          icon: const Icon(AppIcons.close, size: 18),
+                          onPressed: () {
+                            _search.clear();
+                            ref.read(requestSearchProvider.notifier).state = '';
+                          },
+                        )
+                      : null,
+                ),
               ),
+            ),
+          Expanded(
+            child: AsyncView(
+              value: requests,
+              builder: (list) {
+                if (list.isEmpty) {
+                  return searching
+                      ? const EmptyState(
+                          icon: AppIcons.notFound,
+                          title: S.noSearchResults,
+                          message: S.noSearchResultsHint,
+                        )
+                      : const EmptyState(
+                          icon: AppIcons.inbox,
+                          title: S.noRequests,
+                          message: S.noRequestsHint,
+                        );
+                }
+                return ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(
+                      20, 8, 20, AppSpacing.navBarClearance),
+                  itemCount: list.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (_, i) => FadeSlideIn(
+                    index: i,
+                    child: _RequestCard(
+                        key: ValueKey(list[i].id), booking: list[i]),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
 class _RequestCard extends ConsumerStatefulWidget {
-  const _RequestCard({required this.booking});
+  const _RequestCard({super.key, required this.booking});
   final Booking booking;
 
   @override
@@ -123,7 +183,7 @@ class _RequestCardState extends ConsumerState<_RequestCard> {
                 padding: const EdgeInsets.all(12),
                 child: Row(
                   children: [
-                    const Icon(AppIcons.calendar, color: AppColors.primary),
+                    Icon(AppIcons.calendar, color: AppColors.primary),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(

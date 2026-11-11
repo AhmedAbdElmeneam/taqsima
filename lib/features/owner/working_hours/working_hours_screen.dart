@@ -21,8 +21,7 @@ class WorkingHoursScreen extends ConsumerWidget {
     return hours.when(
       skipLoadingOnReload: true,
       data: (h) => _Editor(pitchId: pitchId, initial: h),
-      loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading: () => const Scaffold(body: Center(child: BallLoader())),
       error: (_, __) => const Scaffold(
           body: EmptyState(icon: AppIcons.warning, title: S.somethingWrong)),
     );
@@ -272,7 +271,7 @@ class _TimeButton extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(AppIcons.dropdown, color: AppColors.inkMuted),
+              Icon(AppIcons.dropdown, color: AppColors.inkMuted),
             ],
           ),
         ),

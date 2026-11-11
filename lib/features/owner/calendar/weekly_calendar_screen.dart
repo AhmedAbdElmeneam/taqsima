@@ -25,6 +25,9 @@ class WeeklyCalendarScreen extends ConsumerStatefulWidget {
 class _WeeklyCalendarScreenState extends ConsumerState<WeeklyCalendarScreen> {
   int _weekOffset = 0;
 
+  /// null = show every slot type.
+  SlotState? _filter;
+
   @override
   Widget build(BuildContext context) {
     final pitch = ref.watch(currentOwnerPitchProvider);
@@ -74,14 +77,23 @@ class _WeeklyCalendarScreenState extends ConsumerState<WeeklyCalendarScreen> {
                   ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(20, 4, 20, 10),
-                child: SlotLegend(states: SlotState.values),
-              ),
               Expanded(
                 child: AsyncView(
                   value: week,
-                  builder: (days) => _WeekGrid(days: days, start: start),
+                  builder: (days) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      _FilterBar(
+                        days: days,
+                        selected: _filter,
+                        onSelected: (f) => setState(() => _filter = f),
+                      ),
+                      Expanded(
+                        child: _WeekGrid(
+                            days: days, start: start, filter: _filter),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],
@@ -92,10 +104,87 @@ class _WeeklyCalendarScreenState extends ConsumerState<WeeklyCalendarScreen> {
   }
 }
 
+/// Filter chips: الكل / متاح / محجوز / حجز يدوي / مغلق, each with its count.
+class _FilterBar extends StatelessWidget {
+  const _FilterBar({
+    required this.days,
+    required this.selected,
+    required this.onSelected,
+  });
+
+  final List<List<TimeSlot>> days;
+  final SlotState? selected;
+  final ValueChanged<SlotState?> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final all = days.expand((d) => d).where((s) => !s.isPast).toList();
+    int count(SlotState? st) =>
+        st == null ? all.length : all.where((s) => s.state == st).length;
+
+    Widget chip(SlotState? st, String label) {
+      final isOn = selected == st;
+      final color = st?.color ?? AppColors.ink;
+      return Padding(
+        padding: const EdgeInsetsDirectional.only(end: 8),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          decoration: BoxDecoration(
+            color: isOn
+                ? (st?.background ?? AppColors.primaryLight)
+                : AppColors.surface,
+            borderRadius: BorderRadius.circular(30),
+            border: Border.all(
+                color: isOn ? color.withOpacity(.6) : AppColors.borderSoft),
+          ),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(30),
+            onTap: () => onSelected(isOn && st != null ? null : st),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (st == null)
+                    Icon(AppIcons.funnel, size: 16, color: color)
+                  else
+                    Icon(st.icon, size: 16, color: color),
+                  const SizedBox(width: 6),
+                  Text(
+                    S.filterCount(label, count(st)),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: isOn ? color : AppColors.ink,
+                        ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
+    return SizedBox(
+      height: 48,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+        children: [
+          chip(null, S.filterAll),
+          for (final st in SlotState.values) chip(st, st.label),
+        ],
+      ),
+    );
+  }
+}
+
 class _WeekGrid extends ConsumerWidget {
-  const _WeekGrid({required this.days, required this.start});
+  const _WeekGrid({required this.days, required this.start, this.filter});
   final List<List<TimeSlot>> days;
   final DateTime start;
+  final SlotState? filter;
 
   static const _cellW = 84.0;
   static const _cellH = 54.0;
@@ -193,12 +282,16 @@ class _WeekGrid extends ConsumerWidget {
                                   color: AppColors.background,
                                 ),
                               )
-                            : SlotChip(
-                                slot: maps[i][offset]!,
-                                ownerView: true,
-                                subtitle: _subtitle(maps[i][offset]!),
-                                onTap: () => onOwnerSlotTap(
-                                    context, ref, maps[i][offset]!),
+                            : _FilteredCell(
+                                visible: filter == null ||
+                                    maps[i][offset]!.state == filter,
+                                child: SlotChip(
+                                  slot: maps[i][offset]!,
+                                  ownerView: true,
+                                  subtitle: _subtitle(maps[i][offset]!),
+                                  onTap: () => onOwnerSlotTap(
+                                      context, ref, maps[i][offset]!),
+                                ),
                               ),
                       ),
                     ),
@@ -211,11 +304,39 @@ class _WeekGrid extends ConsumerWidget {
   }
 
   String? _subtitle(TimeSlot s) {
-    final b = s.booking;
-    if (b != null && b.status == BookingStatus.pending) return b.status.label;
-    if (s.state == SlotState.manualBooked) {
-      return b?.customerName ?? S.manualBooking;
-    }
-    return null;
+    return _subtitleFor(s);
   }
+}
+
+/// Dims (and disables) cells hidden by the filter, with a short fade + shrink.
+class _FilteredCell extends StatelessWidget {
+  const _FilteredCell({required this.visible, required this.child});
+  final bool visible;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return IgnorePointer(
+      ignoring: !visible,
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 220),
+        opacity: visible ? 1 : .12,
+        child: AnimatedScale(
+          duration: const Duration(milliseconds: 220),
+          curve: Curves.easeOut,
+          scale: visible ? 1 : .92,
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+
+String? _subtitleFor(TimeSlot s) {
+  final b = s.booking;
+  if (b != null && b.status == BookingStatus.pending) return b.status.label;
+  if (s.state == SlotState.manualBooked) {
+    return b?.customerName ?? S.manualBooking;
+  }
+  return null;
 }

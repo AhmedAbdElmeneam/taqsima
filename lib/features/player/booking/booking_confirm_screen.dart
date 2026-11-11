@@ -116,7 +116,7 @@ class _BookingConfirmScreenState extends ConsumerState<BookingConfirmScreen> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(AppIcons.policy, color: AppColors.slotManual),
+                Icon(AppIcons.policy, color: AppColors.slotManual),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
@@ -137,7 +137,7 @@ class _BookingConfirmScreenState extends ConsumerState<BookingConfirmScreen> {
           const SizedBox(height: 12),
           Row(
             children: [
-              const Icon(AppIcons.info, size: 20, color: AppColors.inkMuted),
+              Icon(AppIcons.info, size: 20, color: AppColors.inkMuted),
               const SizedBox(width: 8),
               Expanded(
                   child: Text(S.requestNote,

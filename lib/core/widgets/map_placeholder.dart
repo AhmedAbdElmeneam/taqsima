@@ -112,9 +112,9 @@ class _Pin extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Colors.white, fontWeight: FontWeight.w700)),
+                      color: AppColors.surface, fontWeight: FontWeight.w700)),
             ),
-          const Icon(AppIcons.locationFill, size: 30, color: AppColors.primary),
+          Icon(AppIcons.locationFill, size: 30, color: AppColors.primary),
         ],
       ),
     );
@@ -124,11 +124,12 @@ class _Pin extends StatelessWidget {
 class _MapPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawRect(
-        Offset.zero & size, Paint()..color = const Color(0xFFEFF1EC));
+    canvas.drawRect(Offset.zero & size,
+        Paint()..color = Color(AppColors.isDark ? 0xFF1A231E : 0xFFEFF1EC));
 
     // Blocks.
-    final block = Paint()..color = const Color(0xFFE3E6DF);
+    final block = Paint()
+      ..color = Color(AppColors.isDark ? 0xFF222D27 : 0xFFE3E6DF);
     const step = 38.0;
     for (var x = 6.0; x < size.width; x += step) {
       for (var y = 6.0; y < size.height; y += step) {
@@ -140,7 +141,8 @@ class _MapPainter extends CustomPainter {
     }
 
     // Parks.
-    final park = Paint()..color = const Color(0xFFD5EBD3);
+    final park = Paint()
+      ..color = Color(AppColors.isDark ? 0xFF1F3A29 : 0xFFD5EBD3);
     canvas.drawCircle(Offset(size.width * .72, size.height * .3), 28, park);
     canvas.drawCircle(Offset(size.width * .2, size.height * .65), 22, park);
 
@@ -152,13 +154,13 @@ class _MapPainter extends CustomPainter {
     canvas.drawPath(
         nile,
         Paint()
-          ..color = const Color(0xFFAFD3EE)
+          ..color = Color(AppColors.isDark ? 0xFF1E3550 : 0xFFAFD3EE)
           ..style = PaintingStyle.stroke
           ..strokeWidth = 16);
 
     // Main roads.
     final road = Paint()
-      ..color = Colors.white
+      ..color = Color(AppColors.isDark ? 0xFF2E3A33 : 0xFFFFFFFF)
       ..strokeWidth = 6
       ..strokeCap = StrokeCap.round;
     canvas.drawLine(Offset(0, size.height * .45),
@@ -172,5 +174,5 @@ class _MapPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

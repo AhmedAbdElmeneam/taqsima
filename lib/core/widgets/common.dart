@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/app_strings.dart';
 import '../theme/app_colors.dart';
+import 'animations.dart';
 import 'empty_state.dart';
 
 /// Renders an [AsyncValue] keeping old data visible while reloading.
@@ -24,7 +25,7 @@ class AsyncView<T> extends StatelessWidget {
       loading: () => const Center(
         child: Padding(
           padding: EdgeInsets.all(32),
-          child: CircularProgressIndicator(color: AppColors.primary),
+          child: BallLoader(),
         ),
       ),
       error: (e, _) => const EmptyState(
@@ -118,9 +119,10 @@ class AppPanel extends StatelessWidget {
 }
 
 /// The one shadow used for floating surfaces.
-const softShadow = [
-  BoxShadow(color: AppColors.shadow, blurRadius: 18, offset: Offset(0, 6)),
-];
+List<BoxShadow> get softShadow => [
+      BoxShadow(
+          color: AppColors.shadow, blurRadius: 18, offset: const Offset(0, 6)),
+    ];
 
 /// Floating bottom action area (e.g. "احجز"), same style as the nav bar.
 class BottomActionBar extends StatelessWidget {
@@ -172,10 +174,9 @@ class GlassContainer extends StatelessWidget {
           child: Container(
             padding: padding,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(.72),
+              color: AppColors.glass,
               borderRadius: BorderRadius.circular(radius),
-              border:
-                  Border.all(color: Colors.white.withOpacity(.9), width: 1.2),
+              border: Border.all(color: AppColors.glassBorder, width: 1.2),
             ),
             child: child,
           ),

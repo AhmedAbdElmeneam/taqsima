@@ -254,7 +254,7 @@ class _OptionTile extends StatelessWidget {
       color: AppColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
-        side: const BorderSide(color: AppColors.border, width: 1.5),
+        side: BorderSide(color: AppColors.border, width: 1.5),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(18),

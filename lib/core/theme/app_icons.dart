@@ -10,34 +10,34 @@ import 'package:flutter/widgets.dart';
 /// point from `PhosphorIconsRegular.<name>` (or Fill / Bold) in the package.
 abstract final class AppIcons {
   // Navigation
-  static const IconData home = IconData(0xe2c2,
+  static const IconData home = IconData(0xe716,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // house
   static const IconData homeFill =
-      IconData(0xe2c2, fontFamily: 'PhosphorFill', fontPackage: _pkg); // house
+      IconData(0xe716, fontFamily: 'PhosphorFill', fontPackage: _pkg); // house
   static const IconData search = IconData(0xe30c,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // magnifyingGlass
   static const IconData searchFill = IconData(0xe30c,
       fontFamily: 'PhosphorFill', fontPackage: _pkg); // magnifyingGlass
-  static const IconData bookings = IconData(0xe490,
+  static const IconData bookings = IconData(0xe712,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // ticket
   static const IconData bookingsFill =
-      IconData(0xe490, fontFamily: 'PhosphorFill', fontPackage: _pkg); // ticket
-  static const IconData profile = IconData(0xe4c2,
+      IconData(0xe712, fontFamily: 'PhosphorFill', fontPackage: _pkg); // ticket
+  static const IconData profile = IconData(0xe4c4,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // user
   static const IconData profileFill =
-      IconData(0xe4c2, fontFamily: 'PhosphorFill', fontPackage: _pkg); // user
+      IconData(0xe4c4, fontFamily: 'PhosphorFill', fontPackage: _pkg); // user
   static const IconData today =
-      IconData(0xe472, fontFamily: 'PhosphorRegular', fontPackage: _pkg); // sun
+      IconData(0xe628, fontFamily: 'PhosphorRegular', fontPackage: _pkg); // sun
   static const IconData todayFill =
-      IconData(0xe472, fontFamily: 'PhosphorFill', fontPackage: _pkg); // sun
+      IconData(0xe628, fontFamily: 'PhosphorFill', fontPackage: _pkg); // sun
   static const IconData week = IconData(0xe7b4,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // calendarDots
   static const IconData weekFill = IconData(0xe7b4,
       fontFamily: 'PhosphorFill', fontPackage: _pkg); // calendarDots
-  static const IconData inbox = IconData(0xe4aa,
+  static const IconData inbox = IconData(0xe010,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // tray
   static const IconData inboxFill =
-      IconData(0xe4aa, fontFamily: 'PhosphorFill', fontPackage: _pkg); // tray
+      IconData(0xe010, fontFamily: 'PhosphorFill', fontPackage: _pkg); // tray
   static const IconData dropdown = IconData(0xe136,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // caretDown
   // Actions
@@ -90,10 +90,10 @@ abstract final class AppIcons {
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // mapTrifold
   static const IconData list = IconData(0xe2f2,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // listBullets
-  static const IconData money = IconData(0xe588,
+  static const IconData money = IconData(0xe78e,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // money
   static const IconData moneyFill =
-      IconData(0xe588, fontFamily: 'PhosphorFill', fontPackage: _pkg); // money
+      IconData(0xe78e, fontFamily: 'PhosphorFill', fontPackage: _pkg); // money
   static const IconData clock = IconData(0xe19a,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // clock
   static const IconData duration = IconData(0xe492,
@@ -166,6 +166,20 @@ abstract final class AppIcons {
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // toilet
   static const IconData parking =
       IconData(0xe112, fontFamily: 'PhosphorRegular', fontPackage: _pkg); // car
+
+  // Appearance & filters
+  static const IconData appearance = IconData(0xe6c8,
+      fontFamily: 'PhosphorRegular', fontPackage: _pkg); // palette
+  static const IconData themeAuto = IconData(0xe18c,
+      fontFamily: 'PhosphorRegular', fontPackage: _pkg); // circleHalf
+  static const IconData themeLight =
+      IconData(0xe472, fontFamily: 'PhosphorRegular', fontPackage: _pkg); // sun
+  static const IconData themeDark = IconData(0xe330,
+      fontFamily: 'PhosphorRegular', fontPackage: _pkg); // moon
+  static const IconData funnel = IconData(0xe268,
+      fontFamily: 'PhosphorRegular', fontPackage: _pkg); // funnelSimple
+  static const IconData trophy =
+      IconData(0xe67e, fontFamily: 'PhosphorFill', fontPackage: _pkg); // trophy
 
   // Arrows — these DO mirror in RTL. Named in LTR terms: on an Arabic screen
   // "forward" points left and "back" points right.

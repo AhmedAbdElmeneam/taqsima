@@ -2,6 +2,21 @@ import '../l10n/app_strings.dart';
 
 /// Date/time helpers. dayOfWeek convention across the app: 0 = Sunday … 6 = Saturday.
 abstract final class Fmt {
+  static final _tashkeel =
+      "[${String.fromCharCode(0x064B)}-${String.fromCharCode(0x0652)}"
+      "${String.fromCharCode(0x0640)}]";
+
+  /// Lower-friction Arabic matching for search: removes diacritics and
+  /// unifies letter variants (أ إ آ → ا، ة → ه، ى → ي).
+  static String normalizeArabic(String s) => s
+      .trim()
+      .toLowerCase()
+      // Arabic diacritics (tashkeel) and tatweel.
+      .replaceAll(RegExp(_tashkeel), "")
+      .replaceAll(RegExp('[أإآ]'), 'ا')
+      .replaceAll('ة', 'ه')
+      .replaceAll('ى', 'ي');
+
   static int dayOfWeek(DateTime d) => d.weekday % 7;
 
   static DateTime dateOnly(DateTime d) => DateTime(d.year, d.month, d.day);

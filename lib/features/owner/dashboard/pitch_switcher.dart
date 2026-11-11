@@ -42,8 +42,7 @@ class PitchSwitcher extends ConsumerWidget {
                         title: Text(p.name, style: t.titleMedium),
                         subtitle: Text(p.area),
                         trailing: p.id == pitch.id
-                            ? const Icon(AppIcons.confirmed,
-                                color: AppColors.primary)
+                            ? Icon(AppIcons.confirmed, color: AppColors.primary)
                             : PitchStatusBadge(status: p.status),
                         onTap: () {
                           ref.read(selectedPitchIdProvider.notifier).state =
@@ -59,7 +58,7 @@ class PitchSwitcher extends ConsumerWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(AppIcons.pitch, color: AppColors.primary),
+            Icon(AppIcons.pitch, color: AppColors.primary),
             const SizedBox(width: 6),
             Flexible(
               child: Text(pitch.name,

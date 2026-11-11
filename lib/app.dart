@@ -1,22 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/l10n/app_strings.dart';
 import 'core/router/app_router.dart';
+import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/theme_mode.dart';
 import 'core/widgets/app_scroll.dart';
 
-class Ma3adnaApp extends ConsumerWidget {
+class Ma3adnaApp extends ConsumerStatefulWidget {
   const Ma3adnaApp({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<Ma3adnaApp> createState() => _Ma3adnaAppState();
+}
+
+class _Ma3adnaAppState extends ConsumerState<Ma3adnaApp>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  // Follow the phone's light/dark setting while in "auto" mode.
+  @override
+  void didChangePlatformBrightness() => setState(() {});
+
+  @override
+  Widget build(BuildContext context) {
+    final mode = ref.watch(themeModeProvider);
+    final platformDark =
+        WidgetsBinding.instance.platformDispatcher.platformBrightness ==
+            Brightness.dark;
+    final isDark = switch (mode) {
+      ThemeMode.dark => true,
+      ThemeMode.light => false,
+      ThemeMode.system => platformDark,
+    };
+    // Must be set before any widget reads AppColors.
+    AppColors.isDark = isDark;
+
     return MaterialApp.router(
       title: S.appName,
       debugShowCheckedModeBanner: false,
       scrollBehavior: const AppScrollBehavior(),
-      theme: AppTheme.light(),
+      theme: AppTheme.build(),
+      themeAnimationDuration: Duration.zero,
       routerConfig: ref.watch(routerProvider),
       // Arabic only, full RTL.
       locale: const Locale('ar', 'EG'),
@@ -26,9 +64,17 @@ class Ma3adnaApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      builder: (context, child) => Directionality(
-        textDirection: TextDirection.rtl,
-        child: child!,
+      builder: (context, child) => AnnotatedRegion<SystemUiOverlayStyle>(
+        value: isDark
+            ? SystemUiOverlayStyle.light
+                .copyWith(statusBarColor: Colors.transparent)
+            : SystemUiOverlayStyle.dark
+                .copyWith(statusBarColor: Colors.transparent),
+        child: Directionality(
+          textDirection: TextDirection.rtl,
+          // Rebuild every widget (including const ones) when the mode flips.
+          child: KeyedSubtree(key: ValueKey(isDark), child: child!),
+        ),
       ),
     );
   }

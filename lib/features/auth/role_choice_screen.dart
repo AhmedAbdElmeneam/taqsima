@@ -50,8 +50,19 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(28),
                       ),
-                      child: const Icon(AppIcons.ball,
-                          size: 60, color: AppColors.primary),
+                      // The ball rolls in once when the app opens.
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween(begin: 0, end: 1),
+                        duration: const Duration(milliseconds: 900),
+                        curve: Curves.easeOutBack,
+                        builder: (_, v, child) => Transform.rotate(
+                          angle: (1 - v) * -6.283,
+                          child:
+                              Transform.scale(scale: .4 + .6 * v, child: child),
+                        ),
+                        child: Icon(AppIcons.ball,
+                            size: 60, color: AppColors.primary),
+                      ),
                     ),
                     const SizedBox(height: 16),
                     Text(S.appName,
@@ -73,10 +84,10 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.fromLTRB(20, 28, 20, 28),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: AppColors.background,
                     borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(32)),
+                        const BorderRadius.vertical(top: Radius.circular(32)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -134,7 +145,7 @@ class _RoleCard extends StatelessWidget {
       color: AppColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: const BorderSide(color: AppColors.border, width: 1.5),
+        side: BorderSide(color: AppColors.border, width: 1.5),
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(20),
@@ -150,7 +161,7 @@ class _RoleCard extends StatelessWidget {
                   color: AppColors.primaryLight,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Icon(icon, size: 26, color: AppColors.primary),
+                child: Icon(icon, size: 24, color: AppColors.primary),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -164,7 +175,7 @@ class _RoleCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(AppIcons.forward, size: 20, color: AppColors.inkFaint),
+              Icon(AppIcons.forward, size: 20, color: AppColors.inkFaint),
             ],
           ),
         ),

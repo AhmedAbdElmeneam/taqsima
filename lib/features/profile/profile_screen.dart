@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/l10n/app_strings.dart';
 import '../../core/theme/app_colors.dart';
+import '../../core/theme/theme_mode.dart';
 import '../../core/utils/formatters.dart';
 import '../../core/widgets/widgets.dart';
 import '../../data/models/models.dart';
@@ -105,6 +106,48 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ),
           ...widget.extra,
           const SizedBox(height: 16),
+          AppPanel(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(AppIcons.appearance,
+                        size: 20, color: AppColors.inkMuted),
+                    const SizedBox(width: 10),
+                    Text(S.appearance, style: t.bodyLarge),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                SegmentedButton<ThemeMode>(
+                  showSelectedIcon: false,
+                  style: SegmentedButton.styleFrom(
+                    selectedForegroundColor: AppColors.primary,
+                    minimumSize: const Size.fromHeight(42),
+                  ),
+                  segments: const [
+                    ButtonSegment(
+                        value: ThemeMode.system,
+                        icon: Icon(AppIcons.themeAuto, size: 18),
+                        label: Text(S.themeSystem)),
+                    ButtonSegment(
+                        value: ThemeMode.light,
+                        icon: Icon(AppIcons.themeLight, size: 18),
+                        label: Text(S.themeLight)),
+                    ButtonSegment(
+                        value: ThemeMode.dark,
+                        icon: Icon(AppIcons.themeDark, size: 18),
+                        label: Text(S.themeDark)),
+                  ],
+                  selected: {ref.watch(themeModeProvider)},
+                  onSelectionChanged: (s) =>
+                      ref.read(themeModeProvider.notifier).state = s.first,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
           AppPanel(
             padding: EdgeInsets.zero,
             child: Column(

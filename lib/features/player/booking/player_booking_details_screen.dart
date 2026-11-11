@@ -133,8 +133,7 @@ class PlayerBookingDetailsScreen extends ConsumerWidget {
                                   ],
                                 ),
                               ),
-                              const Icon(AppIcons.forward,
-                                  color: AppColors.inkFaint),
+                              Icon(AppIcons.forward, color: AppColors.inkFaint),
                             ],
                           ),
                         ),
@@ -191,7 +190,7 @@ class PlayerBookingDetailsScreen extends ConsumerWidget {
               const SizedBox(height: 10),
               TextButton.icon(
                 onPressed: () => _report(context),
-                icon: const Icon(AppIcons.flag, color: AppColors.inkMuted),
+                icon: Icon(AppIcons.flag, color: AppColors.inkMuted),
                 label: Text(S.reportProblem,
                     style: t.titleMedium?.copyWith(color: AppColors.inkMuted)),
               ),

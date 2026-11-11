@@ -82,11 +82,14 @@ class PlayerHomeScreen extends ConsumerWidget {
                   value: pitches,
                   builder: (list) => Column(
                     children: [
-                      for (final p in list) ...[
-                        PitchCard(
-                          pitch: p,
-                          trailing: _DistanceBadge(pitch: p),
-                          onTap: () => context.push(Routes.pitch(p.id)),
+                      for (final (i, p) in list.indexed) ...[
+                        FadeSlideIn(
+                          index: i,
+                          child: PitchCard(
+                            pitch: p,
+                            trailing: _DistanceBadge(pitch: p),
+                            onTap: () => context.push(Routes.pitch(p.id)),
+                          ),
                         ),
                         const SizedBox(height: 14),
                       ],
@@ -132,7 +135,7 @@ class _DistanceBadge extends StatelessWidget {
         playerLocation.lat, playerLocation.lng, pitch.lat, pitch.lng);
     return AppBadge(
       label: S.km(Fmt.ltr(km.toStringAsFixed(1))),
-      color: AppColors.ink,
+      color: AppColors.onPhotoInk,
       background: Colors.white,
       icon: AppIcons.distance,
     );

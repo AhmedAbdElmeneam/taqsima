@@ -24,8 +24,7 @@ class PitchFormScreen extends ConsumerWidget {
     final pitch = ref.watch(pitchProvider(pitchId!));
     return pitch.when(
       data: (p) => _PitchForm(initial: p),
-      loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading: () => const Scaffold(body: Center(child: BallLoader())),
       error: (_, __) => const Scaffold(
           body: EmptyState(icon: AppIcons.warning, title: S.somethingWrong)),
     );
@@ -342,7 +341,7 @@ class _PitchFormState extends ConsumerState<_PitchForm> {
               color: AppColors.primaryLight,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-                side: const BorderSide(color: AppColors.primary, width: 1.5),
+                side: BorderSide(color: AppColors.primary, width: 1.5),
               ),
               child: InkWell(
                 borderRadius: BorderRadius.circular(16),
@@ -351,8 +350,7 @@ class _PitchFormState extends ConsumerState<_PitchForm> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(AppIcons.addPhoto,
-                        size: 28, color: AppColors.primary),
+                    Icon(AppIcons.addPhoto, size: 28, color: AppColors.primary),
                     const SizedBox(height: 6),
                     Text(S.addPhoto,
                         style:

@@ -76,7 +76,8 @@ class _List extends StatelessWidget {
           const EdgeInsets.fromLTRB(20, 16, 20, AppSpacing.navBarClearance),
       itemCount: bookings.length,
       separatorBuilder: (_, __) => const SizedBox(height: 12),
-      itemBuilder: (_, i) => PlayerBookingCard(booking: bookings[i]),
+      itemBuilder: (_, i) =>
+          FadeSlideIn(index: i, child: PlayerBookingCard(booking: bookings[i])),
     );
   }
 }
@@ -125,7 +126,7 @@ class PlayerBookingCard extends ConsumerWidget {
                   ],
                 ),
               ),
-              const Icon(AppIcons.forward, color: AppColors.inkFaint),
+              Icon(AppIcons.forward, color: AppColors.inkFaint),
             ],
           ),
         ),

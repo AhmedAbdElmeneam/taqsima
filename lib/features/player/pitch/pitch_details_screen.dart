@@ -98,8 +98,7 @@ class _Body extends StatelessWidget {
               const SizedBox(height: 4),
               Row(
                 children: [
-                  const Icon(AppIcons.location,
-                      color: AppColors.inkMuted, size: 20),
+                  Icon(AppIcons.location, color: AppColors.inkMuted, size: 20),
                   const SizedBox(width: 4),
                   Text(pitch.area,
                       style: t.bodyLarge?.copyWith(color: AppColors.inkMuted)),

@@ -57,7 +57,7 @@ class PitchCard extends StatelessWidget {
                         const SizedBox(height: 2),
                         Row(
                           children: [
-                            const Icon(AppIcons.location,
+                            Icon(AppIcons.location,
                                 size: 18, color: AppColors.inkMuted),
                             const SizedBox(width: 2),
                             Flexible(
@@ -102,9 +102,7 @@ class _Pill extends StatelessWidget {
           borderRadius: BorderRadius.circular(30),
         ),
         child: Text(label,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(color: AppColors.ink, fontWeight: FontWeight.w800)),
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: AppColors.onPhotoInk, fontWeight: FontWeight.w800)),
       );
 }

@@ -7,23 +7,27 @@ import 'app_spacing.dart';
 import '../widgets/app_background.dart';
 
 abstract final class AppTheme {
-  static ThemeData light() {
+  /// Builds the theme for the current [AppColors.isDark] mode.
+  static ThemeData build() {
+    final brightness = AppColors.isDark ? Brightness.dark : Brightness.light;
     final scheme = ColorScheme.fromSeed(
       seedColor: AppColors.primary,
+      brightness: brightness,
       primary: AppColors.primary,
-      onPrimary: Colors.white,
+      onPrimary: AppColors.onPrimary,
       secondary: AppColors.ink,
-      onSecondary: Colors.white,
+      onSecondary: AppColors.surface,
       error: AppColors.error,
       surface: AppColors.surface,
       onSurface: AppColors.ink,
     );
 
-    final base = ThemeData(useMaterial3: true, colorScheme: scheme);
+    final base = ThemeData(
+        useMaterial3: true, brightness: brightness, colorScheme: scheme);
 
     // Calm, compact type scale: one clear title size, everything else small.
-    TextStyle cairo(double size, FontWeight w, [Color c = AppColors.ink]) =>
-        GoogleFonts.cairo(fontSize: size, fontWeight: w, color: c, height: 1.5);
+    TextStyle cairo(double size, FontWeight w, [Color? c]) => GoogleFonts.cairo(
+        fontSize: size, fontWeight: w, color: c ?? AppColors.ink, height: 1.5);
 
     final textTheme = GoogleFonts.cairoTextTheme(base.textTheme)
         .apply(bodyColor: AppColors.ink, displayColor: AppColors.ink)
@@ -49,7 +53,7 @@ abstract final class AppTheme {
         // Transparent at rest; turns frosted white once content scrolls under.
         backgroundColor: WidgetStateColor.resolveWith((s) =>
             s.contains(WidgetState.scrolledUnder)
-                ? Colors.white.withOpacity(.92)
+                ? AppColors.surface.withOpacity(.94)
                 : Colors.transparent),
         surfaceTintColor: Colors.transparent,
         shadowColor: AppColors.shadow,
@@ -58,12 +62,12 @@ abstract final class AppTheme {
         scrolledUnderElevation: 2,
         centerTitle: true,
         titleTextStyle: textTheme.titleLarge,
-        iconTheme: const IconThemeData(size: 22, color: AppColors.ink),
+        iconTheme: IconThemeData(size: 22, color: AppColors.ink),
       ),
       actionIconTheme: ActionIconThemeData(
         backButtonIconBuilder: (_) => const Icon(AppIcons.back, size: 22),
       ),
-      iconTheme: const IconThemeData(size: 20, color: AppColors.ink),
+      iconTheme: IconThemeData(size: 20, color: AppColors.ink),
       cardTheme: CardTheme(
         surfaceTintColor: Colors.transparent,
         color: AppColors.surface,
@@ -71,7 +75,7 @@ abstract final class AppTheme {
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
-          side: const BorderSide(color: AppColors.borderSoft),
+          side: BorderSide(color: AppColors.borderSoft),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
@@ -90,7 +94,7 @@ abstract final class AppTheme {
           minimumSize: const Size.fromHeight(AppSpacing.buttonHeight),
           foregroundColor: AppColors.ink,
           backgroundColor: AppColors.surface,
-          side: const BorderSide(color: AppColors.border),
+          side: BorderSide(color: AppColors.border),
           textStyle: textTheme.labelLarge,
           shape: rounded,
         ),
@@ -111,25 +115,25 @@ abstract final class AppTheme {
         prefixIconColor: AppColors.inkMuted,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          borderSide: const BorderSide(color: AppColors.borderSoft),
+          borderSide: BorderSide(color: AppColors.borderSoft),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          borderSide: const BorderSide(color: AppColors.borderSoft),
+          borderSide: BorderSide(color: AppColors.borderSoft),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          borderSide: const BorderSide(color: AppColors.error),
+          borderSide: BorderSide(color: AppColors.error),
         ),
         errorStyle: textTheme.bodySmall?.copyWith(color: AppColors.error),
       ),
       chipTheme: base.chipTheme.copyWith(
         labelStyle: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
-        side: const BorderSide(color: AppColors.borderSoft),
+        side: BorderSide(color: AppColors.borderSoft),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         backgroundColor: AppColors.surface,
         selectedColor: AppColors.primaryLight,
@@ -142,8 +146,7 @@ abstract final class AppTheme {
               s.contains(WidgetState.selected)
                   ? AppColors.primaryLight
                   : AppColors.surface),
-          side: const WidgetStatePropertyAll(
-              BorderSide(color: AppColors.borderSoft)),
+          side: WidgetStatePropertyAll(BorderSide(color: AppColors.borderSoft)),
         ),
       ),
       tabBarTheme: TabBarTheme(
@@ -160,12 +163,12 @@ abstract final class AppTheme {
         iconColor: AppColors.inkMuted,
         dense: true,
       ),
-      dividerTheme:
-          const DividerThemeData(color: AppColors.borderSoft, space: 1),
+      dividerTheme: DividerThemeData(color: AppColors.borderSoft, space: 1),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
         backgroundColor: AppColors.ink,
-        contentTextStyle: textTheme.bodyMedium?.copyWith(color: Colors.white),
+        contentTextStyle:
+            textTheme.bodyMedium?.copyWith(color: AppColors.surface),
         shape: rounded,
       ),
       // Every page gets its own copy of the background so pages never show
@@ -178,11 +181,11 @@ abstract final class AppTheme {
         TargetPlatform.linux: BackgroundPageTransitionsBuilder(),
         TargetPlatform.fuchsia: BackgroundPageTransitionsBuilder(),
       }),
-      bottomSheetTheme: const BottomSheetThemeData(
+      bottomSheetTheme: BottomSheetThemeData(
         surfaceTintColor: Colors.transparent,
         backgroundColor: AppColors.surface,
         showDragHandle: true,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
       ),

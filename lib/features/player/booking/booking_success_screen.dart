@@ -43,7 +43,7 @@ class BookingSuccessScreen extends ConsumerWidget {
                   child: Container(
                     width: 96,
                     height: 96,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       color: AppColors.primary,
                       shape: BoxShape.circle,
                     ),

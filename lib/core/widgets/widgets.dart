@@ -1,6 +1,7 @@
 export 'app_background.dart';
 export 'app_bottom_sheet.dart';
 export 'app_button.dart';
+export 'animations.dart';
 export 'app_scroll.dart';
 export 'app_text_field.dart';
 export 'common.dart';

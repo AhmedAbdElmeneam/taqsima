@@ -190,9 +190,12 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                       20, 0, 20, AppSpacing.navBarClearance),
                   itemCount: list.length,
                   separatorBuilder: (_, __) => const SizedBox(height: 14),
-                  itemBuilder: (_, i) => PitchCard(
-                    pitch: list[i],
-                    onTap: () => context.push(Routes.pitch(list[i].id)),
+                  itemBuilder: (_, i) => FadeSlideIn(
+                    index: i,
+                    child: PitchCard(
+                      pitch: list[i],
+                      onTap: () => context.push(Routes.pitch(list[i].id)),
+                    ),
                   ),
                 );
               },
@@ -218,7 +221,7 @@ class _ActiveChip extends StatelessWidget {
           showCheckmark: false,
           onDeleted: onRemove,
           deleteIcon: const Icon(AppIcons.close, size: 18),
-          side: const BorderSide(color: AppColors.primary),
+          side: BorderSide(color: AppColors.primary),
         ),
       );
 }
