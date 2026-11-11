@@ -9,11 +9,18 @@ abstract final class Fmt {
   static bool isSameDay(DateTime a, DateTime b) =>
       a.year == b.year && a.month == b.month && a.day == b.day;
 
+  /// Left-to-right mark. Put before numbers with separators ("8:00", "3.5")
+  /// so they are not flipped inside Arabic text.
+  static final lrm = String.fromCharCode(0x200E);
+
+  /// Keeps a number like "3.5" in order inside RTL text.
+  static String ltr(String s) => '$lrm$s';
+
   /// "8:00 م"
   static String time(DateTime d) {
     final h = d.hour % 12 == 0 ? 12 : d.hour % 12;
     final m = d.minute.toString().padLeft(2, '0');
-    return '$h:$m ${d.hour < 12 ? S.am : S.pm}';
+    return '$lrm$h:$m ${d.hour < 12 ? S.am : S.pm}';
   }
 
   /// Minutes from midnight → "8:00 م". Values ≥ 1440 wrap to next day.
@@ -44,6 +51,10 @@ abstract final class Fmt {
   /// "01012345678" → "0101 234 5678"
   static String phone(String p) {
     if (p.length != 11) return p;
-    return '${p.substring(0, 4)} ${p.substring(4, 7)} ${p.substring(7)}';
+    // A left-to-right mark before each group keeps the groups in order
+    // inside Arabic (RTL) text.
+    final lrm = String.fromCharCode(0x200E);
+    return '$lrm${p.substring(0, 4)} $lrm${p.substring(4, 7)} '
+        '$lrm${p.substring(7)}';
   }
 }

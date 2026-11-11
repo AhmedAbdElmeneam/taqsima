@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/l10n/app_strings.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/formatters.dart';
 import '../../../core/utils/labels.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../data/models/models.dart';
@@ -170,7 +171,7 @@ class _DistanceBadge extends StatelessWidget {
     final km = distanceKm(
         playerLocation.lat, playerLocation.lng, pitch.lat, pitch.lng);
     return AppBadge(
-      label: S.km(km.toStringAsFixed(1)),
+      label: S.km(Fmt.ltr(km.toStringAsFixed(1))),
       color: AppColors.ink,
       background: Colors.white,
       icon: Icons.near_me_rounded,

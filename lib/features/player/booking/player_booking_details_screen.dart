@@ -148,7 +148,7 @@ class PlayerBookingDetailsScreen extends ConsumerWidget {
                     InfoRow(
                         icon: Icons.confirmation_number_outlined,
                         label: S.bookingNumber,
-                        value: '#${b.id.toUpperCase()}'),
+                        value: Fmt.ltr('#${b.id.toUpperCase()}')),
                     InfoRow(
                         icon: Icons.calendar_today_rounded,
                         label: S.date,

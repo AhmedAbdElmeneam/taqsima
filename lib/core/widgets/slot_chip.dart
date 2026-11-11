@@ -113,8 +113,11 @@ class SlotChip extends StatelessWidget {
 
 /// Color legend for slot states.
 class SlotLegend extends StatelessWidget {
-  const SlotLegend({super.key, required this.states});
+  const SlotLegend({super.key, required this.states, this.playerView = false});
   final List<SlotState> states;
+
+  /// Players see every taken slot as "محجوز".
+  final bool playerView;
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +141,11 @@ class SlotLegend extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 6),
-              Text(s.label, style: Theme.of(context).textTheme.bodySmall),
+              Text(
+                  playerView && s != SlotState.available
+                      ? S.legendBooked
+                      : s.label,
+                  style: Theme.of(context).textTheme.bodySmall),
             ],
           ),
       ],

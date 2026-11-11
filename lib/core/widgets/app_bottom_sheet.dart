@@ -12,6 +12,8 @@ Future<T?> showAppBottomSheet<T>(
 }) {
   return showModalBottomSheet<T>(
     context: context,
+    // Above the bottom navigation bar.
+    useRootNavigator: true,
     isScrollControlled: true,
     useSafeArea: true,
     builder: (ctx) => Padding(

@@ -96,7 +96,8 @@ class _SlotPickerScreenState extends ConsumerState<SlotPickerScreen> {
               children: [
                 Expanded(child: Text(S.availableTimes, style: t.titleMedium)),
                 const SlotLegend(
-                    states: [SlotState.available, SlotState.blocked]),
+                    states: [SlotState.available, SlotState.blocked],
+                    playerView: true),
               ],
             ),
           ),

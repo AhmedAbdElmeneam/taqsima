@@ -191,7 +191,8 @@ abstract final class S {
   static const terms = 'الشروط والأحكام';
   static const logout = 'تسجيل الخروج';
   static const logoutQ = 'عايز تخرج من حسابك؟';
-  static const appVersion = 'الإصدار 1.0.0 (نسخة تجريبية)';
+  static String get appVersion =>
+      'الإصدار ${String.fromCharCode(0x200E)}1.0.0 (نسخة تجريبية)';
   static const comingSoon = 'قريباً';
   static const player = 'لاعب';
   static const owner = 'صاحب ملعب';
@@ -199,8 +200,10 @@ abstract final class S {
   // Owner dashboard
   static const todaysBookings = 'حجوزات النهارده';
   static const todaysRevenue = 'إيراد النهارده';
-  static const bookingsCount = 'عدد الحجوزات';
-  static const freeSlots = 'مواعيد فاضية';
+  static const bookingsCount = 'حجوزات';
+  static const freeSlots = 'فاضي';
+  static const edit = 'تعديل';
+  static const hours = 'المواعيد';
   static const pendingRequests = 'طلبات مستنية';
   static String pendingRequestsBanner(int n) =>
       n == 1 ? 'عندك طلب حجز جديد' : 'عندك $n طلبات حجز جديدة';
@@ -237,6 +240,7 @@ abstract final class S {
   static const tapMapToPin = 'دوس على الخريطة عشان تحدد مكان الملعب';
   static const locationSet = 'تم تحديد المكان';
   static const priceHint = 'السعر بالجنيه للساعة';
+  static const priceLabel = 'سعر الساعة (ج.م)';
   static const pitchSaved = 'تم حفظ الملعب';
   static const pitchSubmitted = 'تم إرسال الملعب للمراجعة';
   static const fieldRequired = 'الخانة دي مطلوبة';

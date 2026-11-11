@@ -39,7 +39,9 @@ class PrimaryButton extends StatelessWidget {
             ],
           );
     return FilledButton(
-      onPressed: loading ? null : onPressed,
+      // Keep the filled color while loading so the white spinner is visible;
+      // taps are ignored.
+      onPressed: loading && onPressed != null ? () {} : onPressed,
       style:
           color == null ? null : FilledButton.styleFrom(backgroundColor: color),
       child: child,
