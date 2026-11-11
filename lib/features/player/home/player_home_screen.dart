@@ -31,66 +31,70 @@ class PlayerHomeScreen extends ConsumerWidget {
     final firstName = (user?.name ?? '').split(' ').first;
 
     return Scaffold(
-      body: SafeArea(
-        child: RefreshIndicator(
-          color: AppColors.primary,
-          onRefresh: () => ref.refresh(nearbyPitchesProvider.future),
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(
-                20, 8, 20, AppSpacing.navBarClearance),
-            children: [
-              Text(S.hello(firstName),
-                  style: t.bodyMedium?.copyWith(color: AppColors.inkMuted)),
-              Text(S.homeQuestion, style: t.headlineMedium),
-              const SizedBox(height: 14),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      textInputAction: TextInputAction.search,
-                      decoration: const InputDecoration(
-                        hintText: S.searchHint,
-                        prefixIcon: Icon(AppIcons.search),
-                      ),
-                      onSubmitted: (q) => _searchWith(
-                          ref,
-                          context,
-                          ref
-                              .read(searchFilterProvider)
-                              .copyWith(query: () => q)),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  _FilterButton(onTap: () async {
-                    if (await showFilterSheet(context) && context.mounted) {
-                      context.go(Routes.playerSearch);
-                    }
-                  }),
-                ],
-              ),
-              const SizedBox(height: 22),
-              SectionHeader(
-                title: S.nearbyPitches,
-                action: S.seeAll,
-                onAction: () => _searchWith(ref, context, const PitchFilter()),
-              ),
-              const SizedBox(height: 8),
-              AsyncView(
-                value: pitches,
-                builder: (list) => Column(
+      body: TopFade(
+        height: MediaQuery.paddingOf(context).top + 24,
+        child: SafeArea(
+          child: RefreshIndicator(
+            color: AppColors.primary,
+            onRefresh: () => ref.refresh(nearbyPitchesProvider.future),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(
+                  20, 8, 20, AppSpacing.navBarClearance),
+              children: [
+                Text(S.hello(firstName),
+                    style: t.bodyMedium?.copyWith(color: AppColors.inkMuted)),
+                Text(S.homeQuestion, style: t.headlineMedium),
+                const SizedBox(height: 14),
+                Row(
                   children: [
-                    for (final p in list) ...[
-                      PitchCard(
-                        pitch: p,
-                        trailing: _DistanceBadge(pitch: p),
-                        onTap: () => context.push(Routes.pitch(p.id)),
+                    Expanded(
+                      child: TextField(
+                        textInputAction: TextInputAction.search,
+                        decoration: const InputDecoration(
+                          hintText: S.searchHint,
+                          prefixIcon: Icon(AppIcons.search),
+                        ),
+                        onSubmitted: (q) => _searchWith(
+                            ref,
+                            context,
+                            ref
+                                .read(searchFilterProvider)
+                                .copyWith(query: () => q)),
                       ),
-                      const SizedBox(height: 14),
-                    ],
+                    ),
+                    const SizedBox(width: 10),
+                    _FilterButton(onTap: () async {
+                      if (await showFilterSheet(context) && context.mounted) {
+                        context.go(Routes.playerSearch);
+                      }
+                    }),
                   ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 22),
+                SectionHeader(
+                  title: S.nearbyPitches,
+                  action: S.seeAll,
+                  onAction: () =>
+                      _searchWith(ref, context, const PitchFilter()),
+                ),
+                const SizedBox(height: 8),
+                AsyncView(
+                  value: pitches,
+                  builder: (list) => Column(
+                    children: [
+                      for (final p in list) ...[
+                        PitchCard(
+                          pitch: p,
+                          trailing: _DistanceBadge(pitch: p),
+                          onTap: () => context.push(Routes.pitch(p.id)),
+                        ),
+                        const SizedBox(height: 14),
+                      ],
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

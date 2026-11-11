@@ -46,10 +46,16 @@ abstract final class AppTheme {
       // Screens are transparent so the shared AppBackground shows through.
       scaffoldBackgroundColor: Colors.transparent,
       appBarTheme: AppBarTheme(
-        backgroundColor: Colors.transparent,
+        // Transparent at rest; turns frosted white once content scrolls under.
+        backgroundColor: WidgetStateColor.resolveWith((s) =>
+            s.contains(WidgetState.scrolledUnder)
+                ? Colors.white.withOpacity(.92)
+                : Colors.transparent),
+        surfaceTintColor: Colors.transparent,
+        shadowColor: AppColors.shadow,
         foregroundColor: AppColors.ink,
         elevation: 0,
-        scrolledUnderElevation: 0,
+        scrolledUnderElevation: 2,
         centerTitle: true,
         titleTextStyle: textTheme.titleLarge,
         iconTheme: const IconThemeData(size: 22, color: AppColors.ink),
