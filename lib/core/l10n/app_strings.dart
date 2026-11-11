@@ -210,6 +210,28 @@ abstract final class S {
   static const owner = 'صاحب ملعب';
 
   // Owner dashboard
+  static const goodMorning = 'صباح الخير';
+  static const goodEvening = 'مساء الخير';
+  static const nextBooking = 'الحجز القادم';
+  static const playingNow = 'يُلعب الآن';
+  static const noMoreBookingsToday = 'لا توجد حجوزات أخرى اليوم';
+  static const ended = 'انتهى';
+  static String inTime(int minutes) {
+    if (minutes < 60) {
+      return minutes <= 1
+          ? 'بعد دقيقة'
+          : minutes <= 10
+              ? 'بعد $minutes دقائق'
+              : 'بعد $minutes دقيقة';
+    }
+    final h = (minutes / 60).round();
+    return h == 1
+        ? 'بعد ساعة'
+        : h == 2
+            ? 'بعد ساعتين'
+            : 'بعد $h ساعات';
+  }
+
   static const todaysBookings = 'حجوزات اليوم';
   static const todaysRevenue = 'إيراد اليوم';
   static const bookingsCount = 'الحجوزات';

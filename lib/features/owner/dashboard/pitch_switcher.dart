@@ -10,8 +10,11 @@ import '../owner_providers.dart';
 
 /// Tappable pitch name that lets owners with several pitches switch.
 class PitchSwitcher extends ConsumerWidget {
-  const PitchSwitcher({super.key, required this.pitch});
+  const PitchSwitcher({super.key, required this.pitch, this.onDark = false});
   final Pitch pitch;
+
+  /// White text and icons, for use on the green header card.
+  final bool onDark;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -58,13 +61,22 @@ class PitchSwitcher extends ConsumerWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(AppIcons.pitch, color: AppColors.primary),
-            const SizedBox(width: 6),
+            if (!onDark) ...[
+              Icon(AppIcons.pitch, color: AppColors.primary),
+              const SizedBox(width: 6),
+            ],
             Flexible(
               child: Text(pitch.name,
-                  style: t.titleLarge, overflow: TextOverflow.ellipsis),
+                  style: onDark
+                      ? t.headlineMedium
+                          ?.copyWith(color: Colors.white, fontSize: 22)
+                      : t.titleLarge,
+                  overflow: TextOverflow.ellipsis),
             ),
-            if (canSwitch) const Icon(AppIcons.dropdown, size: 28),
+            if (canSwitch)
+              Icon(AppIcons.dropdown,
+                  size: onDark ? 22 : 28,
+                  color: onDark ? Colors.white70 : null),
           ],
         ),
       ),

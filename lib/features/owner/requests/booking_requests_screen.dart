@@ -144,84 +144,87 @@ class _RequestCardState extends ConsumerState<_RequestCard> {
     final pitch = ref.watch(pitchProvider(b.pitchId)).valueOrNull;
     final t = Theme.of(context).textTheme;
 
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => context.push(Routes.ownerBooking(b.id)),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundColor: AppColors.infoLight,
-                    child: Text(
-                      (player?.name ?? ' ').characters.first,
-                      style: t.titleLarge?.copyWith(color: AppColors.info),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(player?.name ?? '', style: t.titleMedium),
-                        Text(pitch?.name ?? '',
-                            style: t.bodyMedium
-                                ?.copyWith(color: AppColors.inkMuted)),
-                      ],
-                    ),
-                  ),
-                  Text(S.price(b.price),
-                      style: t.titleMedium?.copyWith(color: AppColors.primary)),
-                ],
-              ),
-              const SizedBox(height: 12),
-              AppPanel(
-                color: AppColors.background,
-                padding: const EdgeInsets.all(12),
-                child: Row(
+    return PressableScale(
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => context.push(Routes.ownerBooking(b.id)),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
                   children: [
-                    Icon(AppIcons.calendar, color: AppColors.primary),
-                    const SizedBox(width: 8),
-                    Expanded(
+                    CircleAvatar(
+                      radius: 24,
+                      backgroundColor: AppColors.infoLight,
                       child: Text(
-                        '${Fmt.dayRelative(b.startAt)} • ${Fmt.timeRange(b.startAt, b.endAt)}',
+                        (player?.name ?? ' ').characters.first,
+                        style: t.titleLarge?.copyWith(color: AppColors.info),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(player?.name ?? '', style: t.titleMedium),
+                          Text(pitch?.name ?? '',
+                              style: t.bodyMedium
+                                  ?.copyWith(color: AppColors.inkMuted)),
+                        ],
+                      ),
+                    ),
+                    Text(S.price(b.price),
                         style:
-                            t.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
+                            t.titleMedium?.copyWith(color: AppColors.primary)),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                AppPanel(
+                  color: AppColors.background,
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    children: [
+                      Icon(AppIcons.calendar, color: AppColors.primary),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          '${Fmt.dayRelative(b.startAt)} • ${Fmt.timeRange(b.startAt, b.endAt)}',
+                          style: t.bodyLarge
+                              ?.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Row(
+                  children: [
+                    Expanded(
+                      child: PrimaryButton(
+                        label: S.accept,
+                        compact: true,
+                        icon: AppIcons.check,
+                        loading: _busy,
+                        onPressed: () => _answer(true),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: SecondaryButton(
+                        label: S.reject,
+                        compact: true,
+                        icon: AppIcons.close,
+                        color: AppColors.error,
+                        onPressed: _busy ? null : () => _answer(false),
                       ),
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: PrimaryButton(
-                      label: S.accept,
-                      compact: true,
-                      icon: AppIcons.check,
-                      loading: _busy,
-                      onPressed: () => _answer(true),
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: SecondaryButton(
-                      label: S.reject,
-                      compact: true,
-                      icon: AppIcons.close,
-                      color: AppColors.error,
-                      onPressed: _busy ? null : () => _answer(false),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -12,10 +12,9 @@ import '../../../core/utils/labels.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../data/models/models.dart';
 import '../../../data/providers.dart';
-import '../../auth/session_controller.dart';
 import '../calendar/slot_action_sheet.dart';
 import '../owner_providers.dart';
-import 'pitch_switcher.dart';
+import 'matchday_header.dart';
 
 class OwnerDashboardScreen extends ConsumerWidget {
   const OwnerDashboardScreen({super.key});
@@ -51,7 +50,6 @@ class _Dashboard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(sessionProvider);
     final today = todayDate();
     final slots = ref.watch(daySlotsProvider((pitch.id, today)));
     final requests = ref.watch(ownerRequestsProvider).valueOrNull ?? const [];
@@ -64,11 +62,8 @@ class _Dashboard extends ConsumerWidget {
         padding:
             const EdgeInsets.fromLTRB(20, 8, 20, AppSpacing.navBarClearance),
         children: [
-          Text(
-              '${S.hello((user?.name ?? '').split(' ').take(2).join(' '))} • ${Fmt.dayLong(today)}',
-              style: t.bodySmall),
-          PitchSwitcher(pitch: pitch),
-          const SizedBox(height: 12),
+          MatchdayHeader(pitch: pitch, slots: slots.valueOrNull),
+          const SizedBox(height: 14),
           if (pitch.status == PitchStatus.pending) ...[
             AppPanel(
               color: AppColors.warningLight,
@@ -275,11 +270,12 @@ class _HourRow extends ConsumerWidget {
         subtitle = slot.blockedSlot?.reason;
       case SlotState.manualBooked:
         title = b?.customerName ?? S.noName;
-        subtitle = S.manualBooking;
+        subtitle =
+            slot.isPast ? "${S.manualBooking} • ${S.ended}" : S.manualBooking;
       case SlotState.appBooked:
         final player = ref.watch(userProvider(b!.userId!)).valueOrNull;
         title = player?.name ?? '';
-        subtitle = S.appBooking;
+        subtitle = slot.isPast ? "${S.appBooking} • ${S.ended}" : S.appBooking;
     }
 
     final free = state == SlotState.available;
@@ -289,95 +285,103 @@ class _HourRow extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Opacity(
-        opacity: slot.isPast ? .45 : 1,
-        child: Material(
-          color: free ? AppColors.card.withOpacity(.55) : AppColors.card,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-            side: BorderSide(
-                color: free ? AppColors.border : AppColors.borderSoft),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: () => onOwnerSlotTap(context, ref, slot),
-            child: IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Colored edge shows the slot type at a glance.
-                  Container(width: 4, color: free ? Colors.transparent : color),
-                  Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(10, 10, 0, 10),
-                    child: SizedBox(
-                      width: 54,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(Fmt.time(slot.startAt).split(' ').first,
-                              style: t.titleMedium?.copyWith(height: 1.1)),
-                          Text(Fmt.time(slot.startAt).split(' ').last,
-                              style: t.bodySmall?.copyWith(height: 1.1)),
-                        ],
+        // Finished bookings stay readable; only past empty slots fade out.
+        opacity: !slot.isPast
+            ? 1
+            : slot.booking != null
+                ? .88
+                : .4,
+        child: PressableScale(
+          child: Material(
+            color: free ? AppColors.card.withOpacity(.55) : AppColors.card,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+              side: BorderSide(
+                  color: free ? AppColors.border : AppColors.borderSoft),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: () => onOwnerSlotTap(context, ref, slot),
+              child: IntrinsicHeight(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Colored edge shows the slot type at a glance.
+                    Container(
+                        width: 4, color: free ? Colors.transparent : color),
+                    Padding(
+                      padding:
+                          const EdgeInsetsDirectional.fromSTEB(10, 10, 0, 10),
+                      child: SizedBox(
+                        width: 54,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(Fmt.time(slot.startAt).split(' ').first,
+                                style: t.titleMedium?.copyWith(height: 1.1)),
+                            Text(Fmt.time(slot.startAt).split(' ').last,
+                                style: t.bodySmall?.copyWith(height: 1.1)),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                      width: 1,
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      color: AppColors.borderSoft),
-                  const SizedBox(width: 12),
-                  Center(
-                    child: Container(
-                      width: 34,
-                      height: 34,
-                      decoration: BoxDecoration(
-                        color: free ? AppColors.primaryLight : tint,
-                        borderRadius: BorderRadius.circular(10),
+                    Container(
+                        width: 1,
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        color: AppColors.borderSoft),
+                    const SizedBox(width: 12),
+                    Center(
+                      child: Container(
+                        width: 34,
+                        height: 34,
+                        decoration: BoxDecoration(
+                          color: free ? AppColors.primaryLight : tint,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Icon(pending ? AppIcons.pending : state.icon,
+                            size: 18, color: color),
                       ),
-                      child: Icon(pending ? AppIcons.pending : state.icon,
-                          size: 18, color: color),
                     ),
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: t.titleMedium?.copyWith(
-                                  color: free
-                                      ? AppColors.inkMuted
-                                      : AppColors.ink)),
-                          if (subtitle != null)
-                            Text(subtitle,
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(title,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: t.bodySmall?.copyWith(color: color)),
-                        ],
+                                style: t.titleMedium?.copyWith(
+                                    color: free
+                                        ? AppColors.inkMuted
+                                        : AppColors.ink)),
+                            if (subtitle != null)
+                              Text(subtitle,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: t.bodySmall?.copyWith(color: color)),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsetsDirectional.only(end: 12),
-                    child: Center(
-                      child: b == null
-                          ? Icon(free ? AppIcons.forward : null,
-                              size: 16, color: AppColors.inkFaint)
-                          : pending
-                              ? BookingStatusBadge(status: b.status)
-                              : Text(S.price(b.price),
-                                  style: t.bodyMedium
-                                      ?.copyWith(fontWeight: FontWeight.w700)),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(end: 12),
+                      child: Center(
+                        child: b == null
+                            ? Icon(free ? AppIcons.forward : null,
+                                size: 16, color: AppColors.inkFaint)
+                            : pending
+                                ? BookingStatusBadge(status: b.status)
+                                : Text(S.price(b.price),
+                                    style: t.bodyMedium?.copyWith(
+                                        fontWeight: FontWeight.w700)),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

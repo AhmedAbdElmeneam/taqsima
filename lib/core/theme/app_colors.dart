@@ -76,6 +76,7 @@ abstract final class AppColors {
   static Color get slotAvailableBg => primaryLight;
   static Color get slotApp => info;
   static Color get slotAppBg => infoLight;
+
   /// Amber for "waiting" states: pending requests, under-review pitch, policy.
   static Color get pending => _c(0xFFB87400, 0xFFE8AA4E);
 

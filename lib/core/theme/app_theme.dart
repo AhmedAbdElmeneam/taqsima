@@ -51,8 +51,8 @@ abstract final class AppTheme {
       scaffoldBackgroundColor: Colors.transparent,
       appBarTheme: AppBarTheme(
         // Transparent at rest; turns frosted white once content scrolls under.
-        backgroundColor: WidgetStateColor.resolveWith((s) =>
-            s.contains(WidgetState.scrolledUnder)
+        backgroundColor: WidgetStateColor.resolveWith(
+            (s) => s.contains(WidgetState.scrolledUnder)
                 // Background tint (not white) so it blends with the pitch.
                 ? AppColors.background.withOpacity(.94)
                 : Colors.transparent),

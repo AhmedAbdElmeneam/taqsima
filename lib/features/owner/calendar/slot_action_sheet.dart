@@ -24,7 +24,12 @@ Future<void> onOwnerSlotTap(
     context.push(Routes.ownerBooking(slot.booking!.id));
     return;
   }
-  if (slot.isPast && slot.state == SlotState.available) return;
+  // Finished bookings: just show the details.
+  if (slot.isPast && slot.booking != null) {
+    context.push(Routes.ownerBooking(slot.booking!.id));
+    return;
+  }
+  if (slot.isPast) return;
   await showAppBottomSheet<void>(
     context,
     title:

@@ -33,7 +33,11 @@ class SlotChip extends StatelessWidget {
     final state = ownerView || slot.state == SlotState.available
         ? slot.state
         : SlotState.blocked; // Players: any taken slot looks the same.
-    final disabled = slot.isPast || (!ownerView && !slot.isBookable);
+    final pastBooking = slot.isPast && slot.booking != null;
+    // Owners can still open finished bookings; players cannot pick past slots.
+    final disabled = ownerView
+        ? slot.isPast && !pastBooking
+        : slot.isPast || !slot.isBookable;
 
     Color fg = state.color;
     Color bg = state.background;
@@ -57,7 +61,11 @@ class SlotChip extends StatelessWidget {
       duration: const Duration(milliseconds: 180),
       curve: Curves.easeOutBack,
       child: Opacity(
-        opacity: slot.isPast ? .45 : 1,
+        opacity: !slot.isPast
+            ? 1
+            : ownerView && pastBooking
+                ? .85
+                : .45,
         child: Material(
           color: bg,
           shape: RoundedRectangleBorder(

@@ -96,8 +96,14 @@ class _NavButton extends StatelessWidget {
                 isLabelVisible: item.badge > 0,
                 label: Text('${item.badge}'),
                 backgroundColor: AppColors.error,
-                child: Icon(selected ? item.selectedIcon : item.icon,
-                    size: 22, color: color),
+                // Selected icon gives a small bounce.
+                child: AnimatedScale(
+                  scale: selected ? 1.12 : 1,
+                  duration: const Duration(milliseconds: 380),
+                  curve: Curves.elasticOut,
+                  child: Icon(selected ? item.selectedIcon : item.icon,
+                      size: 22, color: color),
+                ),
               ),
               const SizedBox(height: 2),
               Text(

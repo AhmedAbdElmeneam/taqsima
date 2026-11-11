@@ -98,44 +98,46 @@ class PlayerBookingCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pitch = ref.watch(pitchProvider(booking.pitchId)).valueOrNull;
     final t = Theme.of(context).textTheme;
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: () => context.push(Routes.playerBooking(booking.id)),
-        child: Padding(
-          padding: const EdgeInsets.all(14),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 72,
-                height: 72,
-                child: PitchImage(
-                  photoKey: pitch == null || pitch.photos.isEmpty
-                      ? booking.pitchId
-                      : pitch.photos.first,
-                  borderRadius: BorderRadius.circular(14),
+    return PressableScale(
+      child: Card(
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: () => context.push(Routes.playerBooking(booking.id)),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 72,
+                  height: 72,
+                  child: PitchImage(
+                    photoKey: pitch == null || pitch.photos.isEmpty
+                        ? booking.pitchId
+                        : pitch.photos.first,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(pitch?.name ?? '', style: t.titleMedium),
-                    const SizedBox(height: 2),
-                    Text(Fmt.dayRelative(booking.startAt),
-                        style:
-                            t.bodyMedium?.copyWith(color: AppColors.inkMuted)),
-                    Text(Fmt.timeRange(booking.startAt, booking.endAt),
-                        style: t.bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.w700)),
-                    const SizedBox(height: 6),
-                    BookingStatusBadge(status: booking.status),
-                  ],
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(pitch?.name ?? '', style: t.titleMedium),
+                      const SizedBox(height: 2),
+                      Text(Fmt.dayRelative(booking.startAt),
+                          style: t.bodyMedium
+                              ?.copyWith(color: AppColors.inkMuted)),
+                      Text(Fmt.timeRange(booking.startAt, booking.endAt),
+                          style: t.bodyMedium
+                              ?.copyWith(fontWeight: FontWeight.w700)),
+                      const SizedBox(height: 6),
+                      BookingStatusBadge(status: booking.status),
+                    ],
+                  ),
                 ),
-              ),
-              Icon(AppIcons.forward, color: AppColors.inkFaint),
-            ],
+                Icon(AppIcons.forward, color: AppColors.inkFaint),
+              ],
+            ),
           ),
         ),
       ),
