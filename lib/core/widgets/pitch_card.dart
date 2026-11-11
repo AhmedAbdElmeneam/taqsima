@@ -29,7 +29,8 @@ class PitchCard extends StatelessWidget {
             Stack(
               children: [
                 PitchImage(
-                  photoKey: pitch.photos.isEmpty ? pitch.id : pitch.photos.first,
+                  photoKey:
+                      pitch.photos.isEmpty ? pitch.id : pitch.photos.first,
                   height: 140,
                 ),
                 PositionedDirectional(

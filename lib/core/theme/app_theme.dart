@@ -30,8 +30,8 @@ abstract final class AppTheme {
           bodyLarge: GoogleFonts.cairo(fontSize: 16, color: AppColors.ink),
           bodyMedium: GoogleFonts.cairo(fontSize: 14, color: AppColors.ink),
           bodySmall: GoogleFonts.cairo(fontSize: 12, color: AppColors.inkMuted),
-          labelLarge: GoogleFonts.cairo(
-              fontSize: 16, fontWeight: FontWeight.w700),
+          labelLarge:
+              GoogleFonts.cairo(fontSize: 16, fontWeight: FontWeight.w700),
         );
 
     final rounded = RoundedRectangleBorder(
@@ -120,8 +120,8 @@ abstract final class AppTheme {
         backgroundColor: AppColors.surface,
         indicatorColor: AppColors.primaryLight,
         labelTextStyle: WidgetStatePropertyAll(
-          textTheme.bodySmall?.copyWith(
-              fontWeight: FontWeight.w700, color: AppColors.ink),
+          textTheme.bodySmall
+              ?.copyWith(fontWeight: FontWeight.w700, color: AppColors.ink),
         ),
       ),
       tabBarTheme: TabBarTheme(

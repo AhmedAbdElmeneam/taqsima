@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 
 class MapPin {
-  const MapPin({required this.id, required this.lat, required this.lng, this.label});
+  const MapPin(
+      {required this.id, required this.lat, required this.lng, this.label});
   final String id;
   final double lat;
   final double lng;
@@ -54,9 +55,10 @@ class MapPlaceholder extends StatelessWidget {
                 ? null
                 : (d) {
                     final p = d.localPosition;
-                    final lng = _minLng + p.dx / size.width * (_maxLng - _minLng);
-                    final lat =
-                        _minLat + (1 - p.dy / size.height) * (_maxLat - _minLat);
+                    final lng =
+                        _minLng + p.dx / size.width * (_maxLng - _minLng);
+                    final lat = _minLat +
+                        (1 - p.dy / size.height) * (_maxLat - _minLat);
                     onPick!(lat, lng);
                   },
             child: Stack(
@@ -121,7 +123,8 @@ class _Pin extends StatelessWidget {
 class _MapPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawRect(Offset.zero & size, Paint()..color = const Color(0xFFEFF1EC));
+    canvas.drawRect(
+        Offset.zero & size, Paint()..color = const Color(0xFFEFF1EC));
 
     // Blocks.
     final block = Paint()..color = const Color(0xFFE3E6DF);
@@ -129,8 +132,8 @@ class _MapPainter extends CustomPainter {
     for (var x = 6.0; x < size.width; x += step) {
       for (var y = 6.0; y < size.height; y += step) {
         canvas.drawRRect(
-            RRect.fromRectAndRadius(
-                Rect.fromLTWH(x, y, step - 10, step - 10), const Radius.circular(4)),
+            RRect.fromRectAndRadius(Rect.fromLTWH(x, y, step - 10, step - 10),
+                const Radius.circular(4)),
             block);
       }
     }

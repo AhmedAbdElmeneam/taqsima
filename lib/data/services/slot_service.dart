@@ -38,7 +38,9 @@ class SlotService {
 
         Booking? booking;
         for (final b in bookings) {
-          if (b.pitchId == pitch.id && b.occupiesSlot && b.overlaps(start, end)) {
+          if (b.pitchId == pitch.id &&
+              b.occupiesSlot &&
+              b.overlaps(start, end)) {
             booking = b;
             break;
           }
@@ -85,8 +87,8 @@ class SlotService {
     required List<Booking> bookings,
     required List<BlockedSlot> blocked,
   }) {
-    final booked = bookings.any(
-        (b) => b.pitchId == pitchId && b.occupiesSlot && b.overlaps(start, end));
+    final booked = bookings.any((b) =>
+        b.pitchId == pitchId && b.occupiesSlot && b.overlaps(start, end));
     final isBlocked =
         blocked.any((b) => b.pitchId == pitchId && b.overlaps(start, end));
     return !booked && !isBlocked;

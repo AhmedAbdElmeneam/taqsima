@@ -27,7 +27,8 @@ class MockAuthRepository implements AuthRepository {
     }
     // Demo: every player logs in as u1 and every owner as o1, so there is
     // always realistic data to look at.
-    final id = role == UserRole.owner ? MockDb.demoOwnerId : MockDb.demoPlayerId;
+    final id =
+        role == UserRole.owner ? MockDb.demoOwnerId : MockDb.demoPlayerId;
     final i = _db.users.indexWhere((u) => u.id == id);
     final trimmed = name?.trim();
     final user = _db.users[i].copyWith(
@@ -71,8 +72,10 @@ class MockPitchRepository implements PitchRepository {
     final q = f.query?.trim();
     return _db.pitches.where((p) {
       if (p.status != PitchStatus.active) return false;
-      if (q != null && q.isNotEmpty &&
-          !p.name.contains(q) && !p.area.contains(q)) {
+      if (q != null &&
+          q.isNotEmpty &&
+          !p.name.contains(q) &&
+          !p.area.contains(q)) {
         return false;
       }
       if (f.area != null && p.area != f.area) return false;
@@ -126,7 +129,10 @@ class MockPitchRepository implements PitchRepository {
       // Default hours so the new pitch has a schedule to edit.
       for (var d = 0; d < 7; d++) {
         _db.workingHours.add(WorkingHours(
-            pitchId: created.id, dayOfWeek: d, from: 960, to: 0,
+            pitchId: created.id,
+            dayOfWeek: d,
+            from: 960,
+            to: 0,
             slotDurationMinutes: 60));
       }
       return created;
@@ -143,7 +149,8 @@ class MockPitchRepository implements PitchRepository {
   }
 
   @override
-  Future<void> saveWorkingHours(String pitchId, List<WorkingHours> hours) async {
+  Future<void> saveWorkingHours(
+      String pitchId, List<WorkingHours> hours) async {
     await _latency(400);
     _db.workingHours
       ..removeWhere((w) => w.pitchId == pitchId)

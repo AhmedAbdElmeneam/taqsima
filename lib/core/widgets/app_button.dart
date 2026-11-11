@@ -31,15 +31,17 @@ class PrimaryButton extends StatelessWidget {
         : Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (icon != null) ...[Icon(icon, size: 22), const SizedBox(width: 8)],
+              if (icon != null) ...[
+                Icon(icon, size: 22),
+                const SizedBox(width: 8)
+              ],
               Flexible(child: Text(label, overflow: TextOverflow.ellipsis)),
             ],
           );
     return FilledButton(
       onPressed: loading ? null : onPressed,
-      style: color == null
-          ? null
-          : FilledButton.styleFrom(backgroundColor: color),
+      style:
+          color == null ? null : FilledButton.styleFrom(backgroundColor: color),
       child: child,
     );
   }

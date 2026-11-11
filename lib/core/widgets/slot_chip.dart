@@ -130,7 +130,9 @@ class SlotLegend extends StatelessWidget {
                 width: 14,
                 height: 14,
                 decoration: BoxDecoration(
-                  color: s == SlotState.available ? AppColors.surface : s.background,
+                  color: s == SlotState.available
+                      ? AppColors.surface
+                      : s.background,
                   border: Border.all(color: s.color, width: 1.5),
                   borderRadius: BorderRadius.circular(4),
                 ),

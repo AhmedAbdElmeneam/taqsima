@@ -33,7 +33,8 @@ class AsyncView<T> extends StatelessWidget {
 }
 
 class SectionHeader extends StatelessWidget {
-  const SectionHeader({super.key, required this.title, this.action, this.onAction});
+  const SectionHeader(
+      {super.key, required this.title, this.action, this.onAction});
 
   final String title;
   final String? action;
@@ -43,8 +44,10 @@ class SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(child: Text(title, style: Theme.of(context).textTheme.titleLarge)),
-        if (action != null) TextButton(onPressed: onAction, child: Text(action!)),
+        Expanded(
+            child: Text(title, style: Theme.of(context).textTheme.titleLarge)),
+        if (action != null)
+          TextButton(onPressed: onAction, child: Text(action!)),
       ],
     );
   }
@@ -88,8 +91,8 @@ class InfoRow extends StatelessWidget {
             child: Text(
               value,
               textAlign: TextAlign.end,
-              style: t.bodyLarge?.copyWith(
-                  fontWeight: FontWeight.w700, color: valueColor),
+              style: t.bodyLarge
+                  ?.copyWith(fontWeight: FontWeight.w700, color: valueColor),
             ),
           ),
         ],

@@ -73,8 +73,8 @@ class _PitchPainter extends CustomPainter {
     final m = size.shortestSide * .1;
     final field = Rect.fromLTRB(m, m, size.width - m, size.height - m);
     canvas.drawRect(field, line);
-    canvas.drawLine(
-        Offset(field.center.dx, field.top), Offset(field.center.dx, field.bottom), line);
+    canvas.drawLine(Offset(field.center.dx, field.top),
+        Offset(field.center.dx, field.bottom), line);
     canvas.drawCircle(field.center, field.height * .18, line);
     canvas.drawCircle(field.center, 3, line..style = PaintingStyle.fill);
     line.style = PaintingStyle.stroke;

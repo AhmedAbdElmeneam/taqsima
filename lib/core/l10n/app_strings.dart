@@ -28,6 +28,7 @@ abstract final class S {
   static const am = 'ص';
   static const pm = 'م';
   static const all = 'الكل';
+  static String km(String value) => '$value كم';
 
   // Role choice / splash
   static const welcome = 'أهلاً بيك في ميعادنا';
@@ -119,8 +120,11 @@ abstract final class S {
   static const noSlotsLeft = 'كل المواعيد اتحجزت';
   static const noSlotsLeftHint = 'جرّب يوم تاني';
   static const selectSlotFirst = 'اختار ميعاد الأول';
-  static String slotDuration(int minutes) =>
-      minutes == 60 ? 'ساعة' : minutes == 90 ? 'ساعة ونص' : '$minutes دقيقة';
+  static String slotDuration(int minutes) => minutes == 60
+      ? 'ساعة'
+      : minutes == 90
+          ? 'ساعة ونص'
+          : '$minutes دقيقة';
   static const continueBtn = 'كمّل';
 
   // Confirmation
@@ -214,7 +218,8 @@ abstract final class S {
   static const editPitch = 'تعديل الملعب';
   static const workingHours = 'مواعيد العمل';
   static const quickActions = 'اختصارات';
-  static const tapFreeSlotHint = 'دوس على أي ميعاد فاضي عشان تقفله أو تسجّل حجز';
+  static const tapFreeSlotHint =
+      'دوس على أي ميعاد فاضي عشان تقفله أو تسجّل حجز';
 
   // Pitch form
   static const stepInfo = 'البيانات';
@@ -227,7 +232,8 @@ abstract final class S {
   static const descriptionHint = 'اكتب حاجة تميّز ملعبك';
   static const chooseArea = 'اختار المنطقة';
   static const addPhoto = 'ضيف صورة';
-  static const photosHint = 'ضيف صور واضحة للملعب (تجريبي — هتتضاف صورة نموذجية)';
+  static const photosHint =
+      'ضيف صور واضحة للملعب (تجريبي — هتتضاف صورة نموذجية)';
   static const tapMapToPin = 'دوس على الخريطة عشان تحدد مكان الملعب';
   static const locationSet = 'تم تحديد المكان';
   static const priceHint = 'السعر بالجنيه للساعة';
@@ -293,7 +299,8 @@ abstract final class S {
   static const pitchStatus = 'حالة الملعب';
   static const underReview = 'تحت المراجعة';
   static const active = 'شغّال';
-  static const underReviewHint = 'فريقنا بيراجع بيانات الملعب، وهيظهر للاعبين بعد الموافقة.';
+  static const underReviewHint =
+      'فريقنا بيراجع بيانات الملعب، وهيظهر للاعبين بعد الموافقة.';
 
   // Days (index = dayOfWeek, 0 = Sunday)
   static const weekdays = [
