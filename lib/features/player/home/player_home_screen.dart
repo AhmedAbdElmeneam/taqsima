@@ -11,9 +11,10 @@ import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../data/models/models.dart';
 import '../../../data/repositories/repositories.dart';
-import '../../auth/session_controller.dart';
+import '../../../data/providers.dart';
 import '../player_providers.dart';
 import '../search/filter_sheet.dart';
+import 'player_home_widgets.dart';
 
 class PlayerHomeScreen extends ConsumerWidget {
   const PlayerHomeScreen({super.key});
@@ -25,10 +26,7 @@ class PlayerHomeScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(sessionProvider);
     final pitches = ref.watch(nearbyPitchesProvider);
-    final t = Theme.of(context).textTheme;
-    final firstName = (user?.name ?? '').split(' ').first;
 
     return Scaffold(
       body: TopFade(
@@ -36,14 +34,12 @@ class PlayerHomeScreen extends ConsumerWidget {
         child: SafeArea(
           child: RefreshIndicator(
             color: AppColors.primary,
-            onRefresh: () => ref.refresh(nearbyPitchesProvider.future),
+            onRefresh: () async => ref.refreshData(),
             child: ListView(
               padding: const EdgeInsets.fromLTRB(
                   20, 8, 20, AppSpacing.navBarClearance),
               children: [
-                Text(S.hello(firstName),
-                    style: t.bodyMedium?.copyWith(color: AppColors.inkMuted)),
-                Text(S.homeQuestion, style: t.headlineMedium),
+                const PlayerHeroHeader(),
                 const SizedBox(height: 14),
                 Row(
                   children: [
@@ -71,6 +67,8 @@ class PlayerHomeScreen extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 22),
+                const AvailableTodayStrip(),
+                const BookAgainRow(),
                 SectionHeader(
                   title: S.nearbyPitches,
                   action: S.seeAll,

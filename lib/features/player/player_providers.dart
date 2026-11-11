@@ -64,3 +64,45 @@ bool canCancel(Booking b, [DateTime? now]) =>
 bool isUpcoming(Booking b, [DateTime? now]) =>
     b.endAt.isAfter(now ?? DateTime.now()) &&
     (b.status == BookingStatus.pending || b.status == BookingStatus.confirmed);
+
+/// The player's next match (pending or confirmed), if any.
+final nextMatchProvider = FutureProvider.autoDispose<Booking?>((ref) async {
+  final all = await ref.watch(myBookingsProvider.future);
+  final now = DateTime.now();
+  final upcoming = all.where((b) => isUpcoming(b, now)).toList()
+    ..sort((a, b) => a.startAt.compareTo(b.startAt));
+  return upcoming.firstOrNull;
+});
+
+/// Earliest free slot left today at each of the nearest pitches.
+final availableTodayProvider =
+    FutureProvider.autoDispose<List<(Pitch, TimeSlot)>>((ref) async {
+  final pitches = await ref.watch(nearbyPitchesProvider.future);
+  final today = Fmt.dateOnly(DateTime.now());
+  final result = <(Pitch, TimeSlot)>[];
+  for (final p in pitches.take(6)) {
+    final slots = await ref.watch(daySlotsProvider((p.id, today)).future);
+    final free = slots.where((s) => s.isBookable).firstOrNull;
+    if (free != null) result.add((p, free));
+  }
+  result.sort((a, b) => a.$2.startAt.compareTo(b.$2.startAt));
+  return result;
+});
+
+/// Pitches the player has played at before (most recent first).
+final bookAgainProvider = FutureProvider.autoDispose<List<Pitch>>((ref) async {
+  final all = await ref.watch(myBookingsProvider.future);
+  final ids = <String>[];
+  for (final b in all.reversed) {
+    if (b.status == BookingStatus.completed && !ids.contains(b.pitchId)) {
+      ids.add(b.pitchId);
+    }
+  }
+  final repo = ref.watch(pitchRepositoryProvider);
+  final pitches = <Pitch>[];
+  for (final id in ids.take(4)) {
+    final p = await repo.getPitch(id);
+    if (p != null) pitches.add(p);
+  }
+  return pitches;
+});

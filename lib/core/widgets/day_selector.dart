@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../l10n/app_strings.dart';
 import '../theme/app_colors.dart';
 import '../utils/formatters.dart';
+import 'animations.dart';
 
 /// Horizontal strip of day tiles starting today.
 class DaySelector extends StatelessWidget {
@@ -35,45 +36,51 @@ class DaySelector extends StatelessWidget {
           final day = first.add(Duration(days: i));
           final isSelected = Fmt.isSameDay(day, selected);
           final isToday = Fmt.isSameDay(day, today);
-          return Material(
-            color: isSelected ? AppColors.primary : AppColors.card,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-              side: BorderSide(
-                  color: isSelected ? AppColors.primary : AppColors.border,
-                  width: 1.5),
-            ),
-            child: InkWell(
-              borderRadius: BorderRadius.circular(16),
-              onTap: () => onSelected(day),
-              child: SizedBox(
-                width: 56,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      isToday ? S.today : S.weekdaysShort[Fmt.dayOfWeek(day)],
-                      style: t.bodySmall?.copyWith(
-                        fontWeight: FontWeight.w700,
-                        color: isSelected ? Colors.white : AppColors.inkMuted,
+          return AnimatedScale(
+            scale: isSelected ? 1 : .94,
+            duration: Motion.fast,
+            curve: Curves.easeOut,
+            child: Material(
+              color: isSelected ? AppColors.primary : AppColors.card,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+                side: BorderSide(
+                    color: isSelected ? AppColors.primary : AppColors.border,
+                    width: 1.5),
+              ),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(16),
+                onTap: () => onSelected(day),
+                child: SizedBox(
+                  width: 56,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        isToday ? S.today : S.weekdaysShort[Fmt.dayOfWeek(day)],
+                        style: t.bodySmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: isSelected ? Colors.white : AppColors.inkMuted,
+                        ),
                       ),
-                    ),
-                    Text(
-                      '${day.day}',
-                      style: t.headlineMedium?.copyWith(
-                        fontSize: 17,
-                        height: 1.2,
-                        color: isSelected ? Colors.white : AppColors.ink,
+                      Text(
+                        '${day.day}',
+                        style: t.headlineMedium?.copyWith(
+                          fontSize: 17,
+                          height: 1.2,
+                          color: isSelected ? Colors.white : AppColors.ink,
+                        ),
                       ),
-                    ),
-                    Text(
-                      S.months[day.month - 1],
-                      style: t.bodySmall?.copyWith(
-                        fontSize: 10,
-                        color: isSelected ? Colors.white70 : AppColors.inkFaint,
+                      Text(
+                        S.months[day.month - 1],
+                        style: t.bodySmall?.copyWith(
+                          fontSize: 10,
+                          color:
+                              isSelected ? Colors.white70 : AppColors.inkFaint,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

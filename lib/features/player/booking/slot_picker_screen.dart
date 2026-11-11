@@ -121,6 +121,8 @@ class _SlotPickerScreenState extends ConsumerState<SlotPickerScreen> {
                   );
                 }
                 return GridView.builder(
+                  // New key per day so the stagger replays when the day changes.
+                  key: ValueKey(_day),
                   padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
@@ -131,10 +133,13 @@ class _SlotPickerScreenState extends ConsumerState<SlotPickerScreen> {
                   itemCount: list.length,
                   itemBuilder: (_, i) {
                     final s = list[i];
-                    return SlotChip(
-                      slot: s,
-                      selected: _selected?.startAt == s.startAt,
-                      onTap: () => setState(() => _selected = s),
+                    return FadeSlideIn(
+                      index: i,
+                      child: SlotChip(
+                        slot: s,
+                        selected: _selected?.startAt == s.startAt,
+                        onTap: () => setState(() => _selected = s),
+                      ),
                     );
                   },
                 );

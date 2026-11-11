@@ -21,7 +21,8 @@ class AsyncView<T> extends StatelessWidget {
     return value.when(
       skipLoadingOnReload: true,
       skipLoadingOnRefresh: true,
-      data: builder,
+      // Content gently fades/rises in the first time it appears.
+      data: (d) => FadeSlideIn(child: builder(d)),
       loading: () => const Center(
         child: Padding(
           padding: EdgeInsets.all(32),

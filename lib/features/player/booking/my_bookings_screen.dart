@@ -131,7 +131,28 @@ class PlayerBookingCard extends ConsumerWidget {
                           style: t.bodyMedium
                               ?.copyWith(fontWeight: FontWeight.w700)),
                       const SizedBox(height: 6),
-                      BookingStatusBadge(status: booking.status),
+                      Row(
+                        children: [
+                          BookingStatusBadge(status: booking.status),
+                          // Countdown for matches in the next 24 hours.
+                          if (isUpcoming(booking) &&
+                              booking.startAt
+                                      .difference(DateTime.now())
+                                      .inMinutes <
+                                  24 * 60) ...[
+                            const SizedBox(width: 6),
+                            AppBadge(
+                              label: S.inTime(booking.startAt
+                                  .difference(DateTime.now())
+                                  .inMinutes
+                                  .clamp(0, 1 << 30)),
+                              color: AppColors.primary,
+                              background: AppColors.primaryLight,
+                              icon: AppIcons.clock,
+                            ),
+                          ],
+                        ],
+                      ),
                     ],
                   ),
                 ),

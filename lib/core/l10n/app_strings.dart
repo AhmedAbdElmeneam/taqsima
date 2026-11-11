@@ -70,6 +70,11 @@ abstract final class S {
   static const navRequests = 'الطلبات';
 
   // Player home
+  static const yourNextMatch = 'مباراتك القادمة';
+  static const noUpcomingMatch = 'لا توجد مباريات قادمة — احجز ملعبك الآن';
+  static const availableToday = 'متاح اليوم';
+  static const bookAgain = 'احجز مرة أخرى';
+  static const awaitingConfirmation = 'بانتظار تأكيد الملعب';
   static String hello(String name) => 'مرحبًا، $name';
   static const homeQuestion = 'أين ستلعب اليوم؟';
   static const searchHint = 'ابحث باسم الملعب أو المنطقة';
@@ -210,6 +215,8 @@ abstract final class S {
   static const owner = 'صاحب ملعب';
 
   // Owner dashboard
+  static const occupancyToday = 'نسبة الإشغال اليوم';
+  static String bookedOf(int booked, int total) => '$booked من $total مواعيد';
   static const goodMorning = 'صباح الخير';
   static const goodEvening = 'مساء الخير';
   static const nextBooking = 'الحجز القادم';
@@ -229,7 +236,9 @@ abstract final class S {
         ? 'بعد ساعة'
         : h == 2
             ? 'بعد ساعتين'
-            : 'بعد $h ساعات';
+            : h <= 10
+                ? 'بعد $h ساعات'
+                : 'بعد $h ساعة';
   }
 
   static const todaysBookings = 'حجوزات اليوم';

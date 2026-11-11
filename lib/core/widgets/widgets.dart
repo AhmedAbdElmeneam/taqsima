@@ -8,6 +8,7 @@ export 'common.dart';
 export 'day_selector.dart';
 export 'empty_state.dart';
 export 'glass_nav_bar.dart';
+export 'hero_card.dart';
 export 'map_placeholder.dart';
 export 'pitch_card.dart';
 export 'pitch_image.dart';
