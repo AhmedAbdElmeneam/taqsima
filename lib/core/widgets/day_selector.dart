@@ -36,7 +36,7 @@ class DaySelector extends StatelessWidget {
           final isSelected = Fmt.isSameDay(day, selected);
           final isToday = Fmt.isSameDay(day, today);
           return Material(
-            color: isSelected ? AppColors.primary : AppColors.surface,
+            color: isSelected ? AppColors.primary : AppColors.card,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(16),
               side: BorderSide(

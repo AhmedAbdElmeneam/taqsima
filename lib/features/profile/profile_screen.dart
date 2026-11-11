@@ -60,12 +60,13 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     if (user == null) return const SizedBox.shrink();
     final t = Theme.of(context).textTheme;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text(S.profile)),
-      body: ListView(
+    return TabPage(
+      child: ListView(
         padding:
-            const EdgeInsets.fromLTRB(20, 8, 20, AppSpacing.navBarClearance),
+            const EdgeInsets.fromLTRB(20, 0, 20, AppSpacing.navBarClearance),
         children: [
+          const PageTitle(S.profile,
+              padding: EdgeInsets.only(top: 12, bottom: 12)),
           AppPanel(
             child: Row(
               children: [
@@ -124,20 +125,24 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   showSelectedIcon: false,
                   style: SegmentedButton.styleFrom(
                     selectedForegroundColor: AppColors.primary,
-                    minimumSize: const Size.fromHeight(42),
+                    minimumSize: const Size.fromHeight(32),
+                    visualDensity: VisualDensity.compact,
+                    padding: const EdgeInsets.symmetric(horizontal: 6),
+                    textStyle:
+                        t.bodySmall?.copyWith(fontWeight: FontWeight.w700),
                   ),
                   segments: const [
                     ButtonSegment(
                         value: ThemeMode.system,
-                        icon: Icon(AppIcons.themeAuto, size: 18),
+                        icon: Icon(AppIcons.themeAuto, size: 15),
                         label: Text(S.themeSystem)),
                     ButtonSegment(
                         value: ThemeMode.light,
-                        icon: Icon(AppIcons.themeLight, size: 18),
+                        icon: Icon(AppIcons.themeLight, size: 15),
                         label: Text(S.themeLight)),
                     ButtonSegment(
                         value: ThemeMode.dark,
-                        icon: Icon(AppIcons.themeDark, size: 18),
+                        icon: Icon(AppIcons.themeDark, size: 15),
                         label: Text(S.themeDark)),
                   ],
                   selected: {ref.watch(themeModeProvider)},

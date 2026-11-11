@@ -33,8 +33,9 @@ class _PitchBackgroundPainter extends CustomPainter {
     final rect = Offset.zero & size;
     final w = size.width;
     final h = size.height;
+    final green = dark ? const Color(0xFF2E7D4F) : const Color(0xFF1B8A3A);
 
-    // 1. Base: grass-tinted wash, fading to neutral further down.
+    // 1. Base: grass-tinted wash over the whole screen.
     canvas.drawRect(
       rect,
       Paint()
@@ -42,25 +43,20 @@ class _PitchBackgroundPainter extends CustomPainter {
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: dark
-              ? const [Color(0xFF0F2318), Color(0xFF0D1712), Color(0xFF0B110E)]
-              : const [Color(0xFFDDF1E3), Color(0xFFEFF6F1), Color(0xFFF6F8F7)],
-          stops: const [0, .42, 1],
+              ? const [Color(0xFF10251A), Color(0xFF0D1913), Color(0xFF0F2117)]
+              : const [Color(0xFFDDF0E2), Color(0xFFEDF5EF), Color(0xFFE2F1E6)],
+          stops: const [0, .5, 1],
         ).createShader(rect),
     );
 
-    // 2. Mowed-grass stripes across the top half, fading out.
-    final stripeH = h * .055;
-    for (var i = 0; i * stripeH < h * .5; i += 2) {
-      final fade = 1 - (i * stripeH) / (h * .5);
-      canvas.drawRect(
-        Rect.fromLTWH(0, i * stripeH, w, stripeH),
-        Paint()
-          ..color = (dark ? const Color(0xFF2E7D4F) : const Color(0xFF1B8A3A))
-              .withOpacity((dark ? .07 : .045) * fade),
-      );
+    // 2. Mowed-grass stripes from top to bottom.
+    final stripeH = h / 14;
+    final stripe = Paint()..color = green.withOpacity(dark ? .075 : .05);
+    for (var i = 0; i < 14; i += 2) {
+      canvas.drawRect(Rect.fromLTWH(0, i * stripeH, w, stripeH), stripe);
     }
 
-    // 3. Light: floodlights in dark mode, soft sun glow in light mode.
+    // 3. Light: floodlights at night, soft daylight glow by day.
     void glow(Offset c, double r, Color color) => canvas.drawCircle(
           c,
           r,
@@ -69,54 +65,61 @@ class _PitchBackgroundPainter extends CustomPainter {
                 .createShader(Rect.fromCircle(center: c, radius: r)),
         );
     if (dark) {
-      glow(Offset(-w * .05, -h * .02), w * .85,
+      glow(Offset(-w * .05, -h * .02), w * .9,
           const Color(0xFFBFF5D2).withOpacity(.10));
-      glow(Offset(w * 1.05, -h * .02), w * .85,
+      glow(Offset(w * 1.05, -h * .02), w * .9,
           const Color(0xFFBFF5D2).withOpacity(.10));
+      glow(Offset(w * .5, h * 1.05), w * .8,
+          const Color(0xFFBFF5D2).withOpacity(.05));
     } else {
-      glow(Offset(w * .9, h * .02), w * .75, Colors.white.withOpacity(.55));
-      glow(Offset(0, h * .6), w * .6, const Color(0xFF7CC9A0).withOpacity(.12));
+      glow(Offset(w * .85, h * .05), w * .8, Colors.white.withOpacity(.55));
+      glow(Offset(w * .1, h * .7), w * .7, Colors.white.withOpacity(.35));
     }
 
-    // 4. Field markings at the top of the screen.
+    // 4. A full pitch, top to bottom of the screen.
     final line = Paint()
-      ..color = (dark ? Colors.white : const Color(0xFF1B8A3A))
-          .withOpacity(dark ? .06 : .08)
+      ..color = (dark ? Colors.white : green).withOpacity(dark ? .08 : .11)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.6;
-    final top = h * .015;
-    final fieldH = h * .36;
-    final midY = top + fieldH / 2;
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(Rect.fromLTWH(w * .04, top, w * .92, fieldH),
-          const Radius.circular(4)),
-      line,
-    );
-    canvas.drawLine(Offset(w * .04, midY), Offset(w * .96, midY), line);
-    canvas.drawCircle(Offset(w / 2, midY), w * .16, line);
-    // Penalty box + goal area at the top edge.
-    canvas.drawRect(
-        Rect.fromCenter(
-            center: Offset(w / 2, top + fieldH * .1),
-            width: w * .5,
-            height: fieldH * .2),
-        line);
-    canvas.drawRect(
-        Rect.fromCenter(
-            center: Offset(w / 2, top + fieldH * .04),
-            width: w * .24,
-            height: fieldH * .08),
-        line);
-    canvas.drawArc(
-        Rect.fromCircle(
-            center: Offset(w / 2, top + fieldH * .2), radius: w * .1),
-        0,
-        3.1416,
-        false,
-        line);
+      ..strokeWidth = 1.8;
     final dot = Paint()..color = line.color;
-    canvas.drawCircle(Offset(w / 2, midY), 3, dot);
-    canvas.drawCircle(Offset(w / 2, top + fieldH * .14), 2.4, dot);
+    final field = Rect.fromLTRB(w * .05, h * .02, w * .95, h * .98);
+    final cx = field.center.dx;
+    canvas.drawRRect(
+        RRect.fromRectAndRadius(field, const Radius.circular(6)), line);
+    // Halfway line + centre circle.
+    canvas.drawLine(Offset(field.left, field.center.dy),
+        Offset(field.right, field.center.dy), line);
+    canvas.drawCircle(field.center, w * .17, line);
+    canvas.drawCircle(field.center, 3.2, dot);
+
+    // Penalty area, goal area, spot and arc at both ends.
+    final boxW = field.width * .56;
+    final boxH = field.height * .14;
+    final goalW = field.width * .26;
+    final goalH = field.height * .055;
+    for (final top in [true, false]) {
+      final y0 = top ? field.top : field.bottom;
+      final dir = top ? 1.0 : -1.0;
+      canvas.drawRect(
+          Rect.fromLTRB(cx - boxW / 2, y0, cx + boxW / 2, y0 + dir * boxH),
+          line);
+      canvas.drawRect(
+          Rect.fromLTRB(cx - goalW / 2, y0, cx + goalW / 2, y0 + dir * goalH),
+          line);
+      final spot = Offset(cx, y0 + dir * boxH * .72);
+      canvas.drawCircle(spot, 2.6, dot);
+      canvas.drawArc(Rect.fromCircle(center: spot, radius: w * .12),
+          top ? .62 : 3.1416 + .62, 3.1416 - 1.24, false, line);
+    }
+    // Corner arcs.
+    for (final c in [
+      field.topLeft,
+      field.topRight,
+      field.bottomLeft,
+      field.bottomRight
+    ]) {
+      canvas.drawCircle(c, 10, line);
+    }
   }
 
   @override

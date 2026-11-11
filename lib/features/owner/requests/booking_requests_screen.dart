@@ -50,14 +50,18 @@ class _BookingRequestsScreenState extends ConsumerState<BookingRequestsScreen> {
     final requests = ref.watch(filteredRequestsProvider);
     final searching = ref.watch(requestSearchProvider).trim().isNotEmpty;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text(S.bookingRequests)),
-      body: Column(
+    final list = requests.valueOrNull;
+
+    // Whole screen scrolls: title, search box and cards in one list.
+    return TabPage(
+      child: ListView(
+        padding: const EdgeInsets.only(bottom: AppSpacing.navBarClearance),
         children: [
+          const PageTitle(S.bookingRequests),
           // Only show the search box when there is something to search.
           if (all.isNotEmpty || searching)
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
               child: TextField(
                 controller: _search,
                 textInputAction: TextInputAction.search,
@@ -78,37 +82,35 @@ class _BookingRequestsScreenState extends ConsumerState<BookingRequestsScreen> {
                 ),
               ),
             ),
-          Expanded(
-            child: AsyncView(
-              value: requests,
-              builder: (list) {
-                if (list.isEmpty) {
-                  return searching
-                      ? const EmptyState(
-                          icon: AppIcons.notFound,
-                          title: S.noSearchResults,
-                          message: S.noSearchResultsHint,
-                        )
-                      : const EmptyState(
-                          icon: AppIcons.inbox,
-                          title: S.noRequests,
-                          message: S.noRequestsHint,
-                        );
-                }
-                return ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(
-                      20, 8, 20, AppSpacing.navBarClearance),
-                  itemCount: list.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
-                  itemBuilder: (_, i) => FadeSlideIn(
-                    index: i,
-                    child: _RequestCard(
-                        key: ValueKey(list[i].id), booking: list[i]),
-                  ),
-                );
-              },
-            ),
-          ),
+          if (list == null)
+            const Padding(
+              padding: EdgeInsets.only(top: 80),
+              child: Center(child: BallLoader()),
+            )
+          else if (list.isEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 40),
+              child: searching
+                  ? const EmptyState(
+                      icon: AppIcons.notFound,
+                      title: S.noSearchResults,
+                      message: S.noSearchResultsHint,
+                    )
+                  : const EmptyState(
+                      icon: AppIcons.inbox,
+                      title: S.noRequests,
+                      message: S.noRequestsHint,
+                    ),
+            )
+          else
+            for (final (i, b) in list.indexed)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 4, 20, 8),
+                child: FadeSlideIn(
+                  index: i,
+                  child: _RequestCard(key: ValueKey(b.id), booking: b),
+                ),
+              ),
         ],
       ),
     );
@@ -201,6 +203,7 @@ class _RequestCardState extends ConsumerState<_RequestCard> {
                   Expanded(
                     child: PrimaryButton(
                       label: S.accept,
+                      compact: true,
                       icon: AppIcons.check,
                       loading: _busy,
                       onPressed: () => _answer(true),
@@ -210,6 +213,7 @@ class _RequestCardState extends ConsumerState<_RequestCard> {
                   Expanded(
                     child: SecondaryButton(
                       label: S.reject,
+                      compact: true,
                       icon: AppIcons.close,
                       color: AppColors.error,
                       onPressed: _busy ? null : () => _answer(false),

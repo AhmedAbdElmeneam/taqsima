@@ -89,22 +89,20 @@ class _MyPitches extends ConsumerWidget {
                         children: [
                           Expanded(
                             child: OutlinedButton.icon(
-                              style: OutlinedButton.styleFrom(
-                                  minimumSize: const Size.fromHeight(48)),
+                              style: _smallButton(context),
                               onPressed: () =>
                                   context.push(Routes.ownerEditPitch(p.id)),
-                              icon: const Icon(AppIcons.edit),
+                              icon: const Icon(AppIcons.edit, size: 16),
                               label: const Text(S.edit),
                             ),
                           ),
                           const SizedBox(width: 8),
                           Expanded(
                             child: OutlinedButton.icon(
-                              style: OutlinedButton.styleFrom(
-                                  minimumSize: const Size.fromHeight(48)),
+                              style: _smallButton(context),
                               onPressed: () =>
                                   context.push(Routes.ownerHours(p.id)),
-                              icon: const Icon(AppIcons.clock),
+                              icon: const Icon(AppIcons.clock, size: 16),
                               label: const Text(S.hours),
                             ),
                           ),
@@ -122,3 +120,16 @@ class _MyPitches extends ConsumerWidget {
     );
   }
 }
+
+/// Small outlined button for actions inside a pitch card.
+ButtonStyle _smallButton(BuildContext context) => OutlinedButton.styleFrom(
+      minimumSize: const Size.fromHeight(34),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      visualDensity: VisualDensity.compact,
+      backgroundColor: AppColors.card,
+      textStyle: Theme.of(context)
+          .textTheme
+          .bodySmall
+          ?.copyWith(fontWeight: FontWeight.w700),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    );

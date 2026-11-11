@@ -109,7 +109,7 @@ class AppPanel extends StatelessWidget {
         width: double.infinity,
         padding: padding ?? const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: color ?? AppColors.surface,
+          color: color ?? AppColors.card,
           borderRadius: BorderRadius.circular(18),
           border: Border.all(color: AppColors.borderSoft),
           boxShadow: color == null ? softShadow : null,

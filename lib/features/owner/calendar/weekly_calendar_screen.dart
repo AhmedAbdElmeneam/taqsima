@@ -35,18 +35,20 @@ class _WeeklyCalendarScreenState extends ConsumerState<WeeklyCalendarScreen> {
     final start = todayDate().add(Duration(days: 7 * _weekOffset));
     final end = start.add(const Duration(days: 6));
 
-    return Scaffold(
-      appBar: AppBar(title: const Text(S.weeklyCalendar)),
-      body: AsyncView(
+    return TabPage(
+      child: AsyncView(
         value: pitch,
         builder: (p) {
           if (p == null) {
             return const EmptyState(icon: AppIcons.pitch, title: S.noPitchYet);
           }
           final week = ref.watch(weekSlotsProvider((p.id, start)));
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          // One vertical scroll for the whole screen (title, week, filter, grid).
+          return ListView(
+            padding: const EdgeInsets.only(bottom: AppSpacing.navBarClearance),
             children: [
+              const PageTitle(S.weeklyCalendar,
+                  padding: EdgeInsets.fromLTRB(20, 12, 20, 0)),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: PitchSwitcher(pitch: p),
@@ -77,23 +79,18 @@ class _WeeklyCalendarScreenState extends ConsumerState<WeeklyCalendarScreen> {
                   ],
                 ),
               ),
-              Expanded(
-                child: AsyncView(
-                  value: week,
-                  builder: (days) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _FilterBar(
-                        days: days,
-                        selected: _filter,
-                        onSelected: (f) => setState(() => _filter = f),
-                      ),
-                      Expanded(
-                        child: _WeekGrid(
-                            days: days, start: start, filter: _filter),
-                      ),
-                    ],
-                  ),
+              AsyncView(
+                value: week,
+                builder: (days) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _FilterBar(
+                      days: days,
+                      selected: _filter,
+                      onSelected: (f) => setState(() => _filter = f),
+                    ),
+                    _WeekGrid(days: days, start: start, filter: _filter),
+                  ],
                 ),
               ),
             ],
@@ -133,7 +130,7 @@ class _FilterBar extends StatelessWidget {
           decoration: BoxDecoration(
             color: isOn
                 ? (st?.background ?? AppColors.primaryLight)
-                : AppColors.surface,
+                : AppColors.card,
             borderRadius: BorderRadius.circular(30),
             border: Border.all(
                 color: isOn ? color.withOpacity(.6) : AppColors.borderSoft),
@@ -213,8 +210,9 @@ class _WeekGrid extends ConsumerWidget {
       return const EmptyState(icon: AppIcons.closed, title: S.closedThisDay);
     }
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: AppSpacing.navBarClearance),
+    // Only scrolls sideways; the page itself scrolls vertically.
+    return Padding(
+      padding: EdgeInsets.zero,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -234,7 +232,7 @@ class _WeekGrid extends ConsumerWidget {
                       margin: const EdgeInsets.all(2),
                       padding: const EdgeInsets.symmetric(vertical: 6),
                       decoration: BoxDecoration(
-                        color: isToday ? AppColors.primary : AppColors.surface,
+                        color: isToday ? AppColors.primary : AppColors.card,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(color: AppColors.border),
                       ),

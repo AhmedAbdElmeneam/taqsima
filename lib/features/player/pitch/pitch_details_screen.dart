@@ -116,7 +116,7 @@ class _Body extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 14, vertical: 10),
                       decoration: BoxDecoration(
-                        color: AppColors.surface,
+                        color: AppColors.card,
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(color: AppColors.border),
                       ),

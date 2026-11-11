@@ -142,7 +142,7 @@ class _RoleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
     return Material(
-      color: AppColors.surface,
+      color: AppColors.card,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: BorderSide(color: AppColors.border, width: 1.5),

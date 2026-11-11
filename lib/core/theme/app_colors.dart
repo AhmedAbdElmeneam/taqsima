@@ -28,6 +28,11 @@ abstract final class AppColors {
 
   // Surfaces.
   static Color get surface => _c(0xFFFFFFFF, 0xFF18211C);
+
+  /// Card fill: slightly see-through so the pitch background shows behind.
+  static Color get card => isDark
+      ? const Color(0xFF18211C).withOpacity(.82)
+      : Colors.white.withOpacity(.80);
   static Color get surfaceRaised => _c(0xFFFFFFFF, 0xFF1F2A24);
   static Color get background => _c(0xFFF5F7F6, 0xFF0D1410);
   static Color get border => _c(0xFFE2E7E4, 0xFF2B3731);

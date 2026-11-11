@@ -43,7 +43,7 @@ class SlotChip extends StatelessWidget {
       bg = AppColors.primary;
       border = AppColors.primaryDark;
     } else if (state == SlotState.available) {
-      bg = AppColors.surface;
+      bg = AppColors.card;
       border = AppColors.primary.withOpacity(.35);
     }
 

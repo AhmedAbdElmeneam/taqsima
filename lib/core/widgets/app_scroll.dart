@@ -44,3 +44,33 @@ class TopFade extends StatelessWidget {
     );
   }
 }
+
+/// Body for a bottom-nav tab: no app bar — the title scrolls with the content
+/// and fades under the status bar, exactly like the home screen.
+class TabPage extends StatelessWidget {
+  const TabPage({super.key, required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: TopFade(
+        height: MediaQuery.paddingOf(context).top + 24,
+        child: SafeArea(bottom: false, child: child),
+      ),
+    );
+  }
+}
+
+/// Large page title used at the top of a [TabPage].
+class PageTitle extends StatelessWidget {
+  const PageTitle(this.text, {super.key, this.padding});
+  final String text;
+  final EdgeInsetsGeometry? padding;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+        padding: padding ?? const EdgeInsets.fromLTRB(20, 12, 20, 12),
+        child: Text(text, style: Theme.of(context).textTheme.headlineMedium),
+      );
+}

@@ -70,7 +70,7 @@ abstract final class AppTheme {
       iconTheme: IconThemeData(size: 20, color: AppColors.ink),
       cardTheme: CardTheme(
         surfaceTintColor: Colors.transparent,
-        color: AppColors.surface,
+        color: AppColors.card,
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(

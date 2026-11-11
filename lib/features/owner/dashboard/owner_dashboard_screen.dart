@@ -203,7 +203,7 @@ class _StatCard extends StatelessWidget {
       height: 76,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: highlight ? null : AppColors.surface,
+        color: highlight ? null : AppColors.card,
         gradient: highlight
             ? LinearGradient(
                 begin: AlignmentDirectional.topStart,
@@ -291,7 +291,7 @@ class _HourRow extends ConsumerWidget {
       child: Opacity(
         opacity: slot.isPast ? .45 : 1,
         child: Material(
-          color: free ? AppColors.surface.withOpacity(.6) : AppColors.surface,
+          color: free ? AppColors.card.withOpacity(.55) : AppColors.card,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
             side: BorderSide(
