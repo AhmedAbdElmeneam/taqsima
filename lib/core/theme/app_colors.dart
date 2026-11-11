@@ -48,6 +48,19 @@ abstract final class AppColors {
   static Color get glassBorder =>
       isDark ? Colors.white.withOpacity(.08) : Colors.white.withOpacity(.9);
 
+  /// Stronger outline for the floating nav bar.
+  static Color get glassBorderStrong => isDark
+      ? Colors.white.withOpacity(.16)
+      : const Color(0xFF1B8A3A).withOpacity(.22);
+
+  /// Top-to-bottom sheen for glass surfaces.
+  static List<Color> get glassSheen => isDark
+      ? [
+          const Color(0xFF223028).withOpacity(.85),
+          const Color(0xFF121A15).withOpacity(.78)
+        ]
+      : [Colors.white.withOpacity(.88), Colors.white.withOpacity(.62)];
+
   // Semantic.
   static Color get success => _c(0xFF2E9E5B, 0xFF4CD483);
   static Color get successLight => _c(0xFFE3F5EA, 0xFF173A26);
@@ -63,8 +76,12 @@ abstract final class AppColors {
   static Color get slotAvailableBg => primaryLight;
   static Color get slotApp => info;
   static Color get slotAppBg => infoLight;
-  static Color get slotManual => _c(0xFFB87400, 0xFFE8AA4E);
-  static Color get slotManualBg => warningLight;
+  /// Amber for "waiting" states: pending requests, under-review pitch, policy.
+  static Color get pending => _c(0xFFB87400, 0xFFE8AA4E);
+
+  // Manual bookings get their own purple so they never look "pending".
+  static Color get slotManual => _c(0xFF7650C4, 0xFFB79CF2);
+  static Color get slotManualBg => _c(0xFFF1EBFC, 0xFF2A2242);
   static Color get slotBlocked => _c(0xFF7A8391, 0xFF8E99A6);
   static Color get slotBlockedBg => _c(0xFFECEEF1, 0xFF252C31);
 }

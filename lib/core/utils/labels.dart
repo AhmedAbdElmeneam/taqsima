@@ -38,7 +38,7 @@ extension BookingStatusLabel on BookingStatus {
       };
 
   Color get color => switch (this) {
-        BookingStatus.pending => AppColors.slotManual,
+        BookingStatus.pending => AppColors.pending,
         BookingStatus.confirmed => AppColors.success,
         BookingStatus.cancelled => AppColors.error,
         BookingStatus.completed => AppColors.inkMuted,

@@ -74,7 +74,7 @@ class _Dashboard extends ConsumerWidget {
               color: AppColors.warningLight,
               child: Row(
                 children: [
-                  Icon(AppIcons.clock, color: AppColors.slotManual),
+                  Icon(AppIcons.clock, color: AppColors.pending),
                   const SizedBox(width: 10),
                   Expanded(child: Text(S.underReviewHint, style: t.bodyMedium)),
                 ],
@@ -283,7 +283,7 @@ class _HourRow extends ConsumerWidget {
     }
 
     final free = state == SlotState.available;
-    final color = pending ? AppColors.slotManual : state.color;
+    final color = pending ? AppColors.pending : state.color;
     final tint = pending ? AppColors.warningLight : state.background;
 
     return Padding(

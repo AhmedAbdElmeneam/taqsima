@@ -57,10 +57,10 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
             () => _update(filter.copyWith(maxPrice: () => null))),
     ];
 
-    return Scaffold(
-      appBar: AppBar(title: const Text(S.searchResults)),
-      body: Column(
+    return TabPage(
+      child: Column(
         children: [
+          const PageTitle(S.searchResults),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 0),
             child: Row(

@@ -32,7 +32,7 @@ abstract final class S {
 
   // Role choice / splash
   static const welcome = 'مرحبًا بك في ميعادنا';
-  static const chooseRole = 'اختر طريقة الاستخدام';
+  static const chooseRole = 'كيف ستستخدم ميعادنا؟';
   static const iAmPlayer = 'أنا لاعب';
   static const iAmPlayerHint = 'ابحث عن ملعب واحجز موعدك';
   static const iAmOwner = 'أنا صاحب ملعب';
@@ -212,7 +212,7 @@ abstract final class S {
   // Owner dashboard
   static const todaysBookings = 'حجوزات اليوم';
   static const todaysRevenue = 'إيراد اليوم';
-  static const bookingsCount = 'حجوزات';
+  static const bookingsCount = 'الحجوزات';
   static const freeSlots = 'متاح';
   static const edit = 'تعديل';
   static const hours = 'المواعيد';
@@ -268,7 +268,7 @@ abstract final class S {
   static const to = 'إلى';
   static const closed = 'مغلق';
   static const open = 'مفتوح';
-  static const slotDurationLabel = 'مدة الحجز الواحد';
+  static const slotDurationLabel = 'مدة الحجز';
   static const hoursSaved = 'تم حفظ ساعات العمل';
   static const nextDay = '(اليوم التالي)';
   static const workingHoursHint = 'حدّد الأيام والساعات التي يعمل فيها الملعب';

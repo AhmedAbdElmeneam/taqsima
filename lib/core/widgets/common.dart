@@ -149,6 +149,7 @@ class GlassContainer extends StatelessWidget {
     this.margin,
     this.padding,
     this.radius = 24,
+    this.strongBorder = false,
   });
 
   final Widget child;
@@ -156,27 +157,44 @@ class GlassContainer extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final double radius;
 
+  /// Thicker, tinted outline (used by the bottom navigation bar).
+  final bool strongBorder;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: margin,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
-        boxShadow: const [
+        boxShadow: [
           BoxShadow(
-              color: Color(0x1F0F2A1C), blurRadius: 30, offset: Offset(0, 10)),
+              color: AppColors.isDark
+                  ? Colors.black.withOpacity(.45)
+                  : const Color(0x260F2A1C),
+              blurRadius: 30,
+              offset: const Offset(0, 10)),
         ],
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(radius),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+          filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
           child: Container(
             padding: padding,
             decoration: BoxDecoration(
-              color: AppColors.glass,
+              // Light sheen from top to bottom gives the glass its depth.
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: AppColors.glassSheen,
+              ),
               borderRadius: BorderRadius.circular(radius),
-              border: Border.all(color: AppColors.glassBorder, width: 1.2),
+              border: Border.all(
+                color: strongBorder
+                    ? AppColors.glassBorderStrong
+                    : AppColors.glassBorder,
+                width: strongBorder ? 1.8 : 1.2,
+              ),
             ),
             child: child,
           ),

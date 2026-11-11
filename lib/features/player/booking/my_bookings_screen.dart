@@ -21,42 +21,50 @@ class MyBookingsScreen extends ConsumerWidget {
     final bookings = ref.watch(myBookingsProvider);
     return DefaultTabController(
       length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text(S.navMyBookings),
-          bottom:
-              const TabBar(tabs: [Tab(text: S.upcoming), Tab(text: S.past)]),
-        ),
-        body: AsyncView(
-          value: bookings,
-          builder: (all) {
-            final now = DateTime.now();
-            final upcoming = all.where((b) => isUpcoming(b, now)).toList();
-            final past = all
-                .where((b) => !isUpcoming(b, now))
-                .toList()
-                .reversed
-                .toList();
-            return TabBarView(
-              children: [
-                _List(
-                  bookings: upcoming,
-                  empty: EmptyState(
-                    icon: AppIcons.ball,
-                    title: S.noUpcoming,
-                    message: S.noUpcomingHint,
-                    actionLabel: S.findPitch,
-                    onAction: () => context.go(Routes.playerSearch),
-                  ),
-                ),
-                _List(
-                  bookings: past,
-                  empty:
-                      const EmptyState(icon: AppIcons.history, title: S.noPast),
-                ),
-              ],
-            );
-          },
+      child: TabPage(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const PageTitle(S.navMyBookings),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12),
+              child: TabBar(tabs: [Tab(text: S.upcoming), Tab(text: S.past)]),
+            ),
+            Expanded(
+              child: AsyncView(
+                value: bookings,
+                builder: (all) {
+                  final now = DateTime.now();
+                  final upcoming =
+                      all.where((b) => isUpcoming(b, now)).toList();
+                  final past = all
+                      .where((b) => !isUpcoming(b, now))
+                      .toList()
+                      .reversed
+                      .toList();
+                  return TabBarView(
+                    children: [
+                      _List(
+                        bookings: upcoming,
+                        empty: EmptyState(
+                          icon: AppIcons.ball,
+                          title: S.noUpcoming,
+                          message: S.noUpcomingHint,
+                          actionLabel: S.findPitch,
+                          onAction: () => context.go(Routes.playerSearch),
+                        ),
+                      ),
+                      _List(
+                        bookings: past,
+                        empty: const EmptyState(
+                            icon: AppIcons.history, title: S.noPast),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );

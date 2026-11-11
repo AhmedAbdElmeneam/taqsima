@@ -53,7 +53,8 @@ abstract final class AppTheme {
         // Transparent at rest; turns frosted white once content scrolls under.
         backgroundColor: WidgetStateColor.resolveWith((s) =>
             s.contains(WidgetState.scrolledUnder)
-                ? AppColors.surface.withOpacity(.94)
+                // Background tint (not white) so it blends with the pitch.
+                ? AppColors.background.withOpacity(.94)
                 : Colors.transparent),
         surfaceTintColor: Colors.transparent,
         shadowColor: AppColors.shadow,

@@ -37,9 +37,11 @@ class GlassNavBar extends StatelessWidget {
       top: false,
       minimum: const EdgeInsets.only(bottom: 14),
       child: GlassContainer(
-        margin: const EdgeInsets.symmetric(horizontal: 18),
+        margin: const EdgeInsets.symmetric(horizontal: 22),
         padding: const EdgeInsets.all(6),
-        radius: 26,
+        // Fully rounded (pill) glass bar with a visible outline.
+        radius: 40,
+        strongBorder: true,
         child: Row(
           children: [
             for (var i = 0; i < items.length; i++)
@@ -78,14 +80,14 @@ class _NavButton extends StatelessWidget {
       label: item.label,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(30),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 220),
           curve: Curves.easeOut,
-          height: 54,
+          height: 52,
           decoration: BoxDecoration(
             color: selected ? AppColors.primaryLight : Colors.transparent,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(30),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

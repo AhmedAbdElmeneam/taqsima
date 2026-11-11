@@ -73,7 +73,7 @@ class PitchStatusBadge extends StatelessWidget {
             icon: AppIcons.verified),
         PitchStatus.pending => AppBadge(
             label: S.underReview,
-            color: AppColors.slotManual,
+            color: AppColors.pending,
             background: AppColors.warningLight,
             icon: AppIcons.clock),
       };
