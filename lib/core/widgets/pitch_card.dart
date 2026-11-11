@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 
 import '../../data/models/models.dart';
 import '../l10n/app_strings.dart';
 import '../theme/app_colors.dart';
-import '../theme/app_spacing.dart';
 import '../utils/labels.dart';
 import 'pitch_image.dart';
 
@@ -31,7 +31,7 @@ class PitchCard extends StatelessWidget {
                 PitchImage(
                   photoKey:
                       pitch.photos.isEmpty ? pitch.id : pitch.photos.first,
-                  height: 140,
+                  height: 120,
                 ),
                 PositionedDirectional(
                   top: 10,
@@ -43,7 +43,7 @@ class PitchCard extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.all(AppSpacing.lg),
+              padding: const EdgeInsets.fromLTRB(14, 10, 14, 12),
               child: Row(
                 children: [
                   Expanded(
@@ -57,7 +57,7 @@ class PitchCard extends StatelessWidget {
                         const SizedBox(height: 2),
                         Row(
                           children: [
-                            const Icon(Icons.location_on_outlined,
+                            const Icon(AppIcons.location,
                                 size: 18, color: AppColors.inkMuted),
                             const SizedBox(width: 2),
                             Flexible(

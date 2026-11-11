@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_spacing.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,12 +39,13 @@ class BookingRequestsScreen extends ConsumerWidget {
         value: requests,
         builder: (list) => list.isEmpty
             ? const EmptyState(
-                icon: Icons.inbox_outlined,
+                icon: AppIcons.inbox,
                 title: S.noRequests,
                 message: S.noRequestsHint,
               )
             : ListView.separated(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.fromLTRB(
+                    20, 16, 20, AppSpacing.navBarClearance),
                 itemCount: list.length,
                 separatorBuilder: (_, __) => const SizedBox(height: 12),
                 itemBuilder: (_, i) => _RequestCard(booking: list[i]),
@@ -120,7 +123,7 @@ class _RequestCardState extends ConsumerState<_RequestCard> {
                 padding: const EdgeInsets.all(12),
                 child: Row(
                   children: [
-                    const Icon(Icons.event_rounded, color: AppColors.primary),
+                    const Icon(AppIcons.calendar, color: AppColors.primary),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -138,7 +141,7 @@ class _RequestCardState extends ConsumerState<_RequestCard> {
                   Expanded(
                     child: PrimaryButton(
                       label: S.accept,
-                      icon: Icons.check_rounded,
+                      icon: AppIcons.check,
                       loading: _busy,
                       onPressed: () => _answer(true),
                     ),
@@ -147,7 +150,7 @@ class _RequestCardState extends ConsumerState<_RequestCard> {
                   Expanded(
                     child: SecondaryButton(
                       label: S.reject,
-                      icon: Icons.close_rounded,
+                      icon: AppIcons.close,
                       color: AppColors.error,
                       onPressed: _busy ? null : () => _answer(false),
                     ),

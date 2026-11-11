@@ -1,4 +1,7 @@
+import 'dart:ui' show ImageFilter;
+
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/app_strings.dart';
@@ -25,7 +28,7 @@ class AsyncView<T> extends StatelessWidget {
         ),
       ),
       error: (e, _) => const EmptyState(
-        icon: Icons.wifi_off_rounded,
+        icon: AppIcons.offline,
         title: S.somethingWrong,
       ),
     );
@@ -72,26 +75,18 @@ class InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.primaryLight,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(icon, color: AppColors.primary, size: 22),
-          ),
-          const SizedBox(width: 12),
-          Text(label, style: t.bodyLarge?.copyWith(color: AppColors.inkMuted)),
+          Icon(icon, color: AppColors.primary, size: 18),
+          const SizedBox(width: 10),
+          Text(label, style: t.bodyMedium?.copyWith(color: AppColors.inkMuted)),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
               value,
               textAlign: TextAlign.end,
-              style: t.bodyLarge
+              style: t.bodyMedium
                   ?.copyWith(fontWeight: FontWeight.w700, color: valueColor),
             ),
           ),
@@ -114,25 +109,78 @@ class AppPanel extends StatelessWidget {
         padding: padding ?? const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: color ?? AppColors.surface,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.border),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.borderSoft),
+          boxShadow: color == null ? softShadow : null,
         ),
         child: child,
       );
 }
 
-/// Pinned bottom action area (e.g. "احجز").
+/// The one shadow used for floating surfaces.
+const softShadow = [
+  BoxShadow(color: AppColors.shadow, blurRadius: 18, offset: Offset(0, 6)),
+];
+
+/// Floating bottom action area (e.g. "احجز"), same style as the nav bar.
 class BottomActionBar extends StatelessWidget {
   const BottomActionBar({super.key, required this.child});
   final Widget child;
 
   @override
-  Widget build(BuildContext context) => Container(
-        decoration: const BoxDecoration(
-          color: AppColors.surface,
-          border: Border(top: BorderSide(color: AppColors.border)),
+  Widget build(BuildContext context) => SafeArea(
+        top: false,
+        minimum: const EdgeInsets.only(bottom: 12),
+        child: GlassContainer(
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.all(10),
+          child: child,
         ),
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 12),
-        child: SafeArea(top: false, child: child),
       );
+}
+
+/// Frosted, bordered, rounded surface that floats over the background.
+class GlassContainer extends StatelessWidget {
+  const GlassContainer({
+    super.key,
+    required this.child,
+    this.margin,
+    this.padding,
+    this.radius = 24,
+  });
+
+  final Widget child;
+  final EdgeInsetsGeometry? margin;
+  final EdgeInsetsGeometry? padding;
+  final double radius;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: margin,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(radius),
+        boxShadow: const [
+          BoxShadow(
+              color: Color(0x1F0F2A1C), blurRadius: 30, offset: Offset(0, 10)),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(radius),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+          child: Container(
+            padding: padding,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(.72),
+              borderRadius: BorderRadius.circular(radius),
+              border:
+                  Border.all(color: Colors.white.withOpacity(.9), width: 1.2),
+            ),
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
 }

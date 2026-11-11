@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -23,7 +24,7 @@ class WorkingHoursScreen extends ConsumerWidget {
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (_, __) => const Scaffold(
-          body: EmptyState(icon: Icons.error_outline, title: S.somethingWrong)),
+          body: EmptyState(icon: AppIcons.warning, title: S.somethingWrong)),
     );
   }
 }
@@ -91,7 +92,7 @@ class _EditorState extends ConsumerState<_Editor> {
                       : Fmt.minutesOfDay(m),
                   style: Theme.of(ctx).textTheme.titleMedium,
                 ),
-                trailing: m == current ? const Icon(Icons.check_rounded) : null,
+                trailing: m == current ? const Icon(AppIcons.check) : null,
                 onTap: () => Navigator.pop(ctx, m),
               ),
           ],
@@ -271,7 +272,7 @@ class _TimeButton extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.expand_more_rounded, color: AppColors.inkMuted),
+              const Icon(AppIcons.dropdown, color: AppColors.inkMuted),
             ],
           ),
         ),

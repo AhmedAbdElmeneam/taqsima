@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -61,12 +62,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: ListView(
             padding: const EdgeInsets.all(20),
             children: [
-              Icon(
-                  isOwner
-                      ? Icons.stadium_rounded
-                      : Icons.directions_run_rounded,
-                  size: 56,
-                  color: AppColors.primary),
+              Icon(isOwner ? AppIcons.owner : AppIcons.player,
+                  size: 40, color: AppColors.primary),
               const SizedBox(height: 8),
               Text(isOwner ? S.loginAsOwner : S.loginAsPlayer,
                   style: t.headlineMedium, textAlign: TextAlign.center),
@@ -96,7 +93,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           label: S.fullName,
                           hint: S.fullNameHint,
                           controller: _name,
-                          prefixIcon: Icons.person_outline_rounded,
+                          prefixIcon: AppIcons.profile,
                           textInputAction: TextInputAction.next,
                           validator: (v) =>
                               _isSignup && (v ?? '').trim().isEmpty
@@ -110,7 +107,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 label: S.phoneNumber,
                 hint: S.phoneHint,
                 controller: _phone,
-                prefixIcon: Icons.phone_iphone_rounded,
+                prefixIcon: AppIcons.mobile,
                 keyboardType: TextInputType.phone,
                 textDirection: TextDirection.ltr,
                 inputFormatters: [
@@ -124,7 +121,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const SizedBox(height: 28),
               PrimaryButton(
                 label: S.sendCode,
-                icon: Icons.sms_outlined,
+                icon: AppIcons.sms,
                 loading: _loading,
                 onPressed: _submit,
               ),

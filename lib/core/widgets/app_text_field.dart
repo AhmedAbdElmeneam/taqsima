@@ -55,7 +55,7 @@ class AppTextField extends StatelessWidget {
           onChanged: onChanged,
           autofocus: autofocus,
           textInputAction: textInputAction,
-          style: theme.textTheme.bodyLarge?.copyWith(fontSize: 17),
+          style: theme.textTheme.bodyLarge,
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: prefixIcon == null ? null : Icon(prefixIcon),

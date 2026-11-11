@@ -16,6 +16,10 @@ abstract final class AppColors {
   static const surface = Color(0xFFFFFFFF);
   static const background = Color(0xFFF5F7F6);
   static const border = Color(0xFFE2E7E4);
+  static const borderSoft = Color(0xFFEAEFEC);
+
+  /// Soft drop shadow for floating surfaces (cards, nav bar).
+  static const shadow = Color(0x140F2A1C);
 
   // Semantic.
   static const success = Color(0xFF2E9E5B);

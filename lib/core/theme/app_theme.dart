@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'app_colors.dart';
+import 'app_icons.dart';
 import 'app_spacing.dart';
+import '../widgets/app_background.dart';
 
 abstract final class AppTheme {
   static ThemeData light() {
@@ -18,20 +20,21 @@ abstract final class AppTheme {
     );
 
     final base = ThemeData(useMaterial3: true, colorScheme: scheme);
+
+    // Calm, compact type scale: one clear title size, everything else small.
+    TextStyle cairo(double size, FontWeight w, [Color c = AppColors.ink]) =>
+        GoogleFonts.cairo(fontSize: size, fontWeight: w, color: c, height: 1.5);
+
     final textTheme = GoogleFonts.cairoTextTheme(base.textTheme)
         .apply(bodyColor: AppColors.ink, displayColor: AppColors.ink)
         .copyWith(
-          headlineMedium: GoogleFonts.cairo(
-              fontSize: 26, fontWeight: FontWeight.w800, color: AppColors.ink),
-          titleLarge: GoogleFonts.cairo(
-              fontSize: 20, fontWeight: FontWeight.w700, color: AppColors.ink),
-          titleMedium: GoogleFonts.cairo(
-              fontSize: 17, fontWeight: FontWeight.w700, color: AppColors.ink),
-          bodyLarge: GoogleFonts.cairo(fontSize: 16, color: AppColors.ink),
-          bodyMedium: GoogleFonts.cairo(fontSize: 14, color: AppColors.ink),
-          bodySmall: GoogleFonts.cairo(fontSize: 12, color: AppColors.inkMuted),
-          labelLarge:
-              GoogleFonts.cairo(fontSize: 16, fontWeight: FontWeight.w700),
+          headlineMedium: cairo(20, FontWeight.w800),
+          titleLarge: cairo(16, FontWeight.w700),
+          titleMedium: cairo(14, FontWeight.w700),
+          bodyLarge: cairo(14, FontWeight.w500),
+          bodyMedium: cairo(13, FontWeight.w500),
+          bodySmall: cairo(11.5, FontWeight.w500, AppColors.inkMuted),
+          labelLarge: cairo(14, FontWeight.w700),
         );
 
     final rounded = RoundedRectangleBorder(
@@ -40,22 +43,29 @@ abstract final class AppTheme {
 
     return base.copyWith(
       textTheme: textTheme,
-      scaffoldBackgroundColor: AppColors.background,
+      // Screens are transparent so the shared AppBackground shows through.
+      scaffoldBackgroundColor: Colors.transparent,
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.background,
+        backgroundColor: Colors.transparent,
         foregroundColor: AppColors.ink,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: true,
         titleTextStyle: textTheme.titleLarge,
+        iconTheme: const IconThemeData(size: 22, color: AppColors.ink),
       ),
+      actionIconTheme: ActionIconThemeData(
+        backButtonIconBuilder: (_) => const Icon(AppIcons.back, size: 22),
+      ),
+      iconTheme: const IconThemeData(size: 20, color: AppColors.ink),
       cardTheme: CardTheme(
+        surfaceTintColor: Colors.transparent,
         color: AppColors.surface,
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
-          side: const BorderSide(color: AppColors.border),
+          side: const BorderSide(color: AppColors.borderSoft),
         ),
       ),
       filledButtonTheme: FilledButtonThemeData(
@@ -66,13 +76,15 @@ abstract final class AppTheme {
           disabledBackgroundColor: AppColors.border,
           textStyle: textTheme.labelLarge,
           shape: rounded,
+          elevation: 0,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           minimumSize: const Size.fromHeight(AppSpacing.buttonHeight),
           foregroundColor: AppColors.ink,
-          side: const BorderSide(color: AppColors.border, width: 1.5),
+          backgroundColor: AppColors.surface,
+          side: const BorderSide(color: AppColors.border),
           textStyle: textTheme.labelLarge,
           shape: rounded,
         ),
@@ -80,48 +92,52 @@ abstract final class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.primary,
-          textStyle: textTheme.labelLarge,
-          minimumSize: const Size(48, 48),
+          textStyle: textTheme.titleMedium,
+          minimumSize: const Size(44, 44),
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surface,
         contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        hintStyle: textTheme.bodyLarge?.copyWith(color: AppColors.inkFaint),
+            const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+        hintStyle: textTheme.bodyMedium?.copyWith(color: AppColors.inkFaint),
+        prefixIconColor: AppColors.inkMuted,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: const BorderSide(color: AppColors.borderSoft),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          borderSide: const BorderSide(color: AppColors.border),
+          borderSide: const BorderSide(color: AppColors.borderSoft),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radius),
-          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.radius),
           borderSide: const BorderSide(color: AppColors.error),
         ),
+        errorStyle: textTheme.bodySmall?.copyWith(color: AppColors.error),
       ),
       chipTheme: base.chipTheme.copyWith(
         labelStyle: textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
-        side: const BorderSide(color: AppColors.border),
+        side: const BorderSide(color: AppColors.borderSoft),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         backgroundColor: AppColors.surface,
         selectedColor: AppColors.primaryLight,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       ),
-      navigationBarTheme: NavigationBarThemeData(
-        height: 72,
-        backgroundColor: AppColors.surface,
-        indicatorColor: AppColors.primaryLight,
-        labelTextStyle: WidgetStatePropertyAll(
-          textTheme.bodySmall
-              ?.copyWith(fontWeight: FontWeight.w700, color: AppColors.ink),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          textStyle: WidgetStatePropertyAll(textTheme.titleMedium),
+          backgroundColor: WidgetStateProperty.resolveWith((s) =>
+              s.contains(WidgetState.selected)
+                  ? AppColors.primaryLight
+                  : AppColors.surface),
+          side: const WidgetStatePropertyAll(
+              BorderSide(color: AppColors.borderSoft)),
         ),
       ),
       tabBarTheme: TabBarTheme(
@@ -130,21 +146,38 @@ abstract final class AppTheme {
         indicatorColor: AppColors.primary,
         labelStyle: textTheme.titleMedium,
         unselectedLabelStyle: textTheme.titleMedium,
-        indicatorSize: TabBarIndicatorSize.tab,
+        indicatorSize: TabBarIndicatorSize.label,
+        dividerColor: Colors.transparent,
       ),
-      dividerTheme: const DividerThemeData(color: AppColors.border, space: 1),
+      listTileTheme: ListTileThemeData(
+        titleTextStyle: textTheme.bodyLarge,
+        iconColor: AppColors.inkMuted,
+        dense: true,
+      ),
+      dividerTheme:
+          const DividerThemeData(color: AppColors.borderSoft, space: 1),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
         backgroundColor: AppColors.ink,
-        contentTextStyle: textTheme.bodyLarge?.copyWith(color: Colors.white),
+        contentTextStyle: textTheme.bodyMedium?.copyWith(color: Colors.white),
         shape: rounded,
       ),
+      // Every page gets its own copy of the background so pages never show
+      // through each other.
+      pageTransitionsTheme: const PageTransitionsTheme(builders: {
+        TargetPlatform.android: BackgroundPageTransitionsBuilder(),
+        TargetPlatform.iOS: BackgroundPageTransitionsBuilder(),
+        TargetPlatform.windows: BackgroundPageTransitionsBuilder(),
+        TargetPlatform.macOS: BackgroundPageTransitionsBuilder(),
+        TargetPlatform.linux: BackgroundPageTransitionsBuilder(),
+        TargetPlatform.fuchsia: BackgroundPageTransitionsBuilder(),
+      }),
       bottomSheetTheme: const BottomSheetThemeData(
+        surfaceTintColor: Colors.transparent,
         backgroundColor: AppColors.surface,
         showDragHandle: true,
         shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.vertical(top: Radius.circular(AppSpacing.radiusLg)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
       ),
     );

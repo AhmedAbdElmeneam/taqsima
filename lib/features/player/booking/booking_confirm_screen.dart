@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -83,24 +84,24 @@ class _BookingConfirmScreenState extends ConsumerState<BookingConfirmScreen> {
               children: [
                 if (pitch != null)
                   InfoRow(
-                      icon: Icons.location_on_outlined,
+                      icon: AppIcons.location,
                       label: S.pitch,
                       value: '${pitch.name} - ${pitch.area}'),
                 InfoRow(
-                    icon: Icons.calendar_today_rounded,
+                    icon: AppIcons.calendar,
                     label: S.date,
                     value: Fmt.dayRelative(slot.startAt)),
                 InfoRow(
-                    icon: Icons.schedule_rounded,
+                    icon: AppIcons.clock,
                     label: S.time,
                     value: Fmt.timeRange(slot.startAt, slot.endAt)),
                 InfoRow(
-                    icon: Icons.timelapse_rounded,
+                    icon: AppIcons.duration,
                     label: S.duration,
                     value: Fmt.duration(slot.duration)),
                 const Divider(height: 24),
                 InfoRow(
-                    icon: Icons.payments_outlined,
+                    icon: AppIcons.money,
                     label: S.total,
                     value: S.price(slot.price),
                     valueColor: AppColors.primary),
@@ -115,7 +116,7 @@ class _BookingConfirmScreenState extends ConsumerState<BookingConfirmScreen> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Icon(Icons.policy_outlined, color: AppColors.slotManual),
+                const Icon(AppIcons.policy, color: AppColors.slotManual),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Column(
@@ -136,8 +137,7 @@ class _BookingConfirmScreenState extends ConsumerState<BookingConfirmScreen> {
           const SizedBox(height: 12),
           Row(
             children: [
-              const Icon(Icons.info_outline_rounded,
-                  size: 20, color: AppColors.inkMuted),
+              const Icon(AppIcons.info, size: 20, color: AppColors.inkMuted),
               const SizedBox(width: 8),
               Expanded(
                   child: Text(S.requestNote,
@@ -150,7 +150,7 @@ class _BookingConfirmScreenState extends ConsumerState<BookingConfirmScreen> {
       bottomNavigationBar: BottomActionBar(
         child: PrimaryButton(
           label: S.sendBookingRequest,
-          icon: Icons.check_rounded,
+          icon: AppIcons.check,
           loading: _loading,
           onPressed: _book,
         ),

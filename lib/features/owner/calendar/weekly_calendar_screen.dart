@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_spacing.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/app_strings.dart';
@@ -36,8 +38,7 @@ class _WeeklyCalendarScreenState extends ConsumerState<WeeklyCalendarScreen> {
         value: pitch,
         builder: (p) {
           if (p == null) {
-            return const EmptyState(
-                icon: Icons.stadium_outlined, title: S.noPitchYet);
+            return const EmptyState(icon: AppIcons.pitch, title: S.noPitchYet);
           }
           final week = ref.watch(weekSlotsProvider((p.id, start)));
           return Column(
@@ -55,7 +56,7 @@ class _WeeklyCalendarScreenState extends ConsumerState<WeeklyCalendarScreen> {
                       onPressed: _weekOffset == 0
                           ? null
                           : () => setState(() => _weekOffset--),
-                      icon: const Icon(Icons.chevron_right_rounded),
+                      icon: const Icon(AppIcons.backward),
                     ),
                     Expanded(
                       child: Text(
@@ -68,7 +69,7 @@ class _WeeklyCalendarScreenState extends ConsumerState<WeeklyCalendarScreen> {
                       onPressed: _weekOffset >= 3
                           ? null
                           : () => setState(() => _weekOffset++),
-                      icon: const Icon(Icons.chevron_left_rounded),
+                      icon: const Icon(AppIcons.forward),
                     ),
                   ],
                 ),
@@ -120,12 +121,11 @@ class _WeekGrid extends ConsumerWidget {
     final today = todayDate();
 
     if (sorted.isEmpty) {
-      return const EmptyState(
-          icon: Icons.door_front_door_outlined, title: S.closedThisDay);
+      return const EmptyState(icon: AppIcons.closed, title: S.closedThisDay);
     }
 
     return SingleChildScrollView(
-      padding: const EdgeInsets.only(bottom: 24),
+      padding: const EdgeInsets.only(bottom: AppSpacing.navBarClearance),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 12),

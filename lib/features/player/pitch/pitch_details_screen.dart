@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,7 +22,7 @@ class PitchDetailsScreen extends ConsumerWidget {
       body: AsyncView(
         value: pitch,
         builder: (p) => p == null
-            ? const EmptyState(icon: Icons.stadium_outlined, title: S.noResults)
+            ? const EmptyState(icon: AppIcons.pitch, title: S.noResults)
             : _Body(pitch: p),
       ),
       bottomNavigationBar: pitch.valueOrNull == null
@@ -48,7 +49,7 @@ class PitchDetailsScreen extends ConsumerWidget {
                   Expanded(
                     child: PrimaryButton(
                       label: S.book,
-                      icon: Icons.event_available_rounded,
+                      icon: AppIcons.calendarCheck,
                       onPressed: () => context.push(Routes.pitchSlots(pitchId)),
                     ),
                   ),
@@ -90,14 +91,14 @@ class _Body extends StatelessWidget {
                     label: pitch.type.label,
                     color: AppColors.primaryDark,
                     background: AppColors.primaryLight,
-                    icon: Icons.groups_rounded,
+                    icon: AppIcons.team,
                   ),
                 ],
               ),
               const SizedBox(height: 4),
               Row(
                 children: [
-                  const Icon(Icons.location_on_outlined,
+                  const Icon(AppIcons.location,
                       color: AppColors.inkMuted, size: 20),
                   const SizedBox(width: 4),
                   Text(pitch.area,

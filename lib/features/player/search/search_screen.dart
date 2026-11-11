@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_spacing.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -69,11 +71,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     textInputAction: TextInputAction.search,
                     decoration: InputDecoration(
                       hintText: S.searchHint,
-                      prefixIcon: const Icon(Icons.search_rounded),
+                      prefixIcon: const Icon(AppIcons.search),
                       suffixIcon: _query.text.isEmpty
                           ? null
                           : IconButton(
-                              icon: const Icon(Icons.close_rounded),
+                              icon: const Icon(AppIcons.close),
                               onPressed: () {
                                 _query.clear();
                                 _update(filter.copyWith(query: () => null));
@@ -93,7 +95,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14)),
                   ),
-                  icon: const Icon(Icons.tune_rounded),
+                  icon: const Icon(AppIcons.filter),
                   onPressed: () => showFilterSheet(context),
                 ),
               ],
@@ -128,11 +130,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   segments: const [
                     ButtonSegment(
                         value: false,
-                        icon: Icon(Icons.view_list_rounded),
+                        icon: Icon(AppIcons.list),
                         label: Text(S.listView)),
                     ButtonSegment(
                         value: true,
-                        icon: Icon(Icons.map_outlined),
+                        icon: Icon(AppIcons.map),
                         label: Text(S.mapView)),
                   ],
                   selected: {_mapView},
@@ -147,7 +149,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
               builder: (list) {
                 if (list.isEmpty) {
                   return EmptyState(
-                    icon: Icons.search_off_rounded,
+                    icon: AppIcons.notFound,
                     title: S.noResults,
                     message: S.noResultsHint,
                     actionLabel: S.resetFilters,
@@ -159,7 +161,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 }
                 if (_mapView) {
                   return Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+                    padding: const EdgeInsets.fromLTRB(
+                        20, 0, 20, AppSpacing.navBarClearance),
                     child: Column(
                       children: [
                         Expanded(
@@ -183,7 +186,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   );
                 }
                 return ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                  padding: const EdgeInsets.fromLTRB(
+                      20, 0, 20, AppSpacing.navBarClearance),
                   itemCount: list.length,
                   separatorBuilder: (_, __) => const SizedBox(height: 14),
                   itemBuilder: (_, i) => PitchCard(
@@ -213,7 +217,7 @@ class _ActiveChip extends StatelessWidget {
           selected: true,
           showCheckmark: false,
           onDeleted: onRemove,
-          deleteIcon: const Icon(Icons.close_rounded, size: 18),
+          deleteIcon: const Icon(AppIcons.close, size: 18),
           side: const BorderSide(color: AppColors.primary),
         ),
       );

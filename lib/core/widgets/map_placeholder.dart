@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 
 import '../theme/app_colors.dart';
 
@@ -113,7 +114,7 @@ class _Pin extends StatelessWidget {
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: Colors.white, fontWeight: FontWeight.w700)),
             ),
-          const Icon(Icons.location_on, size: 34, color: AppColors.primary),
+          const Icon(AppIcons.locationFill, size: 30, color: AppColors.primary),
         ],
       ),
     );

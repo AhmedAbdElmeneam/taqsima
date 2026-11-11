@@ -15,7 +15,10 @@ abstract final class AppSpacing {
   static const radiusLg = 20.0;
 
   /// Big tap targets — owners are not tech-savvy.
-  static const buttonHeight = 56.0;
-  static const fieldHeight = 56.0;
-  static const slotHeight = 52.0;
+  static const buttonHeight = 50.0;
+  static const fieldHeight = 50.0;
+  static const slotHeight = 48.0;
+
+  /// Bottom space so tab content clears the floating nav bar.
+  static const navBarClearance = 110.0;
 }

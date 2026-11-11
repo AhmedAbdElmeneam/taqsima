@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/app_strings.dart';
@@ -41,7 +42,7 @@ class PitchSwitcher extends ConsumerWidget {
                         title: Text(p.name, style: t.titleMedium),
                         subtitle: Text(p.area),
                         trailing: p.id == pitch.id
-                            ? const Icon(Icons.check_circle_rounded,
+                            ? const Icon(AppIcons.confirmed,
                                 color: AppColors.primary)
                             : PitchStatusBadge(status: p.status),
                         onTap: () {
@@ -58,14 +59,13 @@ class PitchSwitcher extends ConsumerWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.stadium_rounded, color: AppColors.primary),
+            const Icon(AppIcons.pitch, color: AppColors.primary),
             const SizedBox(width: 6),
             Flexible(
               child: Text(pitch.name,
                   style: t.titleLarge, overflow: TextOverflow.ellipsis),
             ),
-            if (canSwitch)
-              const Icon(Icons.keyboard_arrow_down_rounded, size: 28),
+            if (canSwitch) const Icon(AppIcons.dropdown, size: 28),
           ],
         ),
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -26,7 +27,7 @@ class PitchFormScreen extends ConsumerWidget {
       loading: () =>
           const Scaffold(body: Center(child: CircularProgressIndicator())),
       error: (_, __) => const Scaffold(
-          body: EmptyState(icon: Icons.error_outline, title: S.somethingWrong)),
+          body: EmptyState(icon: AppIcons.warning, title: S.somethingWrong)),
     );
   }
 }
@@ -331,7 +332,7 @@ class _PitchFormState extends ConsumerState<_PitchForm> {
                     child: IconButton.filled(
                       style:
                           IconButton.styleFrom(backgroundColor: Colors.black54),
-                      icon: const Icon(Icons.close_rounded, size: 18),
+                      icon: const Icon(AppIcons.close, size: 18),
                       onPressed: () => setState(() => _photos.remove(photo)),
                     ),
                   ),
@@ -350,8 +351,8 @@ class _PitchFormState extends ConsumerState<_PitchForm> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.add_a_photo_outlined,
-                        size: 36, color: AppColors.primary),
+                    const Icon(AppIcons.addPhoto,
+                        size: 28, color: AppColors.primary),
                     const SizedBox(height: 6),
                     Text(S.addPhoto,
                         style:
@@ -376,9 +377,7 @@ class _PitchFormState extends ConsumerState<_PitchForm> {
           Row(
             children: [
               Icon(
-                _location == null
-                    ? Icons.touch_app_rounded
-                    : Icons.check_circle_rounded,
+                _location == null ? AppIcons.tap : AppIcons.confirmed,
                 color: AppColors.primary,
               ),
               const SizedBox(width: 8),
@@ -417,7 +416,7 @@ class _PitchFormState extends ConsumerState<_PitchForm> {
             controller: _price,
             keyboardType: TextInputType.number,
             textDirection: TextDirection.ltr,
-            prefixIcon: Icons.payments_outlined,
+            prefixIcon: AppIcons.money,
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
               LengthLimitingTextInputFormatter(5),

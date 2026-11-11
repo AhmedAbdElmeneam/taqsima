@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_spacing.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -40,7 +42,7 @@ class MyBookingsScreen extends ConsumerWidget {
                 _List(
                   bookings: upcoming,
                   empty: EmptyState(
-                    icon: Icons.sports_soccer_rounded,
+                    icon: AppIcons.ball,
                     title: S.noUpcoming,
                     message: S.noUpcomingHint,
                     actionLabel: S.findPitch,
@@ -49,8 +51,8 @@ class MyBookingsScreen extends ConsumerWidget {
                 ),
                 _List(
                   bookings: past,
-                  empty: const EmptyState(
-                      icon: Icons.history_rounded, title: S.noPast),
+                  empty:
+                      const EmptyState(icon: AppIcons.history, title: S.noPast),
                 ),
               ],
             );
@@ -70,7 +72,8 @@ class _List extends StatelessWidget {
   Widget build(BuildContext context) {
     if (bookings.isEmpty) return empty;
     return ListView.separated(
-      padding: const EdgeInsets.all(20),
+      padding:
+          const EdgeInsets.fromLTRB(20, 16, 20, AppSpacing.navBarClearance),
       itemCount: bookings.length,
       separatorBuilder: (_, __) => const SizedBox(height: 12),
       itemBuilder: (_, i) => PlayerBookingCard(booking: bookings[i]),
@@ -122,7 +125,7 @@ class PlayerBookingCard extends ConsumerWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_left_rounded, color: AppColors.inkFaint),
+              const Icon(AppIcons.forward, color: AppColors.inkFaint),
             ],
           ),
         ),

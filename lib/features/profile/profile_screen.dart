@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_spacing.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/l10n/app_strings.dart';
@@ -60,7 +62,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text(S.profile)),
       body: ListView(
-        padding: const EdgeInsets.all(20),
+        padding:
+            const EdgeInsets.fromLTRB(20, 8, 20, AppSpacing.navBarClearance),
         children: [
           AppPanel(
             child: Row(
@@ -95,7 +98,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 IconButton(
                   tooltip: S.editName,
                   onPressed: () => _editName(user),
-                  icon: const Icon(Icons.edit_outlined),
+                  icon: const Icon(AppIcons.edit),
                 ),
               ],
             ),
@@ -110,27 +113,27 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   value: _notifications,
                   onChanged: (v) => setState(() => _notifications = v),
                   activeColor: AppColors.primary,
-                  secondary: const Icon(Icons.notifications_outlined),
+                  secondary: const Icon(AppIcons.bell),
                   title: const Text(S.notifications),
                 ),
                 const Divider(),
                 ListTile(
-                  leading: const Icon(Icons.language_rounded),
+                  leading: const Icon(AppIcons.language),
                   title: const Text(S.language),
                   trailing: Text(S.arabic, style: t.bodyMedium),
                 ),
                 const Divider(),
                 ListTile(
-                  leading: const Icon(Icons.support_agent_rounded),
+                  leading: const Icon(AppIcons.support),
                   title: const Text(S.helpCenter),
-                  trailing: const Icon(Icons.chevron_left_rounded),
+                  trailing: const Icon(AppIcons.forward),
                   onTap: () => showSnack(context, S.comingSoon),
                 ),
                 const Divider(),
                 ListTile(
-                  leading: const Icon(Icons.description_outlined),
+                  leading: const Icon(AppIcons.terms),
                   title: const Text(S.terms),
-                  trailing: const Icon(Icons.chevron_left_rounded),
+                  trailing: const Icon(AppIcons.forward),
                   onTap: () => showSnack(context, S.comingSoon),
                 ),
               ],
@@ -139,7 +142,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           const SizedBox(height: 20),
           SecondaryButton(
             label: S.logout,
-            icon: Icons.logout_rounded,
+            icon: AppIcons.logout,
             color: AppColors.error,
             onPressed: _logout,
           ),

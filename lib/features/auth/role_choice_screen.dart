@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/l10n/app_strings.dart';
@@ -49,13 +50,13 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(28),
                       ),
-                      child: const Icon(Icons.sports_soccer_rounded,
+                      child: const Icon(AppIcons.ball,
                           size: 60, color: AppColors.primary),
                     ),
                     const SizedBox(height: 16),
                     Text(S.appName,
                         style: t.headlineMedium
-                            ?.copyWith(color: Colors.white, fontSize: 36)),
+                            ?.copyWith(color: Colors.white, fontSize: 28)),
                     Text(S.appTagline,
                         style: t.bodyLarge?.copyWith(color: Colors.white70)),
                   ],
@@ -88,7 +89,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                           textAlign: TextAlign.center),
                       const SizedBox(height: 20),
                       _RoleCard(
-                        icon: Icons.directions_run_rounded,
+                        icon: AppIcons.player,
                         title: S.iAmPlayer,
                         subtitle: S.iAmPlayerHint,
                         onTap: () =>
@@ -96,7 +97,7 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                       ),
                       const SizedBox(height: 12),
                       _RoleCard(
-                        icon: Icons.stadium_rounded,
+                        icon: AppIcons.owner,
                         title: S.iAmOwner,
                         subtitle: S.iAmOwnerHint,
                         onTap: () => context.push(Routes.login(UserRole.owner)),
@@ -143,13 +144,13 @@ class _RoleCard extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 60,
-                height: 60,
+                width: 50,
+                height: 50,
                 decoration: BoxDecoration(
                   color: AppColors.primaryLight,
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: Icon(icon, size: 34, color: AppColors.primary),
+                child: Icon(icon, size: 26, color: AppColors.primary),
               ),
               const SizedBox(width: 16),
               Expanded(
@@ -163,8 +164,7 @@ class _RoleCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_left_rounded,
-                  size: 30, color: AppColors.inkFaint),
+              const Icon(AppIcons.forward, size: 20, color: AppColors.inkFaint),
             ],
           ),
         ),

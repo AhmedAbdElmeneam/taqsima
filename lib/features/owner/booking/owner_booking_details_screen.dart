@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/app_strings.dart';
@@ -27,7 +28,7 @@ class OwnerBookingDetailsScreen extends ConsumerWidget {
         builder: (b) {
           if (b == null) {
             return const EmptyState(
-                icon: Icons.search_off_rounded, title: S.bookingNotFound);
+                icon: AppIcons.notFound, title: S.bookingNotFound);
           }
           final isApp = b.source == BookingSource.app;
           final player =
@@ -44,7 +45,7 @@ class OwnerBookingDetailsScreen extends ConsumerWidget {
                 color: b.status.background,
                 child: Row(
                   children: [
-                    Icon(b.status.icon, color: b.status.color, size: 32),
+                    Icon(b.status.icon, color: b.status.color, size: 24),
                     const SizedBox(width: 12),
                     Text(b.status.label,
                         style: t.titleLarge?.copyWith(color: b.status.color)),
@@ -56,7 +57,7 @@ class OwnerBookingDetailsScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     InfoRow(
-                      icon: Icons.person_outline_rounded,
+                      icon: AppIcons.profile,
                       label: S.playerName,
                       value: isApp
                           ? (player?.name ?? '')
@@ -64,7 +65,7 @@ class OwnerBookingDetailsScreen extends ConsumerWidget {
                     ),
                     if (isApp)
                       InfoRow(
-                        icon: Icons.phone_outlined,
+                        icon: AppIcons.phone,
                         label: S.playerPhone,
                         value: phoneVisible && player != null
                             ? Fmt.phone(player.phone)
@@ -72,9 +73,7 @@ class OwnerBookingDetailsScreen extends ConsumerWidget {
                         valueColor: phoneVisible ? null : AppColors.inkFaint,
                       ),
                     InfoRow(
-                      icon: isApp
-                          ? Icons.smartphone_rounded
-                          : Icons.edit_note_rounded,
+                      icon: isApp ? AppIcons.mobile : AppIcons.manual,
                       label: S.source,
                       value: isApp ? S.sourceApp : S.sourceManual,
                     ),
@@ -87,19 +86,19 @@ class OwnerBookingDetailsScreen extends ConsumerWidget {
                   children: [
                     if (pitch != null)
                       InfoRow(
-                          icon: Icons.stadium_outlined,
+                          icon: AppIcons.pitch,
                           label: S.pitch,
                           value: pitch.name),
                     InfoRow(
-                        icon: Icons.calendar_today_rounded,
+                        icon: AppIcons.calendar,
                         label: S.date,
                         value: Fmt.dayLong(b.startAt)),
                     InfoRow(
-                        icon: Icons.schedule_rounded,
+                        icon: AppIcons.clock,
                         label: S.time,
                         value: Fmt.timeRange(b.startAt, b.endAt)),
                     InfoRow(
-                        icon: Icons.payments_outlined,
+                        icon: AppIcons.money,
                         label: S.total,
                         value: S.price(b.price),
                         valueColor: AppColors.primary),
@@ -110,19 +109,19 @@ class OwnerBookingDetailsScreen extends ConsumerWidget {
               if (phoneVisible)
                 PrimaryButton(
                   label: S.call,
-                  icon: Icons.call_rounded,
+                  icon: AppIcons.call,
                   onPressed: () => showSnack(context, S.callMock),
                 ),
               if (b.status == BookingStatus.pending) ...[
                 PrimaryButton(
                   label: S.accept,
-                  icon: Icons.check_rounded,
+                  icon: AppIcons.check,
                   onPressed: () => answerRequest(context, ref, b, accept: true),
                 ),
                 const SizedBox(height: 10),
                 SecondaryButton(
                   label: S.reject,
-                  icon: Icons.close_rounded,
+                  icon: AppIcons.close,
                   color: AppColors.error,
                   onPressed: () =>
                       answerRequest(context, ref, b, accept: false),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -87,7 +88,7 @@ class _SlotActionSheetState extends ConsumerState<_SlotActionSheet> {
             const SizedBox(height: 20),
             PrimaryButton(
               label: S.unblock,
-              icon: Icons.lock_open_rounded,
+              icon: AppIcons.unlock,
               loading: _loading,
               onPressed: () => _run(
                   (r) => r.unblockSlot(s.blockedSlot!.id), S.slotUnblocked),
@@ -111,7 +112,7 @@ class _SlotActionSheetState extends ConsumerState<_SlotActionSheet> {
             const SizedBox(height: 10),
             SecondaryButton(
               label: S.removeManualBooking,
-              icon: Icons.delete_outline_rounded,
+              icon: AppIcons.delete,
               color: AppColors.error,
               onPressed: _loading
                   ? null
@@ -134,7 +135,7 @@ class _SlotActionSheetState extends ConsumerState<_SlotActionSheet> {
               style: t.titleMedium, textAlign: TextAlign.center),
           const SizedBox(height: 14),
           _OptionTile(
-            icon: Icons.edit_note_rounded,
+            icon: AppIcons.manual,
             color: AppColors.slotManual,
             background: AppColors.slotManualBg,
             title: S.addManualBooking,
@@ -143,7 +144,7 @@ class _SlotActionSheetState extends ConsumerState<_SlotActionSheet> {
           ),
           const SizedBox(height: 10),
           _OptionTile(
-            icon: Icons.lock_rounded,
+            icon: AppIcons.lock,
             color: AppColors.slotBlocked,
             background: AppColors.slotBlockedBg,
             title: S.blockSlot,
@@ -163,13 +164,12 @@ class _SlotActionSheetState extends ConsumerState<_SlotActionSheet> {
           hint: manual ? S.customerNameHint : S.blockReasonHint,
           controller: _text,
           autofocus: true,
-          prefixIcon:
-              manual ? Icons.person_outline_rounded : Icons.notes_rounded,
+          prefixIcon: manual ? AppIcons.profile : AppIcons.note,
         ),
         const SizedBox(height: 20),
         PrimaryButton(
           label: manual ? S.addManualBooking : S.blockSlot,
-          icon: manual ? Icons.check_rounded : Icons.lock_rounded,
+          icon: manual ? AppIcons.check : AppIcons.lock,
           color: manual ? null : AppColors.ink,
           loading: _loading,
           onPressed: () => manual
@@ -212,7 +212,7 @@ class _StateHeader extends StatelessWidget {
         color: state.background,
         child: Row(
           children: [
-            Icon(state.icon, color: state.color, size: 30),
+            Icon(state.icon, color: state.color, size: 24),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -264,11 +264,11 @@ class _OptionTile extends StatelessWidget {
           child: Row(
             children: [
               Container(
-                width: 52,
-                height: 52,
+                width: 44,
+                height: 44,
                 decoration: BoxDecoration(
                     color: background, borderRadius: BorderRadius.circular(14)),
-                child: Icon(icon, color: color, size: 30),
+                child: Icon(icon, color: color, size: 22),
               ),
               const SizedBox(width: 14),
               Expanded(

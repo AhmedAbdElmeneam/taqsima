@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_strings.dart';
+import '../../../core/theme/app_icons.dart';
+import '../../../core/widgets/widgets.dart';
 
 class PlayerShell extends StatelessWidget {
   const PlayerShell({super.key, required this.shell});
@@ -10,27 +12,28 @@ class PlayerShell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       body: shell,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: shell.currentIndex,
-        onDestinationSelected: (i) =>
+      bottomNavigationBar: GlassNavBar(
+        currentIndex: shell.currentIndex,
+        onTap: (i) =>
             shell.goBranch(i, initialLocation: i == shell.currentIndex),
-        destinations: const [
-          NavigationDestination(
-              icon: Icon(Icons.home_outlined),
-              selectedIcon: Icon(Icons.home_rounded),
+        items: const [
+          GlassNavItem(
+              icon: AppIcons.home,
+              selectedIcon: AppIcons.homeFill,
               label: S.navHome),
-          NavigationDestination(
-              icon: Icon(Icons.search_rounded),
-              selectedIcon: Icon(Icons.manage_search_rounded),
+          GlassNavItem(
+              icon: AppIcons.search,
+              selectedIcon: AppIcons.searchFill,
               label: S.navSearch),
-          NavigationDestination(
-              icon: Icon(Icons.calendar_month_outlined),
-              selectedIcon: Icon(Icons.calendar_month_rounded),
+          GlassNavItem(
+              icon: AppIcons.bookings,
+              selectedIcon: AppIcons.bookingsFill,
               label: S.navMyBookings),
-          NavigationDestination(
-              icon: Icon(Icons.person_outline_rounded),
-              selectedIcon: Icon(Icons.person_rounded),
+          GlassNavItem(
+              icon: AppIcons.profile,
+              selectedIcon: AppIcons.profileFill,
               label: S.navProfile),
         ],
       ),

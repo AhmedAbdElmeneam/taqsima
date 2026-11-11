@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_strings.dart';
+import '../../../core/theme/app_icons.dart';
+import '../../../core/widgets/widgets.dart';
 import '../owner_providers.dart';
 
 class OwnerShell extends ConsumerWidget {
@@ -13,35 +15,29 @@ class OwnerShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final pending = ref.watch(ownerRequestsProvider).valueOrNull?.length ?? 0;
     return Scaffold(
+      extendBody: true,
       body: shell,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: shell.currentIndex,
-        onDestinationSelected: (i) =>
+      bottomNavigationBar: GlassNavBar(
+        currentIndex: shell.currentIndex,
+        onTap: (i) =>
             shell.goBranch(i, initialLocation: i == shell.currentIndex),
-        destinations: [
-          const NavigationDestination(
-              icon: Icon(Icons.today_outlined),
-              selectedIcon: Icon(Icons.today_rounded),
+        items: [
+          const GlassNavItem(
+              icon: AppIcons.today,
+              selectedIcon: AppIcons.todayFill,
               label: S.navToday),
-          const NavigationDestination(
-              icon: Icon(Icons.calendar_view_week_outlined),
-              selectedIcon: Icon(Icons.calendar_view_week_rounded),
+          const GlassNavItem(
+              icon: AppIcons.week,
+              selectedIcon: AppIcons.weekFill,
               label: S.navCalendar),
-          NavigationDestination(
-              icon: Badge(
-                isLabelVisible: pending > 0,
-                label: Text('$pending'),
-                child: const Icon(Icons.inbox_outlined),
-              ),
-              selectedIcon: Badge(
-                isLabelVisible: pending > 0,
-                label: Text('$pending'),
-                child: const Icon(Icons.inbox_rounded),
-              ),
-              label: S.navRequests),
-          const NavigationDestination(
-              icon: Icon(Icons.person_outline_rounded),
-              selectedIcon: Icon(Icons.person_rounded),
+          GlassNavItem(
+              icon: AppIcons.inbox,
+              selectedIcon: AppIcons.inboxFill,
+              label: S.navRequests,
+              badge: pending),
+          const GlassNavItem(
+              icon: AppIcons.profile,
+              selectedIcon: AppIcons.profileFill,
               label: S.navProfile),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -64,8 +65,8 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            const Icon(Icons.lock_outline_rounded,
-                size: 56, color: AppColors.primary),
+            const Icon(AppIcons.lockOutline,
+                size: 40, color: AppColors.primary),
             const SizedBox(height: 8),
             Text(S.otpTitle,
                 style: t.headlineMedium, textAlign: TextAlign.center),
@@ -93,7 +94,7 @@ class _OtpScreenState extends ConsumerState<OtpScreen> {
               padding: const EdgeInsets.all(12),
               child: Row(
                 children: [
-                  const Icon(Icons.info_outline_rounded, color: AppColors.info),
+                  const Icon(AppIcons.info, color: AppColors.info),
                   const SizedBox(width: 8),
                   Expanded(
                       child: Text(S.otpDemoHint,
@@ -140,7 +141,7 @@ class _OtpBoxes extends StatelessWidget {
     return Directionality(
       textDirection: TextDirection.ltr,
       child: SizedBox(
-        height: 64,
+        height: 56,
         child: Stack(
           children: [
             // Hidden input that actually receives the keyboard.
@@ -173,8 +174,8 @@ class _OtpBoxes extends StatelessWidget {
                       children: [
                         for (var i = 0; i < length; i++)
                           Container(
-                            width: 64,
-                            height: 64,
+                            width: 56,
+                            height: 56,
                             margin: const EdgeInsets.symmetric(horizontal: 6),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -194,7 +195,7 @@ class _OtpBoxes extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .headlineMedium
-                                  ?.copyWith(fontSize: 28),
+                                  ?.copyWith(fontSize: 20),
                             ),
                           ),
                       ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -107,14 +108,14 @@ class _SlotPickerScreenState extends ConsumerState<SlotPickerScreen> {
               builder: (list) {
                 if (list.isEmpty) {
                   return const EmptyState(
-                    icon: Icons.door_front_door_outlined,
+                    icon: AppIcons.closed,
                     title: S.closedThisDay,
                     message: S.closedThisDayHint,
                   );
                 }
                 if (!list.any((s) => s.isBookable)) {
                   return const EmptyState(
-                    icon: Icons.event_busy_rounded,
+                    icon: AppIcons.calendarX,
                     title: S.noSlotsLeft,
                     message: S.noSlotsLeftHint,
                   );

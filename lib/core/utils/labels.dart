@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 
 import '../../data/models/models.dart';
 import '../l10n/app_strings.dart';
@@ -21,10 +22,10 @@ extension AmenityLabel on Amenity {
       };
 
   IconData get icon => switch (this) {
-        Amenity.artificialGrass => Icons.grass_rounded,
-        Amenity.lighting => Icons.lightbulb_outline_rounded,
-        Amenity.toilets => Icons.wc_rounded,
-        Amenity.parking => Icons.local_parking_rounded,
+        Amenity.artificialGrass => AppIcons.grass,
+        Amenity.lighting => AppIcons.lights,
+        Amenity.toilets => AppIcons.toilets,
+        Amenity.parking => AppIcons.parking,
       };
 }
 
@@ -51,10 +52,10 @@ extension BookingStatusLabel on BookingStatus {
       };
 
   IconData get icon => switch (this) {
-        BookingStatus.pending => Icons.hourglass_top_rounded,
-        BookingStatus.confirmed => Icons.check_circle_rounded,
-        BookingStatus.cancelled => Icons.cancel_rounded,
-        BookingStatus.completed => Icons.sports_soccer_rounded,
+        BookingStatus.pending => AppIcons.pending,
+        BookingStatus.confirmed => AppIcons.confirmed,
+        BookingStatus.cancelled => AppIcons.cancelled,
+        BookingStatus.completed => AppIcons.ball,
       };
 }
 
@@ -81,9 +82,9 @@ extension SlotStateStyle on SlotState {
       };
 
   IconData get icon => switch (this) {
-        SlotState.available => Icons.add_circle_outline_rounded,
-        SlotState.appBooked => Icons.smartphone_rounded,
-        SlotState.manualBooked => Icons.edit_note_rounded,
-        SlotState.blocked => Icons.lock_rounded,
+        SlotState.available => AppIcons.add,
+        SlotState.appBooked => AppIcons.mobile,
+        SlotState.manualBooked => AppIcons.manual,
+        SlotState.blocked => AppIcons.lock,
       };
 }

@@ -25,7 +25,7 @@ class DaySelector extends StatelessWidget {
     final today = Fmt.dateOnly(DateTime.now());
     final t = Theme.of(context).textTheme;
     return SizedBox(
-      height: 84,
+      height: 70,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -47,7 +47,7 @@ class DaySelector extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
               onTap: () => onSelected(day),
               child: SizedBox(
-                width: 66,
+                width: 56,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -61,7 +61,7 @@ class DaySelector extends StatelessWidget {
                     Text(
                       '${day.day}',
                       style: t.headlineMedium?.copyWith(
-                        fontSize: 24,
+                        fontSize: 17,
                         height: 1.2,
                         color: isSelected ? Colors.white : AppColors.ink,
                       ),
@@ -69,7 +69,7 @@ class DaySelector extends StatelessWidget {
                     Text(
                       S.months[day.month - 1],
                       style: t.bodySmall?.copyWith(
-                        fontSize: 11,
+                        fontSize: 10,
                         color: isSelected ? Colors.white70 : AppColors.inkFaint,
                       ),
                     ),

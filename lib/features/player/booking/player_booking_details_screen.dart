@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -51,7 +52,7 @@ class PlayerBookingDetailsScreen extends ConsumerWidget {
           const SizedBox(height: 16),
           PrimaryButton(
             label: S.send,
-            icon: Icons.send_rounded,
+            icon: AppIcons.send,
             onPressed: () => Navigator.pop(ctx, true),
           ),
         ],
@@ -72,7 +73,7 @@ class PlayerBookingDetailsScreen extends ConsumerWidget {
         builder: (b) {
           if (b == null) {
             return const EmptyState(
-                icon: Icons.search_off_rounded, title: S.bookingNotFound);
+                icon: AppIcons.notFound, title: S.bookingNotFound);
           }
           final pitch = ref.watch(pitchProvider(b.pitchId)).valueOrNull;
           final active = b.status == BookingStatus.pending ||
@@ -86,7 +87,7 @@ class PlayerBookingDetailsScreen extends ConsumerWidget {
                 color: b.status.background,
                 child: Row(
                   children: [
-                    Icon(b.status.icon, color: b.status.color, size: 32),
+                    Icon(b.status.icon, color: b.status.color, size: 24),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -132,7 +133,7 @@ class PlayerBookingDetailsScreen extends ConsumerWidget {
                                   ],
                                 ),
                               ),
-                              const Icon(Icons.chevron_left_rounded,
+                              const Icon(AppIcons.forward,
                                   color: AppColors.inkFaint),
                             ],
                           ),
@@ -146,19 +147,19 @@ class PlayerBookingDetailsScreen extends ConsumerWidget {
                 child: Column(
                   children: [
                     InfoRow(
-                        icon: Icons.confirmation_number_outlined,
+                        icon: AppIcons.ticket,
                         label: S.bookingNumber,
                         value: Fmt.ltr('#${b.id.toUpperCase()}')),
                     InfoRow(
-                        icon: Icons.calendar_today_rounded,
+                        icon: AppIcons.calendar,
                         label: S.date,
                         value: Fmt.dayLong(b.startAt)),
                     InfoRow(
-                        icon: Icons.schedule_rounded,
+                        icon: AppIcons.clock,
                         label: S.time,
                         value: Fmt.timeRange(b.startAt, b.endAt)),
                     InfoRow(
-                        icon: Icons.payments_outlined,
+                        icon: AppIcons.money,
                         label: S.total,
                         value: S.price(b.price),
                         valueColor: AppColors.primary),
@@ -169,14 +170,14 @@ class PlayerBookingDetailsScreen extends ConsumerWidget {
               if (pitch != null)
                 PrimaryButton(
                   label: S.directions,
-                  icon: Icons.directions_rounded,
+                  icon: AppIcons.directions,
                   onPressed: () => showSnack(context, S.directionsMock),
                 ),
               if (active) ...[
                 const SizedBox(height: 10),
                 SecondaryButton(
                   label: S.cancelBooking,
-                  icon: Icons.close_rounded,
+                  icon: AppIcons.close,
                   color: AppColors.error,
                   onPressed: cancellable ? () => _cancel(context, ref) : null,
                 ),
@@ -190,8 +191,7 @@ class PlayerBookingDetailsScreen extends ConsumerWidget {
               const SizedBox(height: 10),
               TextButton.icon(
                 onPressed: () => _report(context),
-                icon:
-                    const Icon(Icons.flag_outlined, color: AppColors.inkMuted),
+                icon: const Icon(AppIcons.flag, color: AppColors.inkMuted),
                 label: Text(S.reportProblem,
                     style: t.titleMedium?.copyWith(color: AppColors.inkMuted)),
               ),

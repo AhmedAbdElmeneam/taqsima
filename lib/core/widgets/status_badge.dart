@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 
 import '../../data/models/models.dart';
 import '../l10n/app_strings.dart';
@@ -38,7 +39,7 @@ class AppBadge extends StatelessWidget {
           Text(
             label,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: color, fontWeight: FontWeight.w800, fontSize: 13),
+                color: color, fontWeight: FontWeight.w700, fontSize: 11),
           ),
         ],
       ),
@@ -69,11 +70,11 @@ class PitchStatusBadge extends StatelessWidget {
             label: S.active,
             color: AppColors.success,
             background: AppColors.successLight,
-            icon: Icons.verified_rounded),
+            icon: AppIcons.verified),
         PitchStatus.pending => const AppBadge(
             label: S.underReview,
             color: AppColors.slotManual,
             background: AppColors.warningLight,
-            icon: Icons.schedule_rounded),
+            icon: AppIcons.clock),
       };
 }

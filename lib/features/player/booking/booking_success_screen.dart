@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -40,14 +41,14 @@ class BookingSuccessScreen extends ConsumerWidget {
                   builder: (_, v, child) =>
                       Transform.scale(scale: v, child: child),
                   child: Container(
-                    width: 120,
-                    height: 120,
+                    width: 96,
+                    height: 96,
                     decoration: const BoxDecoration(
                       color: AppColors.primary,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.check_rounded,
-                        size: 72, color: Colors.white),
+                    child: const Icon(AppIcons.check,
+                        size: 52, color: Colors.white),
                   ),
                 ),
                 const SizedBox(height: 24),

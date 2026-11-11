@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_spacing.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,7 +29,7 @@ class OwnerDashboardScreen extends ConsumerWidget {
           value: pitch,
           builder: (p) => p == null
               ? EmptyState(
-                  icon: Icons.stadium_outlined,
+                  icon: AppIcons.pitch,
                   title: S.noPitchYet,
                   message: S.noPitchYetHint,
                   actionLabel: S.addPitch,
@@ -56,20 +58,20 @@ class _Dashboard extends ConsumerWidget {
       color: AppColors.primary,
       onRefresh: () async => ref.refreshData(),
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+        padding:
+            const EdgeInsets.fromLTRB(20, 8, 20, AppSpacing.navBarClearance),
         children: [
-          Text(S.hello((user?.name ?? '').split(' ').take(2).join(' ')),
-              style: t.bodyLarge?.copyWith(color: AppColors.inkMuted)),
+          Text(
+              '${S.hello((user?.name ?? '').split(' ').take(2).join(' '))} • ${Fmt.dayLong(today)}',
+              style: t.bodySmall),
           PitchSwitcher(pitch: pitch),
-          Text(Fmt.dayLong(today), style: t.bodyMedium),
-          const SizedBox(height: 14),
+          const SizedBox(height: 12),
           if (pitch.status == PitchStatus.pending) ...[
             AppPanel(
               color: AppColors.warningLight,
               child: Row(
                 children: [
-                  const Icon(Icons.schedule_rounded,
-                      color: AppColors.slotManual),
+                  const Icon(AppIcons.clock, color: AppColors.slotManual),
                   const SizedBox(width: 10),
                   Expanded(child: Text(S.underReviewHint, style: t.bodyMedium)),
                 ],
@@ -79,27 +81,26 @@ class _Dashboard extends ConsumerWidget {
           ],
           if (requests.isNotEmpty) ...[
             Material(
-              color: AppColors.info,
-              borderRadius: BorderRadius.circular(18),
+              color: AppColors.infoLight,
+              borderRadius: BorderRadius.circular(16),
               child: InkWell(
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(16),
                 onTap: () => context.go(Routes.ownerRequests),
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                   child: Row(
                     children: [
-                      const Icon(Icons.notifications_active_rounded,
-                          color: Colors.white, size: 30),
-                      const SizedBox(width: 12),
+                      const Icon(AppIcons.bellRinging,
+                          color: AppColors.info, size: 20),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Text(S.pendingRequestsBanner(requests.length),
                             style:
-                                t.titleMedium?.copyWith(color: Colors.white)),
+                                t.titleMedium?.copyWith(color: AppColors.info)),
                       ),
-                      Text(S.review,
-                          style: t.titleMedium?.copyWith(color: Colors.white)),
-                      const Icon(Icons.chevron_left_rounded,
-                          color: Colors.white),
+                      const Icon(AppIcons.forward,
+                          color: AppColors.info, size: 18),
                     ],
                   ),
                 ),
@@ -124,7 +125,7 @@ class _Dashboard extends ConsumerWidget {
                         child: _StatCard(
                           label: S.todaysRevenue,
                           value: S.price(revenueOf(list)),
-                          icon: Icons.payments_rounded,
+                          icon: AppIcons.moneyFill,
                           highlight: true,
                         ),
                       ),
@@ -134,7 +135,7 @@ class _Dashboard extends ConsumerWidget {
                         child: _StatCard(
                           label: S.bookingsCount,
                           value: '${booked.length}',
-                          icon: Icons.event_available_rounded,
+                          icon: AppIcons.calendarCheck,
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -143,7 +144,7 @@ class _Dashboard extends ConsumerWidget {
                         child: _StatCard(
                           label: S.freeSlots,
                           value: '$free',
-                          icon: Icons.event_seat_outlined,
+                          icon: AppIcons.calendarPlus,
                         ),
                       ),
                     ],
@@ -158,43 +159,11 @@ class _Dashboard extends ConsumerWidget {
                   const SizedBox(height: 10),
                   if (list.isEmpty)
                     const EmptyState(
-                      icon: Icons.door_front_door_outlined,
+                      icon: AppIcons.closed,
                       title: S.closedThisDay,
                     )
                   else
                     for (final s in list) _HourRow(slot: s),
-                  const SizedBox(height: 20),
-                  Text(S.quickActions, style: t.titleLarge),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _QuickAction(
-                          icon: Icons.schedule_rounded,
-                          label: S.workingHours,
-                          onTap: () =>
-                              context.push(Routes.ownerHours(pitch.id)),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: _QuickAction(
-                          icon: Icons.edit_outlined,
-                          label: S.editPitch,
-                          onTap: () =>
-                              context.push(Routes.ownerEditPitch(pitch.id)),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: _QuickAction(
-                          icon: Icons.add_business_outlined,
-                          label: S.addPitch,
-                          onTap: () => context.push(Routes.ownerPitchForm),
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               );
             },
@@ -223,23 +192,40 @@ class _StatCard extends StatelessWidget {
     final t = Theme.of(context).textTheme;
     final fg = highlight ? Colors.white : AppColors.ink;
     return Container(
-      height: 112,
-      padding: const EdgeInsets.all(14),
+      height: 76,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: highlight ? AppColors.primary : AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
-        border: highlight ? null : Border.all(color: AppColors.border),
+        color: highlight ? null : AppColors.surface,
+        gradient: highlight
+            ? const LinearGradient(
+                begin: AlignmentDirectional.topStart,
+                end: AlignmentDirectional.bottomEnd,
+                colors: [Color(0xFF22A049), AppColors.primaryDark],
+              )
+            : null,
+        borderRadius: BorderRadius.circular(18),
+        border: highlight ? null : Border.all(color: AppColors.borderSoft),
+        boxShadow: softShadow,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(icon, color: highlight ? Colors.white : AppColors.primary),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: AlignmentDirectional.centerStart,
-            child: Text(value,
-                style: t.headlineMedium?.copyWith(color: fg, fontSize: 24)),
+          Row(
+            children: [
+              Icon(icon,
+                  size: 16,
+                  color: highlight ? Colors.white70 : AppColors.primary),
+              const SizedBox(width: 6),
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(value,
+                      style: t.titleLarge?.copyWith(color: fg, fontSize: 16)),
+                ),
+              ),
+            ],
           ),
           Text(label,
               maxLines: 1,
@@ -292,9 +278,9 @@ class _HourRow extends ConsumerWidget {
         child: Row(
           children: [
             SizedBox(
-              width: 70,
+              width: 62,
               child: Text(Fmt.time(slot.startAt),
-                  style: t.bodyLarge?.copyWith(fontWeight: FontWeight.w700)),
+                  style: t.bodyMedium?.copyWith(fontWeight: FontWeight.w700)),
             ),
             Expanded(
               child: Material(
@@ -303,7 +289,7 @@ class _HourRow extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(14),
                   side: BorderSide(
                     color: state == SlotState.available
-                        ? AppColors.border
+                        ? AppColors.borderSoft
                         : Colors.transparent,
                   ),
                 ),
@@ -311,13 +297,13 @@ class _HourRow extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(14),
                   onTap: () => onOwnerSlotTap(context, ref, slot),
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(minHeight: 56),
+                    constraints: const BoxConstraints(minHeight: 50),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
+                          horizontal: 12, vertical: 6),
                       child: Row(
                         children: [
-                          Icon(state.icon, color: color),
+                          Icon(state.icon, color: color, size: 18),
                           const SizedBox(width: 10),
                           Expanded(
                             child: Column(
@@ -356,42 +342,4 @@ class _HourRow extends ConsumerWidget {
       ),
     );
   }
-}
-
-class _QuickAction extends StatelessWidget {
-  const _QuickAction(
-      {required this.icon, required this.label, required this.onTap});
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) => Material(
-        color: AppColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(18),
-          side: const BorderSide(color: AppColors.border),
-        ),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(18),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 6),
-            child: Column(
-              children: [
-                Icon(icon, color: AppColors.primary, size: 30),
-                const SizedBox(height: 6),
-                Text(label,
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(fontWeight: FontWeight.w700)),
-              ],
-            ),
-          ),
-        ),
-      );
 }

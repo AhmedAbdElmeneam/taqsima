@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_spacing.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -6,7 +8,6 @@ import '../../../core/l10n/app_strings.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
-import '../../../core/utils/labels.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../data/models/models.dart';
 import '../../../data/repositories/repositories.dart';
@@ -35,12 +36,13 @@ class PlayerHomeScreen extends ConsumerWidget {
           color: AppColors.primary,
           onRefresh: () => ref.refresh(nearbyPitchesProvider.future),
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
+            padding: const EdgeInsets.fromLTRB(
+                20, 8, 20, AppSpacing.navBarClearance),
             children: [
               Text(S.hello(firstName),
-                  style: t.bodyLarge?.copyWith(color: AppColors.inkMuted)),
+                  style: t.bodyMedium?.copyWith(color: AppColors.inkMuted)),
               Text(S.homeQuestion, style: t.headlineMedium),
-              const SizedBox(height: 16),
+              const SizedBox(height: 14),
               Row(
                 children: [
                   Expanded(
@@ -48,7 +50,7 @@ class PlayerHomeScreen extends ConsumerWidget {
                       textInputAction: TextInputAction.search,
                       decoration: const InputDecoration(
                         hintText: S.searchHint,
-                        prefixIcon: Icon(Icons.search_rounded),
+                        prefixIcon: Icon(AppIcons.search),
                       ),
                       onSubmitted: (q) => _searchWith(
                           ref,
@@ -66,35 +68,7 @@ class PlayerHomeScreen extends ConsumerWidget {
                   }),
                 ],
               ),
-              const SizedBox(height: 14),
-              SizedBox(
-                height: 44,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: [
-                    for (final type in PitchType.values)
-                      _QuickChip(
-                        icon: Icons.groups_rounded,
-                        label: type.label,
-                        onTap: () =>
-                            _searchWith(ref, context, PitchFilter(type: type)),
-                      ),
-                    for (final area in const [
-                      'مدينة نصر',
-                      'المعادي',
-                      'التجمع الخامس',
-                      'الشيخ زايد'
-                    ])
-                      _QuickChip(
-                        icon: Icons.location_on_outlined,
-                        label: area,
-                        onTap: () =>
-                            _searchWith(ref, context, PitchFilter(area: area)),
-                      ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 22),
               SectionHeader(
                 title: S.nearbyPitches,
                 action: S.seeAll,
@@ -136,28 +110,10 @@ class _FilterButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(14),
           onTap: onTap,
           child: const SizedBox(
-            width: 56,
-            height: 56,
-            child: Icon(Icons.tune_rounded, color: Colors.white),
+            width: 50,
+            height: 50,
+            child: Icon(AppIcons.filter, color: Colors.white),
           ),
-        ),
-      );
-}
-
-class _QuickChip extends StatelessWidget {
-  const _QuickChip(
-      {required this.icon, required this.label, required this.onTap});
-  final IconData icon;
-  final String label;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsetsDirectional.only(end: 8),
-        child: ActionChip(
-          avatar: Icon(icon, size: 18, color: AppColors.primary),
-          label: Text(label),
-          onPressed: onTap,
         ),
       );
 }
@@ -174,7 +130,7 @@ class _DistanceBadge extends StatelessWidget {
       label: S.km(Fmt.ltr(km.toStringAsFixed(1))),
       color: AppColors.ink,
       background: Colors.white,
-      icon: Icons.near_me_rounded,
+      icon: AppIcons.distance,
     );
   }
 }

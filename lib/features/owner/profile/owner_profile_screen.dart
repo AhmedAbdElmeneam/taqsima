@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ma3adna/core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -48,8 +49,8 @@ class _MyPitches extends ConsumerWidget {
                       Row(
                         children: [
                           SizedBox(
-                            width: 64,
-                            height: 64,
+                            width: 54,
+                            height: 54,
                             child: PitchImage(
                               photoKey:
                                   p.photos.isEmpty ? p.id : p.photos.first,
@@ -92,7 +93,7 @@ class _MyPitches extends ConsumerWidget {
                                   minimumSize: const Size.fromHeight(48)),
                               onPressed: () =>
                                   context.push(Routes.ownerEditPitch(p.id)),
-                              icon: const Icon(Icons.edit_outlined),
+                              icon: const Icon(AppIcons.edit),
                               label: const Text(S.edit),
                             ),
                           ),
@@ -103,7 +104,7 @@ class _MyPitches extends ConsumerWidget {
                                   minimumSize: const Size.fromHeight(48)),
                               onPressed: () =>
                                   context.push(Routes.ownerHours(p.id)),
-                              icon: const Icon(Icons.schedule_rounded),
+                              icon: const Icon(AppIcons.clock),
                               label: const Text(S.hours),
                             ),
                           ),
