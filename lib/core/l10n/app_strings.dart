@@ -2,8 +2,8 @@
 /// Arabic. To add another language later, turn this into an ARB-based class.
 abstract final class S {
   // App
-  static const appName = 'ميعادنا';
-  static const appTagline = 'احجز ملعبك في دقيقة';
+  static const appName = 'تقسيمة';
+  static const appTagline = 'احجز ملعبك وجهّز التقسيمة';
   static const currency = 'ج.م';
   static String price(int amount) => '$amount ${S.currency}';
   static String pricePerHour(int amount) => '$amount ${S.currency} / الساعة';
@@ -23,8 +23,8 @@ abstract final class S {
   static String km(String value) => '$value كم';
 
   // Role choice / splash
-  static const welcome = 'مرحبًا بك في ميعادنا';
-  static const chooseRole = 'كيف ستستخدم ميعادنا؟';
+  static const welcome = 'مرحبًا بك في تقسيمة';
+  static const chooseRole = 'كيف ستستخدم تقسيمة؟';
   static const iAmPlayer = 'أنا لاعب';
   static const iAmPlayerHint = 'ابحث عن ملعب واحجز موعدك';
   static const iAmOwner = 'أنا صاحب ملعب';

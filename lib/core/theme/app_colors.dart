@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Ma3adna color palette with a light and a dark variant.
+/// Taqsima color palette with a light and a dark variant.
 ///
 /// Every color is a getter that reads [isDark], which the app root sets
 /// before building (see `app.dart`). The whole app is rebuilt when the mode

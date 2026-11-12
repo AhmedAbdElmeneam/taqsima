@@ -14,5 +14,5 @@ void main() {
       primaryColor: 0xFF1B8A3A,
     ),
   );
-  runApp(const ProviderScope(child: Ma3adnaApp()));
+  runApp(const ProviderScope(child: TaqsimaApp()));
 }

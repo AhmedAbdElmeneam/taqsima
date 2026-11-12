@@ -10,14 +10,14 @@ import 'core/theme/app_theme.dart';
 import 'core/theme/theme_mode.dart';
 import 'core/widgets/app_scroll.dart';
 
-class Ma3adnaApp extends ConsumerStatefulWidget {
-  const Ma3adnaApp({super.key});
+class TaqsimaApp extends ConsumerStatefulWidget {
+  const TaqsimaApp({super.key});
 
   @override
-  ConsumerState<Ma3adnaApp> createState() => _Ma3adnaAppState();
+  ConsumerState<TaqsimaApp> createState() => _TaqsimaAppState();
 }
 
-class _Ma3adnaAppState extends ConsumerState<Ma3adnaApp>
+class _TaqsimaAppState extends ConsumerState<TaqsimaApp>
     with WidgetsBindingObserver {
   @override
   void initState() {
