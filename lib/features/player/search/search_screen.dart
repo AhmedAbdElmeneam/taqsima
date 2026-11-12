@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_spacing.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
+import '../../../core/theme/app_spacing.dart';
+import '../../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -88,14 +88,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                   ),
                 ),
                 const SizedBox(width: 10),
-                IconButton.filled(
-                  style: IconButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    fixedSize: const Size(56, 56),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14)),
-                  ),
-                  icon: const Icon(AppIcons.filter),
+                SquareIconButton(
+                  icon: AppIcons.filter,
                   onPressed: () => showFilterSheet(context),
                 ),
               ],

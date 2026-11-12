@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/app_strings.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_icons.dart';
+import '../utils/clock.dart';
 import '../utils/formatters.dart';
 import 'animations.dart';
 
@@ -143,13 +145,13 @@ class _HeroLinesPainter extends CustomPainter {
 }
 
 /// "صباح الخير، أحمد" + today's date pill.
-class HeroGreeting extends StatelessWidget {
+class HeroGreeting extends ConsumerWidget {
   const HeroGreeting({super.key, required this.name});
   final String name;
 
   @override
-  Widget build(BuildContext context) {
-    final now = DateTime.now();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final now = ref.now;
     final greeting = now.hour < 12 ? S.goodMorning : S.goodEvening;
     return Row(
       children: [

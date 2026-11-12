@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
-import 'package:flutter/services.dart';
+import '../../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/l10n/app_strings.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/utils/labels.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../data/models/models.dart';
 import '../../../data/providers.dart';
 import '../../auth/session_controller.dart';
 import '../owner_providers.dart';
+import 'steps/info_step.dart';
+import 'steps/location_step.dart';
+import 'steps/photos_step.dart';
+import 'steps/price_step.dart';
 
 /// Add / edit pitch — 4 simple steps: info, photos, location, price.
 class PitchFormScreen extends ConsumerWidget {
@@ -177,12 +179,7 @@ class _PitchFormState extends ConsumerState<_PitchForm> {
               duration: const Duration(milliseconds: 200),
               child: KeyedSubtree(
                 key: ValueKey(_step),
-                child: switch (_step) {
-                  0 => _infoStep(),
-                  1 => _photosStep(),
-                  2 => _locationStep(),
-                  _ => _priceStep(),
-                },
+                child: _currentStep(),
               ),
             ),
           ),
@@ -225,222 +222,38 @@ class _PitchFormState extends ConsumerState<_PitchForm> {
     );
   }
 
-  Widget _infoStep() {
-    final areas = ref.watch(areasProvider).valueOrNull ?? const [];
-    final t = Theme.of(context).textTheme;
-    return Form(
-      key: _infoKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          AppTextField(
-            label: S.pitchName,
-            hint: S.pitchNameHint,
-            controller: _name,
-            validator: (v) => (v ?? '').trim().isEmpty ? S.fieldRequired : null,
+  /// The widget for the current step, wired to this form's state.
+  Widget _currentStep() => switch (_step) {
+        0 => InfoStep(
+            formKey: _infoKey,
+            name: _name,
+            description: _desc,
+            areas: ref.watch(areasProvider).valueOrNull ?? const [],
+            area: _area,
+            onArea: (a) => setState(() => _area = a),
+            type: _type,
+            onType: (t) => setState(() => _type = t),
+            amenities: _amenities,
+            onAmenity: (a, on) =>
+                setState(() => on ? _amenities.add(a) : _amenities.remove(a)),
           ),
-          const SizedBox(height: 16),
-          AppTextField(
-            label: '${S.description} ${S.optional}',
-            hint: S.descriptionHint,
-            controller: _desc,
-            maxLines: 3,
+        1 => PhotosStep(
+            photos: _photos,
+            onAdd: () => setState(() =>
+                _photos.add('new_${DateTime.now().microsecondsSinceEpoch}')),
+            onRemove: (p) => setState(() => _photos.remove(p)),
           ),
-          const SizedBox(height: 16),
-          Text(S.area,
-              style: t.bodyLarge?.copyWith(fontWeight: FontWeight.w700)),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final a in {...areas, if (_area != null) _area!})
-                ChoiceChip(
-                  label: Text(a),
-                  selected: _area == a,
-                  showCheckmark: false,
-                  onSelected: (_) => setState(() => _area = a),
-                ),
-            ],
+        2 => LocationStep(
+            location: _location,
+            onPick: (lat, lng) => setState(() {
+              _location = (lat: lat, lng: lng);
+              _stepError = null;
+            }),
           ),
-          const SizedBox(height: 16),
-          Text(S.pitchType,
-              style: t.bodyLarge?.copyWith(fontWeight: FontWeight.w700)),
-          const SizedBox(height: 8),
-          SegmentedButton<PitchType>(
-            showSelectedIcon: false,
-            style: SegmentedButton.styleFrom(
-              minimumSize: const Size.fromHeight(52),
-              selectedBackgroundColor: AppColors.primaryLight,
-              selectedForegroundColor: AppColors.primaryDark,
-            ),
-            segments: [
-              for (final type in PitchType.values)
-                ButtonSegment(value: type, label: Text(type.label)),
-            ],
-            selected: {_type},
-            onSelectionChanged: (s) => setState(() => _type = s.first),
+        _ => PriceStep(
+            formKey: _priceKey,
+            price: _price,
+            onChanged: () => setState(() {}),
           ),
-          const SizedBox(height: 16),
-          Text(S.amenities,
-              style: t.bodyLarge?.copyWith(fontWeight: FontWeight.w700)),
-          const SizedBox(height: 8),
-          for (final a in Amenity.values)
-            CheckboxListTile(
-              contentPadding: EdgeInsets.zero,
-              value: _amenities.contains(a),
-              activeColor: AppColors.primary,
-              secondary: Icon(a.icon, color: AppColors.primary),
-              title: Text(a.label, style: t.bodyLarge),
-              onChanged: (v) => setState(
-                  () => v == true ? _amenities.add(a) : _amenities.remove(a)),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _photosStep() {
-    final t = Theme.of(context).textTheme;
-    return ListView(
-      padding: const EdgeInsets.all(20),
-      children: [
-        Text(S.photosHint,
-            style: t.bodyMedium?.copyWith(color: AppColors.inkMuted)),
-        const SizedBox(height: 14),
-        GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          mainAxisSpacing: 12,
-          crossAxisSpacing: 12,
-          childAspectRatio: 1.3,
-          children: [
-            for (final photo in _photos)
-              Stack(
-                children: [
-                  Positioned.fill(
-                    child: PitchImage(
-                        photoKey: photo,
-                        borderRadius: BorderRadius.circular(16)),
-                  ),
-                  PositionedDirectional(
-                    top: 6,
-                    end: 6,
-                    child: IconButton.filled(
-                      style:
-                          IconButton.styleFrom(backgroundColor: Colors.black54),
-                      icon: const Icon(AppIcons.close, size: 18),
-                      onPressed: () => setState(() => _photos.remove(photo)),
-                    ),
-                  ),
-                ],
-              ),
-            Material(
-              color: AppColors.primaryLight,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-                side: BorderSide(color: AppColors.primary, width: 1.5),
-              ),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(16),
-                onTap: () => setState(() => _photos
-                    .add('new_${DateTime.now().microsecondsSinceEpoch}')),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(AppIcons.addPhoto, size: 28, color: AppColors.primary),
-                    const SizedBox(height: 6),
-                    Text(S.addPhoto,
-                        style:
-                            t.titleMedium?.copyWith(color: AppColors.primary)),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _locationStep() {
-    final t = Theme.of(context).textTheme;
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            children: [
-              Icon(
-                _location == null ? AppIcons.tap : AppIcons.confirmed,
-                color: AppColors.primary,
-              ),
-              const SizedBox(width: 8),
-              Expanded(
-                child: Text(_location == null ? S.tapMapToPin : S.locationSet,
-                    style: t.titleMedium),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Expanded(
-            child: MapPlaceholder(
-              picked: _location,
-              onPick: (lat, lng) => setState(() {
-                _location = (lat: lat, lng: lng);
-                _stepError = null;
-              }),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _priceStep() {
-    const quick = [250, 300, 350, 400, 500, 600];
-    return Form(
-      key: _priceKey,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      child: ListView(
-        padding: const EdgeInsets.all(20),
-        children: [
-          AppTextField(
-            label: S.priceLabel,
-            hint: S.priceHint,
-            controller: _price,
-            keyboardType: TextInputType.number,
-            textDirection: TextDirection.ltr,
-            prefixIcon: AppIcons.money,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-              LengthLimitingTextInputFormatter(5),
-            ],
-            onChanged: (_) => setState(() {}),
-            validator: (v) {
-              final n = int.tryParse(v ?? '');
-              return n == null || n <= 0 ? S.invalidPrice : null;
-            },
-          ),
-          const SizedBox(height: 14),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              for (final p in quick)
-                ChoiceChip(
-                  label: Text(S.price(p)),
-                  selected: _price.text == '$p',
-                  showCheckmark: false,
-                  onSelected: (_) => setState(() => _price.text = '$p'),
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+      };
 }

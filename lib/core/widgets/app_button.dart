@@ -117,3 +117,31 @@ class SecondaryButton extends StatelessWidget {
     );
   }
 }
+
+/// Square filled icon button that sits next to a search field (filters).
+class SquareIconButton extends StatelessWidget {
+  const SquareIconButton({
+    super.key,
+    required this.icon,
+    required this.onPressed,
+    this.size = 50,
+  });
+
+  final IconData icon;
+  final VoidCallback onPressed;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) => Material(
+        color: AppColors.primary,
+        borderRadius: BorderRadius.circular(14),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(14),
+          onTap: onPressed,
+          child: SizedBox.square(
+            dimension: size,
+            child: Icon(icon, color: Colors.white),
+          ),
+        ),
+      );
+}

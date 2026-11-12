@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
+import '../../../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/l10n/app_strings.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/widgets.dart';
-import '../../../data/models/models.dart';
-import '../owner_providers.dart';
+import '../../../../core/l10n/app_strings.dart';
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/widgets/widgets.dart';
+import '../../../../data/models/models.dart';
+import '../../owner_providers.dart';
 
 /// Tappable pitch name that lets owners with several pitches switch.
 class PitchSwitcher extends ConsumerWidget {
@@ -34,14 +34,8 @@ class PitchSwitcher extends ConsumerWidget {
                     for (final p in pitches)
                       ListTile(
                         contentPadding: EdgeInsets.zero,
-                        leading: SizedBox(
-                          width: 48,
-                          height: 48,
-                          child: PitchImage(
-                            photoKey: p.photos.isEmpty ? p.id : p.photos.first,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
+                        leading: PitchThumb(
+                            photoKey: p.coverPhoto, size: 48, radius: 10),
                         title: Text(p.name, style: t.titleMedium),
                         subtitle: Text(p.area),
                         trailing: p.id == pitch.id

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
+import '../../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -48,15 +48,8 @@ class _MyPitches extends ConsumerWidget {
                     children: [
                       Row(
                         children: [
-                          SizedBox(
-                            width: 54,
-                            height: 54,
-                            child: PitchImage(
-                              photoKey:
-                                  p.photos.isEmpty ? p.id : p.photos.first,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
+                          PitchThumb(
+                              photoKey: p.coverPhoto, size: 54, radius: 12),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(

@@ -17,9 +17,9 @@ final selectedPitchIdProvider = StateProvider<String?>((ref) => null);
 /// Resolves the managed pitch: the selected one, else the first active one.
 final currentOwnerPitchProvider =
     FutureProvider.autoDispose<Pitch?>((ref) async {
+  final id = ref.watch(selectedPitchIdProvider);
   final pitches = await ref.watch(ownerPitchesProvider.future);
   if (pitches.isEmpty) return null;
-  final id = ref.watch(selectedPitchIdProvider);
   return pitches.where((p) => p.id == id).firstOrNull ??
       pitches.where((p) => p.status == PitchStatus.active).firstOrNull ??
       pitches.first;
@@ -62,22 +62,42 @@ DateTime todayDate() => Fmt.dateOnly(DateTime.now());
 /// Text typed in the requests search box.
 final requestSearchProvider = StateProvider.autoDispose<String>((ref) => '');
 
-/// Pending requests filtered by player name or pitch name.
-final filteredRequestsProvider =
-    FutureProvider.autoDispose<List<Booking>>((ref) async {
-  final requests = await ref.watch(ownerRequestsProvider.future);
-  final query = Fmt.normalizeArabic(ref.watch(requestSearchProvider));
-  if (query.isEmpty) return requests;
+/// A pending request plus the text it can be searched by.
+class RequestEntry {
+  const RequestEntry(this.booking, this.searchText);
+  final Booking booking;
 
+  /// Normalized player name + customer name + pitch name.
+  final String searchText;
+}
+
+/// Requests with their names resolved once (in parallel), independent of
+/// what is typed in the search box.
+final requestEntriesProvider =
+    FutureProvider.autoDispose<List<RequestEntry>>((ref) async {
   final users = ref.watch(userRepositoryProvider);
   final pitches = ref.watch(pitchRepositoryProvider);
-  final result = <Booking>[];
-  for (final b in requests) {
-    final player = b.userId == null ? null : await users.getUser(b.userId!);
-    final pitch = await pitches.getPitch(b.pitchId);
-    final haystack = Fmt.normalizeArabic(
-        '${player?.name ?? ''} ${b.customerName ?? ''} ${pitch?.name ?? ''}');
-    if (haystack.contains(query)) result.add(b);
-  }
-  return result;
+  final requests = await ref.watch(ownerRequestsProvider.future);
+
+  return Future.wait(requests.map((b) async {
+    final (player, pitch) = await (
+      b.userId == null ? Future<AppUser?>.value() : users.getUser(b.userId!),
+      pitches.getPitch(b.pitchId),
+    ).wait;
+    return RequestEntry(
+      b,
+      Fmt.normalizeArabic(
+          '${player?.name ?? ''} ${b.customerName ?? ''} ${pitch?.name ?? ''}'),
+    );
+  }));
+});
+
+/// Pending requests filtered by player or pitch name — no extra I/O per key.
+final filteredRequestsProvider =
+    Provider.autoDispose<AsyncValue<List<Booking>>>((ref) {
+  final query = Fmt.normalizeArabic(ref.watch(requestSearchProvider));
+  return ref.watch(requestEntriesProvider).whenData((entries) => [
+        for (final e in entries)
+          if (query.isEmpty || e.searchText.contains(query)) e.booking,
+      ]);
 });

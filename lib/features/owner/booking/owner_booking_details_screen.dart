@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
+import '../../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/app_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
-import '../../../core/utils/labels.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../data/models/models.dart';
 import '../../../data/providers.dart';
@@ -19,7 +18,6 @@ class OwnerBookingDetailsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final booking = ref.watch(bookingProvider(bookingId));
-    final t = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(title: const Text(S.bookingDetails)),
@@ -41,17 +39,7 @@ class OwnerBookingDetailsScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(20),
             children: [
-              AppPanel(
-                color: b.status.background,
-                child: Row(
-                  children: [
-                    Icon(b.status.icon, color: b.status.color, size: 24),
-                    const SizedBox(width: 12),
-                    Text(b.status.label,
-                        style: t.titleLarge?.copyWith(color: b.status.color)),
-                  ],
-                ),
-              ),
+              BookingStatusBanner(status: b.status),
               const SizedBox(height: 16),
               AppPanel(
                 child: Column(

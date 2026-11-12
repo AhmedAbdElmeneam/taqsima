@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
+import '../../core/theme/app_icons.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/l10n/app_strings.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_spacing.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
+import '../../../core/theme/app_spacing.dart';
+import '../../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -8,6 +8,7 @@ import '../../../core/l10n/app_strings.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
+import '../../../core/utils/labels.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../data/models/models.dart';
 import '../../../data/providers.dart';
@@ -103,61 +104,59 @@ class PlayerBookingCard extends ConsumerWidget {
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: () => context.push(Routes.playerBooking(booking.id)),
-          child: Padding(
-            padding: const EdgeInsets.all(14),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 72,
-                  height: 72,
-                  child: PitchImage(
-                    photoKey: pitch == null || pitch.photos.isEmpty
-                        ? booking.pitchId
-                        : pitch.photos.first,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(pitch?.name ?? '', style: t.titleMedium),
-                      const SizedBox(height: 2),
-                      Text(Fmt.dayRelative(booking.startAt),
-                          style: t.bodyMedium
-                              ?.copyWith(color: AppColors.inkMuted)),
-                      Text(Fmt.timeRange(booking.startAt, booking.endAt),
-                          style: t.bodyMedium
-                              ?.copyWith(fontWeight: FontWeight.w700)),
-                      const SizedBox(height: 6),
-                      Row(
-                        children: [
-                          BookingStatusBadge(status: booking.status),
-                          // Countdown for matches in the next 24 hours.
-                          if (isUpcoming(booking) &&
-                              booking.startAt
-                                      .difference(DateTime.now())
-                                      .inMinutes <
-                                  24 * 60) ...[
-                            const SizedBox(width: 6),
-                            AppBadge(
-                              label: S.inTime(booking.startAt
-                                  .difference(DateTime.now())
-                                  .inMinutes
-                                  .clamp(0, 1 << 30)),
-                              color: AppColors.primary,
-                              background: AppColors.primaryLight,
-                              icon: AppIcons.clock,
-                            ),
+          // Colored edge = booking status, same pattern as the owner rows.
+          child: StatusEdge(
+            color: booking.status.color,
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Row(
+                children: [
+                  PitchThumb(
+                      photoKey: pitch?.coverPhoto ?? booking.pitchId,
+                      size: 72,
+                      radius: 14),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(pitch?.name ?? '', style: t.titleMedium),
+                        const SizedBox(height: 2),
+                        Text(Fmt.dayRelative(booking.startAt),
+                            style: t.bodyMedium
+                                ?.copyWith(color: AppColors.inkMuted)),
+                        Text(Fmt.timeRange(booking.startAt, booking.endAt),
+                            style: t.bodyMedium
+                                ?.copyWith(fontWeight: FontWeight.w700)),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            BookingStatusBadge(status: booking.status),
+                            // Countdown for matches in the next 24 hours.
+                            if (isUpcoming(booking) &&
+                                booking.startAt
+                                        .difference(DateTime.now())
+                                        .inMinutes <
+                                    24 * 60) ...[
+                              const SizedBox(width: 6),
+                              AppBadge(
+                                label: S.inTime(booking.startAt
+                                    .difference(DateTime.now())
+                                    .inMinutes
+                                    .clamp(0, 1 << 30)),
+                                color: AppColors.primary,
+                                background: AppColors.primaryLight,
+                                icon: AppIcons.clock,
+                              ),
+                            ],
                           ],
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                Icon(AppIcons.forward, color: AppColors.inkFaint),
-              ],
+                  Icon(AppIcons.forward, color: AppColors.inkFaint),
+                ],
+              ),
             ),
           ),
         ),

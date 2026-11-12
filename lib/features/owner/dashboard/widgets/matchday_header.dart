@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../core/l10n/app_strings.dart';
-import '../../../core/theme/app_icons.dart';
-import '../../../core/utils/formatters.dart';
-import '../../../core/widgets/widgets.dart';
-import '../../../data/models/models.dart';
-import '../../../data/providers.dart';
-import '../../auth/session_controller.dart';
+import '../../../../core/l10n/app_strings.dart';
+import '../../../../core/theme/app_icons.dart';
+import '../../../../core/utils/clock.dart';
+import '../../../../core/utils/formatters.dart';
+import '../../../../core/widgets/widgets.dart';
+import '../../../../data/models/models.dart';
+import '../../../../data/providers.dart';
+import '../../../auth/session_controller.dart';
 import 'pitch_switcher.dart';
 
 /// Owner home header styled like a stadium scoreboard: greeting, date,
@@ -47,7 +48,7 @@ class _NextBookingStrip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final now = DateTime.now();
+    final now = ref.now; // ticks, so the countdown stays current
     final booked = (slots ?? const <TimeSlot>[])
         .where((s) =>
             s.booking != null && s.booking!.status != BookingStatus.pending)

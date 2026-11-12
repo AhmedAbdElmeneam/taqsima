@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_spacing.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
+import '../../../core/theme/app_spacing.dart';
+import '../../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/l10n/app_strings.dart';
@@ -9,7 +9,7 @@ import '../../../core/utils/formatters.dart';
 import '../../../core/utils/labels.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../data/models/models.dart';
-import '../dashboard/pitch_switcher.dart';
+import '../dashboard/widgets/pitch_switcher.dart';
 import '../owner_providers.dart';
 import 'slot_action_sheet.dart';
 

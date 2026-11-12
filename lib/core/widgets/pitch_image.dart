@@ -114,3 +114,26 @@ class _PitchPainter extends CustomPainter {
   @override
   bool shouldRepaint(_PitchPainter old) => old.seed != seed;
 }
+
+/// Square rounded pitch thumbnail used in lists, chips and sheets.
+class PitchThumb extends StatelessWidget {
+  const PitchThumb({
+    super.key,
+    required this.photoKey,
+    this.size = 48,
+    this.radius = 12,
+  });
+
+  final String photoKey;
+  final double size;
+  final double radius;
+
+  @override
+  Widget build(BuildContext context) => SizedBox.square(
+        dimension: size,
+        child: PitchImage(
+          photoKey: photoKey,
+          borderRadius: BorderRadius.circular(radius),
+        ),
+      );
+}

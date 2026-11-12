@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
+import '../../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -7,7 +7,6 @@ import '../../../core/l10n/app_strings.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/formatters.dart';
-import '../../../core/utils/labels.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../data/models/models.dart';
 import '../../../data/providers.dart';
@@ -83,26 +82,10 @@ class PlayerBookingDetailsScreen extends ConsumerWidget {
           return ListView(
             padding: const EdgeInsets.all(20),
             children: [
-              AppPanel(
-                color: b.status.background,
-                child: Row(
-                  children: [
-                    Icon(b.status.icon, color: b.status.color, size: 24),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(b.status.label,
-                              style: t.titleLarge
-                                  ?.copyWith(color: b.status.color)),
-                          if (b.status == BookingStatus.pending)
-                            Text(S.requestNote, style: t.bodyMedium),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              BookingStatusBanner(
+                status: b.status,
+                message:
+                    b.status == BookingStatus.pending ? S.requestNote : null,
               ),
               const SizedBox(height: 16),
               if (pitch != null)
@@ -113,11 +96,7 @@ class PlayerBookingDetailsScreen extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        PitchImage(
-                            photoKey: pitch.photos.isEmpty
-                                ? pitch.id
-                                : pitch.photos.first,
-                            height: 110),
+                        PitchImage(photoKey: pitch.coverPhoto, height: 110),
                         Padding(
                           padding: const EdgeInsets.all(14),
                           child: Row(

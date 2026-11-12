@@ -12,22 +12,14 @@ abstract final class S {
   static const next = 'التالي';
   static const back = 'رجوع';
   static const save = 'حفظ';
-  static const cancel = 'إلغاء';
-  static const confirm = 'تأكيد';
-  static const close = 'إغلاق';
-  static const done = 'تم';
-  static const retry = 'إعادة المحاولة';
   static const seeAll = 'عرض الكل';
-  static const loading = 'جارٍ التحميل...';
   static const somethingWrong = 'حدث خطأ، يرجى المحاولة مرة أخرى';
   static const today = 'اليوم';
   static const tomorrow = 'غدًا';
-  static const minutes = 'دقيقة';
   static const hour = 'ساعة';
   static const optional = '(اختياري)';
   static const am = 'ص';
   static const pm = 'م';
-  static const all = 'الكل';
   static String km(String value) => '$value كم';
 
   // Role choice / splash
@@ -75,7 +67,6 @@ abstract final class S {
   static const availableToday = 'متاح اليوم';
   static const bookAgain = 'احجز مرة أخرى';
   static const awaitingConfirmation = 'بانتظار تأكيد الملعب';
-  static String hello(String name) => 'مرحبًا، $name';
   static const homeQuestion = 'أين ستلعب اليوم؟';
   static const searchHint = 'ابحث باسم الملعب أو المنطقة';
   static const nearbyPitches = 'ملاعب قريبة منك';
@@ -108,12 +99,10 @@ abstract final class S {
   static const mapPlaceholderNote = 'خريطة تجريبية — اضغط على أي علامة';
 
   // Pitch details
-  static const pitchDetails = 'تفاصيل الملعب';
   static const location = 'الموقع';
   static const amenities = 'المرافق';
   static const about = 'عن الملعب';
   static const book = 'احجز';
-  static const bookNow = 'احجز الآن';
   static const startingFrom = 'السعر';
   static const amenityTurf = 'عشب صناعي';
   static const amenityLights = 'إضاءة ليلية';
@@ -247,15 +236,11 @@ abstract final class S {
   static const freeSlots = 'متاح';
   static const edit = 'تعديل';
   static const hours = 'المواعيد';
-  static const pendingRequests = 'طلبات معلّقة';
   static String pendingRequestsBanner(int n) => n == 1
       ? 'لديك طلب حجز جديد'
       : n == 2
           ? 'لديك طلبا حجز جديدان'
           : 'لديك $n طلبات حجز جديدة';
-  static const review = 'مراجعة';
-  static const noBookingsToday = 'لا توجد حجوزات اليوم بعد';
-  static const noBookingsTodayHint = 'ستظهر المواعيد المتاحة هنا.';
   static const freeSlot = 'متاح';
   static const appBooking = 'حجز عبر التطبيق';
   static const manualBooking = 'حجز يدوي';
@@ -266,7 +251,6 @@ abstract final class S {
   static const addPitch = 'إضافة ملعب';
   static const editPitch = 'تعديل الملعب';
   static const workingHours = 'ساعات العمل';
-  static const quickActions = 'اختصارات';
   static const tapFreeSlotHint =
       'اضغط على أي موعد متاح لإغلاقه أو تسجيل حجز يدوي';
 

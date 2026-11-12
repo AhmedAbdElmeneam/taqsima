@@ -6,6 +6,7 @@ import '../../../core/l10n/app_strings.dart';
 import '../../../core/router/routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
+import '../../../core/utils/clock.dart';
 import '../../../core/utils/formatters.dart';
 import '../../../core/widgets/widgets.dart';
 import '../../../data/models/models.dart';
@@ -58,7 +59,7 @@ class _NextMatchStrip extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final pitch = ref.watch(pitchProvider(booking.pitchId)).valueOrNull;
-    final now = DateTime.now();
+    final now = ref.now; // ticks, so the countdown stays current
     final live = !booking.startAt.isAfter(now) && booking.endAt.isAfter(now);
     final minutes = booking.startAt.difference(now).inMinutes;
     final soon = !live && minutes < 24 * 60;
@@ -89,17 +90,13 @@ class AvailableTodayStrip extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final items = ref.watch(availableTodayProvider).valueOrNull;
     if (items == null || items.isEmpty) return const SizedBox.shrink();
-    final t = Theme.of(context).textTheme;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            PulseDot(color: AppColors.primary, size: 7),
-            const SizedBox(width: 4),
-            Text(S.availableToday, style: t.titleLarge),
-          ],
+        SectionHeader(
+          title: S.availableToday,
+          leading: PulseDot(color: AppColors.primary, size: 7),
         ),
         const SizedBox(height: 10),
         SizedBox(
@@ -156,8 +153,7 @@ class _SlotCard extends StatelessWidget {
               Stack(
                 children: [
                   PitchImage(
-                    photoKey:
-                        pitch.photos.isEmpty ? pitch.id : pitch.photos.first,
+                    photoKey: pitch.coverPhoto,
                     height: 72,
                   ),
                   PositionedDirectional(
@@ -223,7 +219,7 @@ class BookAgainRow extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Text(S.bookAgain, style: t.titleLarge),
+        const SectionHeader(title: S.bookAgain),
         const SizedBox(height: 10),
         Wrap(
           spacing: 8,
@@ -246,15 +242,8 @@ class BookAgainRow extends ConsumerWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            SizedBox(
-                              width: 28,
-                              height: 28,
-                              child: PitchImage(
-                                photoKey:
-                                    p.photos.isEmpty ? p.id : p.photos.first,
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                            ),
+                            PitchThumb(
+                                photoKey: p.coverPhoto, size: 28, radius: 14),
                             const SizedBox(width: 8),
                             Text(p.name,
                                 style: t.bodyMedium

@@ -1,7 +1,7 @@
 import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
+import '../theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../l10n/app_strings.dart';
@@ -37,11 +37,18 @@ class AsyncView<T> extends StatelessWidget {
   }
 }
 
+/// Section title with an optional leading widget and trailing text action.
 class SectionHeader extends StatelessWidget {
-  const SectionHeader(
-      {super.key, required this.title, this.action, this.onAction});
+  const SectionHeader({
+    super.key,
+    required this.title,
+    this.leading,
+    this.action,
+    this.onAction,
+  });
 
   final String title;
+  final Widget? leading;
   final String? action;
   final VoidCallback? onAction;
 
@@ -49,6 +56,7 @@ class SectionHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        if (leading != null) ...[leading!, const SizedBox(width: 4)],
         Expanded(
             child: Text(title, style: Theme.of(context).textTheme.titleLarge)),
         if (action != null)
@@ -203,4 +211,19 @@ class GlassContainer extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Thin colored bar on the leading edge of a card (status / slot type).
+class StatusEdge extends StatelessWidget {
+  const StatusEdge({super.key, required this.color, required this.child});
+  final Color color;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+        decoration: BoxDecoration(
+          border: BorderDirectional(start: BorderSide(color: color, width: 4)),
+        ),
+        child: child,
+      );
 }

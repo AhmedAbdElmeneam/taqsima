@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
+import '../../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -54,15 +54,7 @@ class _SlotPickerScreenState extends ConsumerState<SlotPickerScreen> {
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
               child: Row(
                 children: [
-                  SizedBox(
-                    width: 52,
-                    height: 52,
-                    child: PitchImage(
-                      photoKey:
-                          pitch.photos.isEmpty ? pitch.id : pitch.photos.first,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                  PitchThumb(photoKey: pitch.coverPhoto, size: 52, radius: 12),
                   const SizedBox(width: 12),
                   Expanded(
                     child: Column(

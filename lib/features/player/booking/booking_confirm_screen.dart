@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
+import '../../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -63,10 +63,7 @@ class _BookingConfirmScreenState extends ConsumerState<BookingConfirmScreen> {
               borderRadius: BorderRadius.circular(20),
               child: Stack(
                 children: [
-                  PitchImage(
-                      photoKey:
-                          pitch.photos.isEmpty ? pitch.id : pitch.photos.first,
-                      height: 120),
+                  PitchImage(photoKey: pitch.coverPhoto, height: 120),
                   PositionedDirectional(
                     bottom: 12,
                     start: 16,

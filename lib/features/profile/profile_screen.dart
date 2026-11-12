@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_spacing.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
+import '../../core/theme/app_spacing.dart';
+import '../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/l10n/app_strings.dart';

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../core/utils/clock.dart';
 import '../../core/utils/formatters.dart';
 import '../../data/models/models.dart';
 import '../../data/providers.dart';
@@ -67,23 +68,30 @@ bool isUpcoming(Booking b, [DateTime? now]) =>
 
 /// The player's next match (pending or confirmed), if any.
 final nextMatchProvider = FutureProvider.autoDispose<Booking?>((ref) async {
+  // Re-evaluated on every clock tick so a finished match drops off.
+  final now = ref.watch(clockProvider).valueOrNull ?? DateTime.now();
   final all = await ref.watch(myBookingsProvider.future);
-  final now = DateTime.now();
   final upcoming = all.where((b) => isUpcoming(b, now)).toList()
     ..sort((a, b) => a.startAt.compareTo(b.startAt));
   return upcoming.firstOrNull;
 });
 
 /// Earliest free slot left today at each of the nearest pitches.
+/// All dependencies are watched synchronously; slot loads run in parallel.
 final availableTodayProvider =
     FutureProvider.autoDispose<List<(Pitch, TimeSlot)>>((ref) async {
-  final pitches = await ref.watch(nearbyPitchesProvider.future);
+  final pitches = ref.watch(nearbyPitchesProvider).valueOrNull;
+  if (pitches == null) return const [];
   final today = Fmt.dateOnly(DateTime.now());
+  final nearest = pitches.take(6).toList();
+  final daySlots = await Future.wait([
+    for (final p in nearest) ref.watch(daySlotsProvider((p.id, today)).future),
+  ]);
+
   final result = <(Pitch, TimeSlot)>[];
-  for (final p in pitches.take(6)) {
-    final slots = await ref.watch(daySlotsProvider((p.id, today)).future);
+  for (final (i, slots) in daySlots.indexed) {
     final free = slots.where((s) => s.isBookable).firstOrNull;
-    if (free != null) result.add((p, free));
+    if (free != null) result.add((nearest[i], free));
   }
   result.sort((a, b) => a.$2.startAt.compareTo(b.$2.startAt));
   return result;
@@ -91,18 +99,13 @@ final availableTodayProvider =
 
 /// Pitches the player has played at before (most recent first).
 final bookAgainProvider = FutureProvider.autoDispose<List<Pitch>>((ref) async {
-  final all = await ref.watch(myBookingsProvider.future);
-  final ids = <String>[];
-  for (final b in all.reversed) {
-    if (b.status == BookingStatus.completed && !ids.contains(b.pitchId)) {
-      ids.add(b.pitchId);
-    }
-  }
   final repo = ref.watch(pitchRepositoryProvider);
-  final pitches = <Pitch>[];
-  for (final id in ids.take(4)) {
-    final p = await repo.getPitch(id);
-    if (p != null) pitches.add(p);
+  final all = await ref.watch(myBookingsProvider.future);
+
+  final ids = <String>{};
+  for (final b in all.reversed) {
+    if (b.status == BookingStatus.completed) ids.add(b.pitchId);
   }
-  return pitches;
+  final pitches = await Future.wait(ids.take(4).map(repo.getPitch));
+  return pitches.whereType<Pitch>().toList();
 });

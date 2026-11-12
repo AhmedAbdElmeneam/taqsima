@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
+import '../theme/app_icons.dart';
 
 import '../../data/models/models.dart';
 import '../l10n/app_strings.dart';
@@ -77,4 +77,43 @@ class PitchStatusBadge extends StatelessWidget {
             background: AppColors.warningLight,
             icon: AppIcons.clock),
       };
+}
+
+/// Full-width tinted banner at the top of a booking's details screen.
+class BookingStatusBanner extends StatelessWidget {
+  const BookingStatusBanner({super.key, required this.status, this.message});
+  final BookingStatus status;
+
+  /// Optional explanation under the status (e.g. "waiting for the owner").
+  final String? message;
+
+  @override
+  Widget build(BuildContext context) {
+    final t = Theme.of(context).textTheme;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: status.background,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: status.color.withOpacity(.25)),
+      ),
+      child: Row(
+        children: [
+          Icon(status.icon, color: status.color, size: 24),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(status.label,
+                    style: t.titleLarge?.copyWith(color: status.color)),
+                if (message != null) Text(message!, style: t.bodyMedium),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

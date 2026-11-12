@@ -37,6 +37,10 @@ class Pitch {
   final List<Amenity> amenities;
   final PitchStatus status;
 
+  /// Photo shown on cards and thumbnails. Falls back to the pitch id so the
+  /// placeholder image stays stable when there are no photos yet.
+  String get coverPhoto => photos.isEmpty ? id : photos.first;
+
   Pitch copyWith({
     String? name,
     String? description,

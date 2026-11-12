@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ma3adna/core/theme/app_icons.dart';
+import '../theme/app_icons.dart';
 
 import '../theme/app_colors.dart';
 
