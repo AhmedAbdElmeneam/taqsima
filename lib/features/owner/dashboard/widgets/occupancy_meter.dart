@@ -39,7 +39,7 @@ class OccupancyMeter extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(AppIcons.today, size: 18, color: AppColors.primary),
+              Icon(AppIcons.gauge, size: 18, color: AppColors.primary),
               const SizedBox(width: 6),
               Expanded(
                 child: Column(

@@ -13,31 +13,35 @@ abstract final class AppIcons {
   static const IconData home = IconData(0xe716,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // house
   static const IconData homeFill =
-      IconData(0xe716, fontFamily: 'PhosphorFill', fontPackage: _pkg); // house
+      IconData(0xe716, fontFamily: 'PhosphorBold', fontPackage: _pkg); // house
   static const IconData search = IconData(0xe30c,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // magnifyingGlass
   static const IconData searchFill = IconData(0xe30c,
-      fontFamily: 'PhosphorFill', fontPackage: _pkg); // magnifyingGlass
+      fontFamily: 'PhosphorBold', fontPackage: _pkg); // magnifyingGlass
   static const IconData bookings = IconData(0xe712,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // ticket
   static const IconData bookingsFill =
-      IconData(0xe712, fontFamily: 'PhosphorFill', fontPackage: _pkg); // ticket
+      IconData(0xe712, fontFamily: 'PhosphorBold', fontPackage: _pkg); // ticket
   static const IconData profile = IconData(0xe4c4,
-      fontFamily: 'PhosphorRegular', fontPackage: _pkg); // user
-  static const IconData profileFill =
-      IconData(0xe4c4, fontFamily: 'PhosphorFill', fontPackage: _pkg); // user
-  static const IconData today =
-      IconData(0xe628, fontFamily: 'PhosphorRegular', fontPackage: _pkg); // sun
-  static const IconData todayFill =
-      IconData(0xe628, fontFamily: 'PhosphorFill', fontPackage: _pkg); // sun
+      fontFamily: 'PhosphorRegular', fontPackage: _pkg); // userCircle
+  static const IconData profileFill = IconData(0xe4c4,
+      fontFamily: 'PhosphorBold', fontPackage: _pkg); // userCircle
+  static const IconData today = IconData(0xe464,
+      fontFamily: 'PhosphorRegular', fontPackage: _pkg); // squaresFour
+  static const IconData todayFill = IconData(0xe464,
+      fontFamily: 'PhosphorBold', fontPackage: _pkg); // squaresFour
+
+  /// Gauge, for the occupancy meter.
+  static const IconData gauge = IconData(0xe628,
+      fontFamily: 'PhosphorRegular', fontPackage: _pkg); // gauge
   static const IconData week = IconData(0xe7b4,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // calendarDots
   static const IconData weekFill = IconData(0xe7b4,
-      fontFamily: 'PhosphorFill', fontPackage: _pkg); // calendarDots
-  static const IconData inbox = IconData(0xe010,
+      fontFamily: 'PhosphorBold', fontPackage: _pkg); // calendarDots
+  static const IconData inbox = IconData(0xe4aa,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // tray
   static const IconData inboxFill =
-      IconData(0xe010, fontFamily: 'PhosphorFill', fontPackage: _pkg); // tray
+      IconData(0xe4aa, fontFamily: 'PhosphorBold', fontPackage: _pkg); // tray
   static const IconData dropdown = IconData(0xe136,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // caretDown
   // Actions
