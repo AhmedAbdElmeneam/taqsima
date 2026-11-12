@@ -107,12 +107,44 @@ lib/
 | `lib/core/widgets/` | الودجتس المشتركة: أزرار، كروت، شارات الحالة، الهيدر الأخضر، البار السفلي، الحركات |
 | `lib/core/utils/clock.dart` | ساعة بتتحدّث كل 30 ثانية للعدادات («بعد 10 دقائق») |
 | `lib/features/*/…_providers.dart` | بيانات كل جزء (Riverpod) — الشاشات بتقرأ منها بس |
-| `lib/features/owner/dashboard/widgets/` | أجزاء الرئيسية لصاحب الملعب (الهيدر، الإحصائيات، الإشغال، صف الحجز) |
-| `lib/features/owner/pitch_form/steps/` | خطوات إضافة الملعب، كل خطوة في ملف |
-| `lib/features/player/home/player_home_widgets.dart` | أجزاء رئيسية اللاعب (الهيدر، متاح اليوم، احجز مرة أخرى) |
+| `lib/features/player/filter/` | شيت الفلاتر (مشترك بين الرئيسية والبحث) |
+| `lib/features/owner/slot_actions/` | شيت إجراءات الميعاد (قفل / حجز يدوي) — مشترك بين النهارده والجدول |
+| `lib/features/owner/widgets/` | ودجتس مشتركة لصاحب الملعب (`PitchSwitcher`) |
+| `lib/features/owner/owner_actions.dart` | قبول / رفض طلب حجز (من الطلبات ومن تفاصيل الحجز) |
+
+---
+
+## هيكل الشاشة (Screen pattern)
+
+كل شاشة في فولدر لوحدها، ومتقسمة كده (مثال: `features/auth/login/`):
+
+```
+login/
+├── login_imports.dart          # كل الـ imports + part 'login_controller.dart' + part 'login_screen.dart'
+├── login_controller.dart       # part of — اللوجيك ونداءات الـ API (requestOtp…)
+├── login_screen.dart           # part of — UI بس، بتجمّع الودجتس الصغيرة
+└── widgets/
+    ├── login_widgets_imports.dart   # imports الودجتس + part لكل ودجت
+    ├── login_header.dart            # part of 'login_widgets_imports.dart'
+    ├── login_fields.dart
+    └── …
+```
+
+- **الـ imports file**: هو الملف الوحيد اللي فيه `import`، وهو اللي بيتعمله import من الراوتر
+  (`import '.../login/login_imports.dart';`).
+- **الكنترولر**: كلاس عادي بياخد `WidgetRef` (لو محتاج)، وفيه الـ `TextEditingController`s
+  والـ `ValueNotifier`s والـ `GlobalKey<FormState>`، والميثودز (submit, save, cancel…) بتاخد
+  `BuildContext` لو هتعمل navigation أو snackbar. ليه `dispose()` والشاشة بتناديها.
+  **أي API جديد يتنادى من الكنترولر بس.**
+- **الشاشة**: `late final controller = XController(ref, …)` جوه الـ State، والـ UI بيسمع
+  للـ notifiers بـ `ValueListenableBuilder` / `ListenableBuilder`. مفيش لوجيك جوه الشاشة.
+- **الودجتس**: كلاسات public (من غير `_`) عشان الشاشة تشوفها، بتاخد بيانات و callbacks
+  بس — ما تعرفش الكنترولر.
+- لو مزوّد provider بيتغيّر مع notifier (يوم / أسبوع)، اعمل `ref.watch` جوه `Consumer`
+  داخل الـ builder، مش في `build` بتاع الشاشة.
 
 ### قواعد بسيطة للحفاظ على النظافة
 
 - أي نص جديد → `S` في `app_strings.dart`، وأي لون → `AppColors`، وأي أيقونة → `AppIcons`.
-- لو ودجت اتكررت في شاشتين → انقلها لـ `lib/core/widgets/`.
-- الشاشة بتعرض بس؛ الحسابات والتحميل في الـ providers.
+- لو ودجت اتكررت في شاشتين → انقلها لـ `lib/core/widgets/` (أو `features/<role>/widgets/`).
+- الشاشة بتعرض بس؛ اللوجيك في الكنترولر، والبيانات المشتركة في الـ providers.

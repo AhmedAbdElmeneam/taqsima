@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-
-import '../../../core/l10n/app_strings.dart';
-import '../../../core/theme/app_icons.dart';
-import '../../../core/widgets/widgets.dart';
+part of 'player_shell_imports.dart';
 
 class PlayerShell extends StatelessWidget {
   const PlayerShell({super.key, required this.shell});
@@ -11,31 +6,13 @@ class PlayerShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = PlayerShellController(shell);
     return Scaffold(
       extendBody: true,
       body: shell,
-      bottomNavigationBar: GlassNavBar(
+      bottomNavigationBar: PlayerNavBar(
         currentIndex: shell.currentIndex,
-        onTap: (i) =>
-            shell.goBranch(i, initialLocation: i == shell.currentIndex),
-        items: const [
-          GlassNavItem(
-              icon: AppIcons.home,
-              selectedIcon: AppIcons.homeFill,
-              label: S.navHome),
-          GlassNavItem(
-              icon: AppIcons.search,
-              selectedIcon: AppIcons.searchFill,
-              label: S.navSearch),
-          GlassNavItem(
-              icon: AppIcons.bookings,
-              selectedIcon: AppIcons.bookingsFill,
-              label: S.navMyBookings),
-          GlassNavItem(
-              icon: AppIcons.profile,
-              selectedIcon: AppIcons.profileFill,
-              label: S.navProfile),
-        ],
+        onTap: controller.selectTab,
       ),
     );
   }

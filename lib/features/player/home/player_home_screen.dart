@@ -1,117 +1,71 @@
-import 'package:flutter/material.dart';
-import '../../../core/theme/app_spacing.dart';
-import '../../../core/theme/app_icons.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+part of 'player_home_imports.dart';
 
-import '../../../core/l10n/app_strings.dart';
-import '../../../core/router/routes.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/utils/formatters.dart';
-import '../../../core/widgets/widgets.dart';
-import '../../../data/models/models.dart';
-import '../../../data/repositories/repositories.dart';
-import '../../../data/providers.dart';
-import '../player_providers.dart';
-import '../search/filter_sheet.dart';
-import 'player_home_widgets.dart';
-
-class PlayerHomeScreen extends ConsumerWidget {
+class PlayerHomeScreen extends ConsumerStatefulWidget {
   const PlayerHomeScreen({super.key});
 
-  void _searchWith(WidgetRef ref, BuildContext context, PitchFilter filter) {
-    ref.read(searchFilterProvider.notifier).state = filter;
-    context.go(Routes.playerSearch);
-  }
+  @override
+  ConsumerState<PlayerHomeScreen> createState() => _PlayerHomeScreenState();
+}
+
+class _PlayerHomeScreenState extends ConsumerState<PlayerHomeScreen> {
+  late final PlayerHomeController controller = PlayerHomeController(ref);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final user = ref.watch(sessionProvider);
+    final next = ref.watch(nextMatchProvider).valueOrNull;
     final pitches = ref.watch(nearbyPitchesProvider);
+    final availableToday = ref.watch(availableTodayProvider).valueOrNull;
+    final bookAgain = ref.watch(bookAgainProvider).valueOrNull;
 
     return TabPage(
       child: RefreshIndicator(
         color: AppColors.primary,
-        onRefresh: () async => ref.refreshData(),
+        onRefresh: controller.refresh,
         child: ListView(
           padding:
               const EdgeInsets.fromLTRB(20, 8, 20, AppSpacing.navBarClearance),
           children: [
-            const PlayerHeroHeader(),
+            PlayerHeroHeader(
+              firstName: (user?.name ?? '').split(' ').first,
+              next: next,
+              onFindMatch: () => controller.openSearchTab(context),
+              onOpenBooking: (b) => controller.openBooking(context, b),
+            ),
             const SizedBox(height: 14),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    textInputAction: TextInputAction.search,
-                    decoration: const InputDecoration(
-                      hintText: S.searchHint,
-                      prefixIcon: Icon(AppIcons.search),
-                    ),
-                    onSubmitted: (q) => _searchWith(
-                        ref,
-                        context,
-                        ref
-                            .read(searchFilterProvider)
-                            .copyWith(query: () => q)),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                SquareIconButton(
-                    icon: AppIcons.filter,
-                    onPressed: () async {
-                      if (await showFilterSheet(context) && context.mounted) {
-                        context.go(Routes.playerSearch);
-                      }
-                    }),
-              ],
+            HomeSearchBar(
+              onSubmitted: (q) => controller.searchText(context, q),
+              onFilters: () => controller.openFilters(context),
             ),
             const SizedBox(height: 22),
-            const AvailableTodayStrip(),
-            const BookAgainRow(),
+            if (availableToday != null && availableToday.isNotEmpty)
+              AvailableTodayStrip(
+                items: availableToday,
+                onTap: (pitch, slot) =>
+                    controller.openSlot(context, pitch, slot),
+              ),
+            if (bookAgain != null && bookAgain.isNotEmpty)
+              BookAgainRow(
+                pitches: bookAgain,
+                onTap: (p) => controller.bookAgain(context, p),
+              ),
             SectionHeader(
               title: S.nearbyPitches,
               action: S.seeAll,
-              onAction: () => _searchWith(ref, context, const PitchFilter()),
+              onAction: () => controller.seeAllPitches(context),
             ),
             const SizedBox(height: 8),
             AsyncView(
               value: pitches,
-              builder: (list) => Column(
-                children: [
-                  for (final (i, p) in list.indexed) ...[
-                    FadeSlideIn(
-                      index: i,
-                      child: PitchCard(
-                        pitch: p,
-                        trailing: _DistanceBadge(pitch: p),
-                        onTap: () => context.push(Routes.pitch(p.id)),
-                      ),
-                    ),
-                    const SizedBox(height: 14),
-                  ],
-                ],
+              builder: (list) => NearbyPitchesList(
+                pitches: list,
+                distanceOf: controller.distanceTo,
+                onTap: (p) => controller.openPitch(context, p),
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class _DistanceBadge extends StatelessWidget {
-  const _DistanceBadge({required this.pitch});
-  final Pitch pitch;
-
-  @override
-  Widget build(BuildContext context) {
-    final km = distanceKm(
-        playerLocation.lat, playerLocation.lng, pitch.lat, pitch.lng);
-    return AppBadge(
-      label: S.km(Fmt.ltr(km.toStringAsFixed(1))),
-      color: AppColors.onPhotoInk,
-      background: Colors.white,
-      icon: AppIcons.distance,
     );
   }
 }

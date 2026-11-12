@@ -1,13 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/l10n/app_strings.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_icons.dart';
-import '../../../../core/utils/formatters.dart';
-import '../../../../core/utils/labels.dart';
-import '../../../../core/widgets/widgets.dart';
-import '../../../../data/models/models.dart';
+part of 'owner_dashboard_widgets_imports.dart';
 
 /// Today's occupancy: one animated bar split by booking type.
 class OccupancyMeter extends StatelessWidget {

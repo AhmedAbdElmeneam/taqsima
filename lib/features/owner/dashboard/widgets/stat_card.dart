@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_spacing.dart';
-import '../../../../core/l10n/app_strings.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/widgets/widgets.dart';
+part of 'owner_dashboard_widgets_imports.dart';
 
 /// Small figure card on the owner home (revenue, bookings, free slots).
 class StatCard extends StatelessWidget {

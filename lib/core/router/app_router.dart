@@ -3,9 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../data/models/models.dart';
-import '../../features/auth/login_screen.dart';
-import '../../features/auth/otp_screen.dart';
-import '../../features/auth/role_choice_screen.dart';
+import '../../features/auth/login/login_imports.dart';
+import '../../features/auth/otp/otp_imports.dart';
+import '../../features/auth/role_choice/role_choice_imports.dart';
 import '../../features/auth/session_controller.dart';
 import '../../features/owner/owner_routes.dart';
 import '../../features/player/player_routes.dart';

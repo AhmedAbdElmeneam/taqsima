@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/router/routes.dart';
-import 'booking/owner_booking_details_screen.dart';
-import 'calendar/weekly_calendar_screen.dart';
-import 'dashboard/owner_dashboard_screen.dart';
-import 'pitch_form/pitch_form_screen.dart';
-import 'profile/owner_profile_screen.dart';
-import 'requests/booking_requests_screen.dart';
-import 'shell/owner_shell.dart';
-import 'working_hours/working_hours_screen.dart';
+import 'booking/owner_booking_details_imports.dart';
+import 'calendar/weekly_calendar_imports.dart';
+import 'dashboard/owner_dashboard_imports.dart';
+import 'pitch_form/pitch_form_imports.dart';
+import 'profile/owner_profile_imports.dart';
+import 'requests/booking_requests_imports.dart';
+import 'shell/owner_shell_imports.dart';
+import 'working_hours/working_hours_imports.dart';
 
 /// Owner area: 4 tabs with bottom navigation + full-screen flows on top.
 List<RouteBase> ownerRoutes(GlobalKey<NavigatorState> rootKey) => [

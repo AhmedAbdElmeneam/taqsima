@@ -3,16 +3,16 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/router/routes.dart';
 import '../../data/models/models.dart';
-import '../profile/profile_screen.dart';
-import 'booking/booking_confirm_screen.dart';
-import 'booking/booking_success_screen.dart';
-import 'booking/my_bookings_screen.dart';
-import 'booking/player_booking_details_screen.dart';
-import 'booking/slot_picker_screen.dart';
-import 'home/player_home_screen.dart';
-import 'pitch/pitch_details_screen.dart';
-import 'search/search_screen.dart';
-import 'shell/player_shell.dart';
+import '../profile/profile_imports.dart';
+import 'booking/booking_confirm/booking_confirm_imports.dart';
+import 'booking/booking_success/booking_success_imports.dart';
+import 'booking/my_bookings/my_bookings_imports.dart';
+import 'booking/booking_details/player_booking_details_imports.dart';
+import 'booking/slot_picker/slot_picker_imports.dart';
+import 'home/player_home_imports.dart';
+import 'pitch/pitch_details_imports.dart';
+import 'search/search_imports.dart';
+import 'shell/player_shell_imports.dart';
 
 /// Player area: 4 tabs with bottom navigation + full-screen flows on top.
 List<RouteBase> playerRoutes(GlobalKey<NavigatorState> rootKey) => [

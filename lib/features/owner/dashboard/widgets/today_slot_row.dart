@@ -1,22 +1,10 @@
-import 'package:flutter/material.dart';
-
-import '../../../../core/theme/app_spacing.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../../../core/l10n/app_strings.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_icons.dart';
-import '../../../../core/utils/formatters.dart';
-import '../../../../core/utils/labels.dart';
-import '../../../../core/widgets/widgets.dart';
-import '../../../../data/models/models.dart';
-import '../../../../data/providers.dart';
-import '../../calendar/slot_action_sheet.dart';
+part of 'owner_dashboard_widgets_imports.dart';
 
 /// One hour of today's timeline.
 class TodaySlotRow extends ConsumerWidget {
-  const TodaySlotRow({super.key, required this.slot});
+  const TodaySlotRow({super.key, required this.slot, required this.onTap});
   final TimeSlot slot;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -66,7 +54,7 @@ class TodaySlotRow extends ConsumerWidget {
             ),
             clipBehavior: Clip.antiAlias,
             child: InkWell(
-              onTap: () => onOwnerSlotTap(context, ref, slot),
+              onTap: onTap,
               child: IntrinsicHeight(
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
