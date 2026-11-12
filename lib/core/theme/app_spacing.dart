@@ -10,9 +10,12 @@ abstract final class AppSpacing {
   /// Default horizontal screen padding.
   static const screen = 20.0;
 
-  static const radiusSm = 10.0;
-  static const radius = 14.0;
-  static const radiusLg = 20.0;
+  /// Corner radius scale. Keep corners modest: cards 12, controls 8.
+  static const radiusXs = 6.0;
+  static const radiusSm = 8.0;
+  static const radius = 10.0;
+  static const radiusLg = 12.0;
+  static const radiusXl = 16.0;
 
   /// Big tap targets — owners are not tech-savvy.
   static const buttonHeight = 50.0;

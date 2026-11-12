@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -164,7 +166,8 @@ class _SlotCard extends StatelessWidget {
                           horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius:
+                            BorderRadius.circular(AppSpacing.radiusLg),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -243,7 +246,9 @@ class BookAgainRow extends ConsumerWidget {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             PitchThumb(
-                                photoKey: p.coverPhoto, size: 28, radius: 14),
+                                photoKey: p.coverPhoto,
+                                size: 28,
+                                radius: AppSpacing.radius),
                             const SizedBox(width: 8),
                             Text(p.name,
                                 style: t.bodyMedium

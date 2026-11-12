@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_spacing.dart';
 import '../theme/app_colors.dart';
 
 /// App-wide background, themed on a football pitch seen from above:
@@ -82,14 +83,18 @@ class _PitchBackgroundPainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.8;
     final dot = Paint()..color = line.color;
-    final field = Rect.fromLTRB(w * .05, h * .02, w * .95, h * .98);
+    // Touchlines sit at the very edge of the screen, outside the 20px content
+    // padding, so they never run through cards or text.
+    final field = Rect.fromLTRB(w * .012, h * .01, w * .988, h * .99);
     final cx = field.center.dx;
     canvas.drawRRect(
-        RRect.fromRectAndRadius(field, const Radius.circular(6)), line);
+        RRect.fromRectAndRadius(
+            field, const Radius.circular(AppSpacing.radiusXs)),
+        line);
     // Halfway line + centre circle.
     canvas.drawLine(Offset(field.left, field.center.dy),
         Offset(field.right, field.center.dy), line);
-    canvas.drawCircle(field.center, w * .17, line);
+    canvas.drawCircle(field.center, w * .22, line);
     canvas.drawCircle(field.center, 3.2, dot);
 
     // Penalty area, goal area, spot and arc at both ends.

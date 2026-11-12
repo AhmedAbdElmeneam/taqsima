@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/widgets/widgets.dart';
@@ -31,15 +32,8 @@ class StatCard extends StatelessWidget {
       height: 76,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
-        color: highlight ? null : AppColors.card,
-        gradient: highlight
-            ? LinearGradient(
-                begin: AlignmentDirectional.topStart,
-                end: AlignmentDirectional.bottomEnd,
-                colors: [AppColors.primary, AppColors.primaryDark],
-              )
-            : null,
-        borderRadius: BorderRadius.circular(18),
+        color: highlight ? AppColors.primary : AppColors.card,
+        borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
         border: highlight ? null : Border.all(color: AppColors.borderSoft),
         boxShadow: softShadow,
       ),

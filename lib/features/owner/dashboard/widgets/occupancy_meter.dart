@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_icons.dart';
@@ -63,7 +64,7 @@ class OccupancyMeter extends StatelessWidget {
             duration: const Duration(milliseconds: 900),
             curve: Motion.curve,
             builder: (_, v, __) => ClipRRect(
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(AppSpacing.radiusXs),
               child: SizedBox(
                 height: 10,
                 child: Container(

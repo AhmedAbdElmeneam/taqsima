@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../core/theme/app_spacing.dart';
 import '../../core/theme/app_icons.dart';
 import 'package:go_router/go_router.dart';
 
@@ -48,7 +50,8 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                       height: 96,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(28),
+                        borderRadius:
+                            BorderRadius.circular(AppSpacing.radiusXl),
                       ),
                       // The ball rolls in once when the app opens.
                       child: TweenAnimationBuilder<double>(
@@ -86,8 +89,8 @@ class _RoleChoiceScreenState extends State<RoleChoiceScreen> {
                   padding: const EdgeInsets.fromLTRB(20, 28, 20, 28),
                   decoration: BoxDecoration(
                     color: AppColors.background,
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(32)),
+                    borderRadius: const BorderRadius.vertical(
+                        top: Radius.circular(AppSpacing.radiusXl)),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -144,11 +147,11 @@ class _RoleCard extends StatelessWidget {
     return Material(
       color: AppColors.card,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
         side: BorderSide(color: AppColors.border, width: 1.5),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(18),
@@ -159,7 +162,7 @@ class _RoleCard extends StatelessWidget {
                 height: 50,
                 decoration: BoxDecoration(
                   color: AppColors.primaryLight,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
                 ),
                 child: Icon(icon, size: 24, color: AppColors.primary),
               ),

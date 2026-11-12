@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_spacing.dart';
 import '../theme/app_colors.dart';
 
 /// Size shared by both buttons. [compact] is for buttons inside cards.
@@ -59,7 +60,8 @@ class PrimaryButton extends StatelessWidget {
         padding: compact ? const EdgeInsets.symmetric(horizontal: 12) : null,
         textStyle: compact ? _compactText(context) : null,
         shape: compact
-            ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(11))
+            ? RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppSpacing.radiusSm))
             : null,
       ),
       child: child,
@@ -101,7 +103,8 @@ class SecondaryButton extends StatelessWidget {
         padding: compact ? const EdgeInsets.symmetric(horizontal: 12) : null,
         textStyle: compact ? _compactText(context) : null,
         shape: compact
-            ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(11))
+            ? RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(AppSpacing.radiusSm))
             : null,
       ),
       child: Row(
@@ -134,9 +137,9 @@ class SquareIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Material(
         color: AppColors.primary,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(AppSpacing.radius),
         child: InkWell(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(AppSpacing.radius),
           onTap: onPressed,
           child: SizedBox.square(
             dimension: size,

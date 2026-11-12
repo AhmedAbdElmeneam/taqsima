@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -60,7 +62,7 @@ class _BookingConfirmScreenState extends ConsumerState<BookingConfirmScreen> {
         children: [
           if (pitch != null)
             ClipRRect(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
               child: Stack(
                 children: [
                   PitchImage(photoKey: pitch.coverPhoto, height: 120),

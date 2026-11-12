@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../theme/app_spacing.dart';
 import '../l10n/app_strings.dart';
 import '../theme/app_colors.dart';
 import '../utils/formatters.dart';
@@ -43,13 +44,13 @@ class DaySelector extends StatelessWidget {
             child: Material(
               color: isSelected ? AppColors.primary : AppColors.card,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
                 side: BorderSide(
                     color: isSelected ? AppColors.primary : AppColors.border,
                     width: 1.5),
               ),
               child: InkWell(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
                 onTap: () => onSelected(day),
                 child: SizedBox(
                   width: 56,

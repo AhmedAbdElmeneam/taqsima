@@ -75,9 +75,9 @@ class _Dashboard extends ConsumerWidget {
           if (requests.isNotEmpty) ...[
             Material(
               color: AppColors.infoLight,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
               child: InkWell(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
                 onTap: () => context.go(Routes.ownerRequests),
                 child: Padding(
                   padding:

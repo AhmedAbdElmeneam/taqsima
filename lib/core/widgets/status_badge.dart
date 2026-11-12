@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../theme/app_spacing.dart';
 import '../theme/app_icons.dart';
 
 import '../../data/models/models.dart';
@@ -95,7 +97,7 @@ class BookingStatusBanner extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: status.background,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
         border: Border.all(color: status.color.withOpacity(.25)),
       ),
       child: Row(

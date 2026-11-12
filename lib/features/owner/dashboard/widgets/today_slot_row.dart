@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../../core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/l10n/app_strings.dart';
@@ -58,7 +60,7 @@ class TodaySlotRow extends ConsumerWidget {
           child: Material(
             color: free ? AppColors.card.withOpacity(.55) : AppColors.card,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
               side: BorderSide(
                   color: free ? AppColors.border : AppColors.borderSoft),
             ),
@@ -100,7 +102,8 @@ class TodaySlotRow extends ConsumerWidget {
                         height: 34,
                         decoration: BoxDecoration(
                           color: free ? AppColors.primaryLight : tint,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius:
+                              BorderRadius.circular(AppSpacing.radiusSm),
                         ),
                         child: Icon(pending ? AppIcons.pending : state.icon,
                             size: 18, color: color),

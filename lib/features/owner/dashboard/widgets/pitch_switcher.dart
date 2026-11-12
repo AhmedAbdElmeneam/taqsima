@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,7 +25,7 @@ class PitchSwitcher extends ConsumerWidget {
     final canSwitch = pitches.length > 1;
 
     return InkWell(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(AppSpacing.radius),
       onTap: !canSwitch
           ? null
           : () => showAppBottomSheet<void>(
@@ -35,7 +37,9 @@ class PitchSwitcher extends ConsumerWidget {
                       ListTile(
                         contentPadding: EdgeInsets.zero,
                         leading: PitchThumb(
-                            photoKey: p.coverPhoto, size: 48, radius: 10),
+                            photoKey: p.coverPhoto,
+                            size: 48,
+                            radius: AppSpacing.radiusSm),
                         title: Text(p.name, style: t.titleMedium),
                         subtitle: Text(p.area),
                         trailing: p.id == pitch.id

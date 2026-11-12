@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../theme/app_spacing.dart';
+
 /// Placeholder pitch photo drawn in code (no network or assets needed).
 /// [photoKey] picks a stable variation; swap for Image.network with a backend.
 class PitchImage extends StatelessWidget {
@@ -121,7 +123,7 @@ class PitchThumb extends StatelessWidget {
     super.key,
     required this.photoKey,
     this.size = 48,
-    this.radius = 12,
+    this.radius = AppSpacing.radiusSm,
   });
 
   final String photoKey;

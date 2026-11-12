@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -258,11 +260,11 @@ class _OptionTile extends StatelessWidget {
     return Material(
       color: AppColors.surface,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
         side: BorderSide(color: AppColors.border, width: 1.5),
       ),
       child: InkWell(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -272,7 +274,8 @@ class _OptionTile extends StatelessWidget {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                    color: background, borderRadius: BorderRadius.circular(14)),
+                    color: background,
+                    borderRadius: BorderRadius.circular(AppSpacing.radius)),
                 child: Icon(icon, color: color, size: 22),
               ),
               const SizedBox(width: 14),

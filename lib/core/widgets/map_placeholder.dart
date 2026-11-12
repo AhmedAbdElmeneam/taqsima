@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../theme/app_spacing.dart';
 import '../theme/app_icons.dart';
 
 import '../theme/app_colors.dart';
@@ -22,7 +24,8 @@ class MapPlaceholder extends StatelessWidget {
     this.onPick,
     this.picked,
     this.height,
-    this.borderRadius = const BorderRadius.all(Radius.circular(20)),
+    this.borderRadius =
+        const BorderRadius.all(Radius.circular(AppSpacing.radiusLg)),
   });
 
   final List<MapPin> pins;
@@ -106,7 +109,7 @@ class _Pin extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
                 color: AppColors.ink,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
               ),
               child: Text(label!,
                   maxLines: 1,

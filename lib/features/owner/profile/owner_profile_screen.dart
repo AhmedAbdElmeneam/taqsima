@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../core/theme/app_spacing.dart';
 import '../../../core/theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -49,7 +51,9 @@ class _MyPitches extends ConsumerWidget {
                       Row(
                         children: [
                           PitchThumb(
-                              photoKey: p.coverPhoto, size: 54, radius: 12),
+                              photoKey: p.coverPhoto,
+                              size: 54,
+                              radius: AppSpacing.radiusSm),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
@@ -124,5 +128,6 @@ ButtonStyle _smallButton(BuildContext context) => OutlinedButton.styleFrom(
           .textTheme
           .bodySmall
           ?.copyWith(fontWeight: FontWeight.w700),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppSpacing.radiusSm)),
     );

@@ -187,7 +187,8 @@ abstract final class AppTheme {
         backgroundColor: AppColors.surface,
         showDragHandle: true,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius:
+              BorderRadius.vertical(top: Radius.circular(AppSpacing.radiusXl)),
         ),
       ),
     );

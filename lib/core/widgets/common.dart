@@ -1,6 +1,8 @@
 import 'dart:ui' show ImageFilter;
 
 import 'package:flutter/material.dart';
+
+import '../theme/app_spacing.dart';
 import '../theme/app_icons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -119,7 +121,7 @@ class AppPanel extends StatelessWidget {
         padding: padding ?? const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: color ?? AppColors.card,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
           border: Border.all(color: AppColors.borderSoft),
           boxShadow: color == null ? softShadow : null,
         ),
@@ -127,10 +129,13 @@ class AppPanel extends StatelessWidget {
       );
 }
 
-/// The one shadow used for floating surfaces.
+/// The one card shadow: barely there, just enough to lift cards off the
+/// pitch background (kept subtle on purpose — no heavy glow).
 List<BoxShadow> get softShadow => [
       BoxShadow(
-          color: AppColors.shadow, blurRadius: 18, offset: const Offset(0, 6)),
+          color: AppColors.shadow.withOpacity(AppColors.isDark ? .3 : .5),
+          blurRadius: 6,
+          offset: const Offset(0, 2)),
     ];
 
 /// Floating bottom action area (e.g. "احجز"), same style as the nav bar.
@@ -157,7 +162,7 @@ class GlassContainer extends StatelessWidget {
     required this.child,
     this.margin,
     this.padding,
-    this.radius = 24,
+    this.radius = AppSpacing.radiusXl,
     this.strongBorder = false,
   });
 
@@ -180,8 +185,8 @@ class GlassContainer extends StatelessWidget {
               color: AppColors.isDark
                   ? Colors.black.withOpacity(.45)
                   : const Color(0x260F2A1C),
-              blurRadius: 30,
-              offset: const Offset(0, 10)),
+              blurRadius: 14,
+              offset: const Offset(0, 4)),
         ],
       ),
       child: ClipRRect(

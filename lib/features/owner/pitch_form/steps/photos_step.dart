@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_spacing.dart';
 import '../../../../core/l10n/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/theme/app_icons.dart';
@@ -55,7 +56,8 @@ class _PhotoTile extends StatelessWidget {
         children: [
           Positioned.fill(
             child: PitchImage(
-                photoKey: photo, borderRadius: BorderRadius.circular(16)),
+                photoKey: photo,
+                borderRadius: BorderRadius.circular(AppSpacing.radiusLg)),
           ),
           PositionedDirectional(
             top: 6,
@@ -78,11 +80,11 @@ class _AddPhotoTile extends StatelessWidget {
   Widget build(BuildContext context) => Material(
         color: AppColors.primaryLight,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
           side: BorderSide(color: AppColors.primary, width: 1.5),
         ),
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
           onTap: onTap,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -233,7 +233,8 @@ class _WeekGrid extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(vertical: 6),
                       decoration: BoxDecoration(
                         color: isToday ? AppColors.primary : AppColors.card,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius:
+                            BorderRadius.circular(AppSpacing.radiusSm),
                         border: Border.all(color: AppColors.border),
                       ),
                       child: Column(
@@ -276,7 +277,8 @@ class _WeekGrid extends ConsumerWidget {
                         child: maps[i][offset] == null
                             ? DecoratedBox(
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(
+                                      AppSpacing.radiusSm),
                                   color: AppColors.background,
                                 ),
                               )
