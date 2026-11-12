@@ -88,8 +88,26 @@ abstract interface class BookingRepository {
     String? customerName,
   });
 
+  /// For one week of a fixed booking, cancelling skips that week only.
   Future<Booking> updateStatus(String bookingId, BookingStatus status);
+
+  /// For one week of a fixed booking, skips that week only.
   Future<void> deleteBooking(String bookingId);
+
+  /// Fixed weekly booking starting at [startAt] and repeating every week on
+  /// the same weekday and time. Weeks already taken (booked / blocked) are
+  /// skipped. Throws [SlotUnavailableException] if [startAt] itself is taken.
+  Future<RecurringBooking> createRecurringBooking({
+    required String pitchId,
+    required DateTime startAt,
+    required DateTime endAt,
+    String? customerName,
+  });
+
+  Future<RecurringBooking?> getRecurringBooking(String id);
+
+  /// Stops the fixed booking for every coming week.
+  Future<void> deleteRecurringBooking(String id);
 
   Future<List<BlockedSlot>> blockedSlots(String pitchId,
       {required DateTime from, required DateTime to});

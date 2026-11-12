@@ -66,34 +66,53 @@ class SlotActionsController {
   Future<void> removeManual(BuildContext context) => _run(context,
       (r) => r.deleteBooking(slot.booking!.id), S.manualBookingRemoved);
 
+  /// Fixed weekly booking: cancels only the tapped week.
+  Future<void> skipWeek(BuildContext context) => _run(
+      context, (r) => r.deleteBooking(slot.booking!.id), S.weekSkipped);
+
+  /// Fixed weekly booking: stops it for every coming week.
+  Future<void> stopFixed(BuildContext context) => _run(
+      context,
+      (r) => r.deleteRecurringBooking(slot.booking!.recurringId!),
+      S.fixedBookingStopped);
+
   void viewDetails(BuildContext context) {
     Navigator.pop(context);
     context.push(Routes.ownerBooking(slot.booking!.id));
   }
 
-  /// Saves the manual booking or the block, depending on [mode].
-  Future<void> submit(BuildContext context) => mode.value ==
-          SlotActionMode.manual
-      ? _run(
-          context,
-          (r) => r.createBooking(
-                pitchId: slot.pitchId,
-                userId: null,
-                startAt: slot.startAt,
-                endAt: slot.endAt,
-                source: BookingSource.manual,
-                customerName: _value,
-              ),
-          S.manualBookingAdded)
-      : _run(
-          context,
-          (r) => r.blockSlot(
-                pitchId: slot.pitchId,
-                startAt: slot.startAt,
-                endAt: slot.endAt,
-                reason: _value,
-              ),
-          S.slotBlocked);
+  /// Saves the manual booking, the fixed booking or the block, per [mode].
+  Future<void> submit(BuildContext context) => switch (mode.value) {
+        SlotActionMode.manual => _run(
+            context,
+            (r) => r.createBooking(
+                  pitchId: slot.pitchId,
+                  userId: null,
+                  startAt: slot.startAt,
+                  endAt: slot.endAt,
+                  source: BookingSource.manual,
+                  customerName: _value,
+                ),
+            S.manualBookingAdded),
+        SlotActionMode.fixed => _run(
+            context,
+            (r) => r.createRecurringBooking(
+                  pitchId: slot.pitchId,
+                  startAt: slot.startAt,
+                  endAt: slot.endAt,
+                  customerName: _value,
+                ),
+            S.fixedBookingAdded),
+        _ => _run(
+            context,
+            (r) => r.blockSlot(
+                  pitchId: slot.pitchId,
+                  startAt: slot.startAt,
+                  endAt: slot.endAt,
+                  reason: _value,
+                ),
+            S.slotBlocked),
+      };
 
   void dispose() {
     _disposed = true;

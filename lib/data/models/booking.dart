@@ -13,6 +13,7 @@ class Booking {
     required this.status,
     required this.price,
     this.customerName,
+    this.recurringId,
   });
 
   final String id;
@@ -30,6 +31,11 @@ class Booking {
 
   /// Optional name the owner typed for a manual booking.
   final String? customerName;
+
+  /// Set when this is one week of a fixed weekly booking.
+  final String? recurringId;
+
+  bool get isRecurring => recurringId != null;
 
   /// Whether this booking occupies its time slot.
   bool get occupiesSlot => status != BookingStatus.cancelled;
@@ -49,5 +55,6 @@ class Booking {
         status: status ?? this.status,
         price: price,
         customerName: customerName,
+        recurringId: recurringId,
       );
 }

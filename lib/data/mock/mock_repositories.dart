@@ -163,13 +163,39 @@ class MockBookingRepository implements BookingRepository {
   final MockDb _db;
   static const _slots = SlotService();
 
+  /// Stored bookings plus the fixed weekly ones generated for [from, to).
+  List<Booking> _bookingsBetween(String pitchId, DateTime from, DateTime to) => [
+        ..._db.bookings
+            .where((b) => b.pitchId == pitchId && b.overlaps(from, to)),
+        for (final r in _db.recurring.where((r) => r.pitchId == pitchId))
+          ...r.occurrencesBetween(from, to),
+      ];
+
+  bool _isFree(String pitchId, DateTime start, DateTime end) => _slots.isFree(
+      pitchId: pitchId,
+      start: start,
+      end: end,
+      bookings: _bookingsBetween(pitchId, start, end),
+      blocked: _db.blocked);
+
+  /// Index of the fixed booking + the date, when [bookingId] is one week of it.
+  (int, DateTime)? _occurrence(String bookingId) {
+    final parsed = RecurringBooking.parseOccurrenceId(bookingId);
+    if (parsed == null) return null;
+    final i = _db.recurring.indexWhere((r) => r.id == parsed.$1);
+    return i < 0 ? null : (i, parsed.$2);
+  }
+
+  void _skip(int index, DateTime day) {
+    final r = _db.recurring[index];
+    _db.recurring[index] = r.copyWith(skipped: {...r.skipped, day});
+  }
+
   @override
   Future<List<Booking>> bookingsForPitch(String pitchId,
       {required DateTime from, required DateTime to}) async {
     await _latency(150);
-    return _db.bookings
-        .where((b) => b.pitchId == pitchId && b.overlaps(from, to))
-        .toList();
+    return _bookingsBetween(pitchId, from, to);
   }
 
   @override
@@ -195,6 +221,8 @@ class MockBookingRepository implements BookingRepository {
   @override
   Future<Booking?> getBooking(String id) async {
     await _latency(150);
+    final occ = _occurrence(id);
+    if (occ != null) return _db.recurring[occ.$1].occurrenceOn(occ.$2);
     return _db.bookings.where((b) => b.id == id).firstOrNull;
   }
 
@@ -208,13 +236,9 @@ class MockBookingRepository implements BookingRepository {
     String? customerName,
   }) async {
     await _latency(600);
-    final free = _slots.isFree(
-        pitchId: pitchId,
-        start: startAt,
-        end: endAt,
-        bookings: _db.bookings,
-        blocked: _db.blocked);
-    if (!free) throw const SlotUnavailableException();
+    if (!_isFree(pitchId, startAt, endAt)) {
+      throw const SlotUnavailableException();
+    }
     final pitch = _db.pitches.firstWhere((p) => p.id == pitchId);
     final booking = Booking(
       id: _db.nextId('b'),
@@ -237,6 +261,12 @@ class MockBookingRepository implements BookingRepository {
   @override
   Future<Booking> updateStatus(String bookingId, BookingStatus status) async {
     await _latency(400);
+    final occ = _occurrence(bookingId);
+    if (occ != null) {
+      final booking = _db.recurring[occ.$1].occurrenceOn(occ.$2)!;
+      if (status == BookingStatus.cancelled) _skip(occ.$1, occ.$2);
+      return booking.copyWith(status: status);
+    }
     final i = _db.bookings.indexWhere((b) => b.id == bookingId);
     _db.bookings[i] = _db.bookings[i].copyWith(status: status);
     return _db.bookings[i];
@@ -245,7 +275,74 @@ class MockBookingRepository implements BookingRepository {
   @override
   Future<void> deleteBooking(String bookingId) async {
     await _latency(300);
+    final occ = _occurrence(bookingId);
+    if (occ != null) return _skip(occ.$1, occ.$2);
     _db.bookings.removeWhere((b) => b.id == bookingId);
+  }
+
+  @override
+  Future<RecurringBooking> createRecurringBooking({
+    required String pitchId,
+    required DateTime startAt,
+    required DateTime endAt,
+    String? customerName,
+  }) async {
+    await _latency(600);
+    final day = DateTime(startAt.year, startAt.month, startAt.day);
+    // Another fixed booking at the same weekly time would clash every week,
+    // even if it is skipped this particular week.
+    final clashesWithFixed = _db.recurring.any((r) =>
+        r.pitchId == pitchId &&
+        (r.copyWith(skipped: const {}).occurrenceOn(day)?.overlaps(
+                startAt, endAt) ??
+            false));
+    if (clashesWithFixed || !_isFree(pitchId, startAt, endAt)) {
+      throw const SlotUnavailableException();
+    }
+    final pitch = _db.pitches.firstWhere((p) => p.id == pitchId);
+    final minutes = endAt.difference(startAt).inMinutes;
+    var rule = RecurringBooking(
+      id: _db.nextId('r'),
+      pitchId: pitchId,
+      dayOfWeek: startAt.weekday % 7,
+      startMinutes: startAt.hour * 60 + startAt.minute,
+      durationMinutes: minutes,
+      startDate: day,
+      price: SlotService.priceFor(pitch, minutes),
+      customerName: customerName,
+    );
+    // Weeks that are already booked or blocked keep their booking / block.
+    // Only stored bookings / blocks can clash, so scan up to the last one.
+    var last = endAt;
+    for (final end in [
+      for (final b in _db.bookings)
+        if (b.pitchId == pitchId) b.endAt,
+      for (final b in _db.blocked)
+        if (b.pitchId == pitchId) b.endAt,
+    ]) {
+      if (end.isAfter(last)) last = end;
+    }
+    final taken = <DateTime>{};
+    for (final o in rule.occurrencesBetween(startAt, last)) {
+      if (!_isFree(pitchId, o.startAt, o.endAt)) {
+        taken.add(DateTime(o.startAt.year, o.startAt.month, o.startAt.day));
+      }
+    }
+    rule = rule.copyWith(skipped: taken);
+    _db.recurring.add(rule);
+    return rule;
+  }
+
+  @override
+  Future<RecurringBooking?> getRecurringBooking(String id) async {
+    await _latency(100);
+    return _db.recurring.where((r) => r.id == id).firstOrNull;
+  }
+
+  @override
+  Future<void> deleteRecurringBooking(String id) async {
+    await _latency(300);
+    _db.recurring.removeWhere((r) => r.id == id);
   }
 
   @override
@@ -265,13 +362,9 @@ class MockBookingRepository implements BookingRepository {
     String? reason,
   }) async {
     await _latency(300);
-    final free = _slots.isFree(
-        pitchId: pitchId,
-        start: startAt,
-        end: endAt,
-        bookings: _db.bookings,
-        blocked: _db.blocked);
-    if (!free) throw const SlotUnavailableException();
+    if (!_isFree(pitchId, startAt, endAt)) {
+      throw const SlotUnavailableException();
+    }
     final slot = BlockedSlot(
         id: _db.nextId('x'),
         pitchId: pitchId,

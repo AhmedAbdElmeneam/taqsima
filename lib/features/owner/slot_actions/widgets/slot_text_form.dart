@@ -1,17 +1,18 @@
 part of 'slot_actions_widgets_imports.dart';
 
-/// Customer name (manual booking) or block reason, then save / back.
+/// Customer name (manual / fixed booking) or block reason, then save / back.
 class SlotTextForm extends StatelessWidget {
   const SlotTextForm({
     super.key,
-    required this.manual,
+    required this.mode,
     required this.text,
     required this.loading,
     required this.onSubmit,
     required this.onBack,
   });
 
-  final bool manual;
+  /// [SlotActionMode.manual], [SlotActionMode.fixed] or [SlotActionMode.block].
+  final SlotActionMode mode;
   final TextEditingController text;
   final bool loading;
   final VoidCallback onSubmit;
@@ -19,21 +20,30 @@ class SlotTextForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final block = mode == SlotActionMode.block;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         AppTextField(
-          label: manual ? S.customerName : S.blockReason,
-          hint: manual ? S.customerNameHint : S.blockReasonHint,
+          label: block ? S.blockReason : S.customerName,
+          hint: block ? S.blockReasonHint : S.customerNameHint,
           controller: text,
           autofocus: true,
-          prefixIcon: manual ? AppIcons.profile : AppIcons.note,
+          prefixIcon: block ? AppIcons.note : AppIcons.profile,
         ),
         const SizedBox(height: 20),
         PrimaryButton(
-          label: manual ? S.addManualBooking : S.blockSlot,
-          icon: manual ? AppIcons.check : AppIcons.lock,
-          color: manual ? null : AppColors.ink,
+          label: switch (mode) {
+            SlotActionMode.fixed => S.addFixedBooking,
+            SlotActionMode.block => S.blockSlot,
+            _ => S.addManualBooking,
+          },
+          icon: switch (mode) {
+            SlotActionMode.fixed => AppIcons.repeat,
+            SlotActionMode.block => AppIcons.lock,
+            _ => AppIcons.check,
+          },
+          color: block ? AppColors.ink : null,
           loading: loading,
           onPressed: onSubmit,
         ),

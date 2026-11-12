@@ -310,6 +310,18 @@ abstract final class S {
   static const manualBookingRemoved = 'تم حذف الحجز';
   static const viewDetails = 'عرض التفاصيل';
   static const noName = 'بدون اسم';
+  static const pickDate = 'اختر اليوم';
+  static const fixedBooking = 'حجز ثابت';
+  static const addFixedBooking = 'حجز ثابت كل أسبوع';
+  static String fixedBookingHint(int dayOfWeek) =>
+      'نفس الموعد كل ${weekdays[dayOfWeek]}، مثلًا لفريق يلعب أسبوعيًا';
+  static String fixedEvery(int dayOfWeek, String time) =>
+      'كل ${weekdays[dayOfWeek]} • $time';
+  static const fixedBookingAdded = 'تم تثبيت الموعد كل أسبوع';
+  static const skipThisWeek = 'إلغاء هذا الأسبوع فقط';
+  static const weekSkipped = 'تم إلغاء موعد هذا الأسبوع';
+  static const stopFixedBooking = 'إيقاف الحجز الثابت';
+  static const fixedBookingStopped = 'تم إيقاف الحجز الثابت';
   static const filterAll = 'الكل';
   static String filterCount(String label, int n) => '$label ($n)';
 

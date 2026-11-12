@@ -15,6 +15,7 @@ class MockDb {
   final workingHours = <WorkingHours>[];
   final bookings = <Booking>[];
   final blocked = <BlockedSlot>[];
+  final recurring = <RecurringBooking>[];
 
   int _seq = 1000;
   String nextId(String prefix) => '$prefix${_seq++}';

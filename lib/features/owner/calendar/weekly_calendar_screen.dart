@@ -54,6 +54,7 @@ class _WeeklyCalendarScreenState extends ConsumerState<WeeklyCalendarScreen> {
                         controller.canGoBack ? controller.previousWeek : null,
                     onNext:
                         controller.canGoForward ? controller.nextWeek : null,
+                    onPickDate: () => controller.pickDate(context),
                   ),
                   AsyncView(
                     value: week,

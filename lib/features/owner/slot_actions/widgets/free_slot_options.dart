@@ -1,8 +1,12 @@
 part of 'slot_actions_widgets_imports.dart';
 
-/// Free slot: choose manual booking or block.
+/// Free slot: choose manual booking, fixed weekly booking or block.
 class FreeSlotOptions extends StatelessWidget {
-  const FreeSlotOptions({super.key, required this.onChoose});
+  const FreeSlotOptions(
+      {super.key, required this.dayOfWeek, required this.onChoose});
+
+  /// Weekday of the tapped slot (0 = Sunday), for the fixed-booking hint.
+  final int dayOfWeek;
   final ValueChanged<SlotActionMode> onChoose;
 
   @override
@@ -21,6 +25,15 @@ class FreeSlotOptions extends StatelessWidget {
           title: S.addManualBooking,
           subtitle: S.addManualBookingHint,
           onTap: () => onChoose(SlotActionMode.manual),
+        ),
+        const SizedBox(height: 10),
+        SlotOptionTile(
+          icon: AppIcons.repeat,
+          color: AppColors.slotManual,
+          background: AppColors.slotManualBg,
+          title: S.addFixedBooking,
+          subtitle: S.fixedBookingHint(dayOfWeek),
+          onTap: () => onChoose(SlotActionMode.fixed),
         ),
         const SizedBox(height: 10),
         SlotOptionTile(

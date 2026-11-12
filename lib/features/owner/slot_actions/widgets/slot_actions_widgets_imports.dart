@@ -8,6 +8,7 @@ import 'package:ma3adna/core/widgets/widgets.dart';
 import 'package:ma3adna/data/models/models.dart';
 
 part 'blocked_slot_actions.dart';
+part 'fixed_slot_actions.dart';
 part 'free_slot_options.dart';
 part 'manual_slot_actions.dart';
 part 'slot_action_mode.dart';

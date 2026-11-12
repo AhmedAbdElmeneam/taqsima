@@ -25,7 +25,8 @@ class WeekGrid extends StatelessWidget {
     final b = s.booking;
     if (b != null && b.status == BookingStatus.pending) return b.status.label;
     if (s.state == SlotState.manualBooked) {
-      return b?.customerName ?? S.manualBooking;
+      return b?.customerName ??
+          (b?.isRecurring ?? false ? S.fixedBooking : S.manualBooking);
     }
     return null;
   }

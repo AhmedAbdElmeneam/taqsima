@@ -33,6 +33,15 @@ class _SlotActionSheetState extends ConsumerState<SlotActionSheet> {
               loading: loading,
               onUnblock: () => controller.unblock(context),
             );
+          case SlotState.manualBooked when s.booking!.isRecurring:
+            return FixedSlotActions(
+              customerName: s.booking!.customerName ?? S.noName,
+              schedule: S.fixedEvery(Fmt.dayOfWeek(s.startAt),
+                  Fmt.timeRange(s.startAt, s.endAt)),
+              loading: loading,
+              onSkipWeek: () => controller.skipWeek(context),
+              onStop: () => controller.stopFixed(context),
+            );
           case SlotState.manualBooked:
             return ManualSlotActions(
               customerName: s.booking!.customerName ?? S.noName,
@@ -45,10 +54,13 @@ class _SlotActionSheetState extends ConsumerState<SlotActionSheet> {
           case SlotState.available:
             final mode = controller.mode.value;
             if (mode == SlotActionMode.choose) {
-              return FreeSlotOptions(onChoose: controller.setMode);
+              return FreeSlotOptions(
+                dayOfWeek: Fmt.dayOfWeek(s.startAt),
+                onChoose: controller.setMode,
+              );
             }
             return SlotTextForm(
-              manual: mode == SlotActionMode.manual,
+              mode: mode,
               text: controller.text,
               loading: loading,
               onSubmit: () => controller.submit(context),

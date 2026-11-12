@@ -110,6 +110,8 @@ abstract final class AppIcons {
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // calendarX
   static const IconData calendarPlus = IconData(0xe714,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // calendarPlus
+  static const IconData repeat = IconData(0xe3f6,
+      fontFamily: 'PhosphorRegular', fontPackage: _pkg); // repeat
   static const IconData ticket = IconData(0xe490,
       fontFamily: 'PhosphorRegular', fontPackage: _pkg); // ticket
   static const IconData history = IconData(0xe1a0,
