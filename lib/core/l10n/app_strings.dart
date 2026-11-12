@@ -3,6 +3,9 @@
 abstract final class S {
   // App
   static const appName = 'تقسيمة';
+
+  /// App name shown by the system (launcher, recents) on non-Arabic phones.
+  static const appNameEn = 'Taqsima';
   static const appTagline = 'احجز ملعبك وجهّز التقسيمة';
   static const currency = 'ج.م';
   static String price(int amount) => '$amount ${S.currency}';

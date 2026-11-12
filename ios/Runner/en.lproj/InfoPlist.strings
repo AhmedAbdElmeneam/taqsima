@@ -1,0 +1,3 @@
+/* App name under the icon when the iPhone is in English. */
+"CFBundleDisplayName" = "Taqsima";
+"CFBundleName" = "Taqsima";

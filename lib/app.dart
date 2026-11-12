@@ -35,6 +35,10 @@ class _TaqsimaAppState extends ConsumerState<TaqsimaApp>
   @override
   void didChangePlatformBrightness() => setState(() {});
 
+  // Keep the recent-apps name in sync if the phone language changes.
+  @override
+  void didChangeLocales(List<Locale>? locales) => setState(() {});
+
   @override
   Widget build(BuildContext context) {
     final mode = ref.watch(themeModeProvider);
@@ -50,7 +54,13 @@ class _TaqsimaAppState extends ConsumerState<TaqsimaApp>
     AppColors.isDark = isDark;
 
     return MaterialApp.router(
-      title: S.appName,
+      // System name (recent-apps screen) follows the phone language, like the
+      // launcher label; the app UI itself stays Arabic.
+      title:
+          WidgetsBinding.instance.platformDispatcher.locale.languageCode == 'ar'
+              ? S.appName
+              : S.appNameEn,
+      color: const Color(0xFF1B8A3A),
       debugShowCheckedModeBanner: false,
       scrollBehavior: const AppScrollBehavior(),
       theme: AppTheme.build(),
