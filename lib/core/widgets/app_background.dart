@@ -17,7 +17,10 @@ class AppBackground extends StatelessWidget {
       children: [
         Positioned.fill(
           child: CustomPaint(
-              painter: _PitchBackgroundPainter(dark: AppColors.isDark)),
+              painter: _PitchBackgroundPainter(
+              dark: AppColors.isDark,
+              accent: AppColors.primary,
+              wash: AppColors.backgroundWash)),
         ),
         Positioned.fill(child: child),
       ],
@@ -26,15 +29,22 @@ class AppBackground extends StatelessWidget {
 }
 
 class _PitchBackgroundPainter extends CustomPainter {
-  const _PitchBackgroundPainter({required this.dark});
+  const _PitchBackgroundPainter(
+      {required this.dark, required this.accent, required this.wash});
   final bool dark;
+
+  /// Line and stripe color (the pitch theme).
+  final Color accent;
+
+  /// Top / middle / bottom background tint.
+  final List<Color> wash;
 
   @override
   void paint(Canvas canvas, Size size) {
     final rect = Offset.zero & size;
     final w = size.width;
     final h = size.height;
-    final green = dark ? const Color(0xFF2E7D4F) : const Color(0xFF1B8A3A);
+    final green = accent;
 
     // 1. Base: grass-tinted wash over the whole screen.
     canvas.drawRect(
@@ -43,9 +53,7 @@ class _PitchBackgroundPainter extends CustomPainter {
         ..shader = LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: dark
-              ? const [Color(0xFF10251A), Color(0xFF0D1913), Color(0xFF0F2117)]
-              : const [Color(0xFFDDF0E2), Color(0xFFEDF5EF), Color(0xFFE2F1E6)],
+          colors: wash,
           stops: const [0, .5, 1],
         ).createShader(rect),
     );
@@ -67,11 +75,11 @@ class _PitchBackgroundPainter extends CustomPainter {
         );
     if (dark) {
       glow(Offset(-w * .05, -h * .02), w * .9,
-          const Color(0xFFBFF5D2).withOpacity(.10));
+          Color.lerp(Colors.white, accent, .35)!.withOpacity(.10));
       glow(Offset(w * 1.05, -h * .02), w * .9,
-          const Color(0xFFBFF5D2).withOpacity(.10));
+          Color.lerp(Colors.white, accent, .35)!.withOpacity(.10));
       glow(Offset(w * .5, h * 1.05), w * .8,
-          const Color(0xFFBFF5D2).withOpacity(.05));
+          Color.lerp(Colors.white, accent, .35)!.withOpacity(.05));
     } else {
       glow(Offset(w * .85, h * .05), w * .8, Colors.white.withOpacity(.55));
       glow(Offset(w * .1, h * .7), w * .7, Colors.white.withOpacity(.35));
@@ -128,7 +136,8 @@ class _PitchBackgroundPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_PitchBackgroundPainter old) => old.dark != dark;
+  bool shouldRepaint(_PitchBackgroundPainter old) =>
+      old.dark != dark || old.accent != accent;
 }
 
 /// Platform page transition with the app background painted under each page.

@@ -14,3 +14,5 @@ export 'pitch_card.dart';
 export 'pitch_image.dart';
 export 'slot_chip.dart';
 export 'status_badge.dart';
+export 'photo_gallery.dart';
+export 'pitch_theme_grid.dart';

@@ -15,3 +15,4 @@ part 'pitch_form_bottom_bar.dart';
 part 'price_step.dart';
 part 'step_error_text.dart';
 part 'step_indicator.dart';
+part 'theme_step.dart';

@@ -8,13 +8,17 @@ class OwnerShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = OwnerShellController(shell);
     final pending = ref.watch(ownerRequestsProvider).valueOrNull?.length ?? 0;
-    return Scaffold(
-      extendBody: true,
-      body: shell,
-      bottomNavigationBar: OwnerNavBar(
-        currentIndex: shell.currentIndex,
-        pendingRequests: pending,
-        onTap: controller.selectTab,
+    // The owner side always wears the managed pitch's theme.
+    return PitchThemeScope(
+      theme: ref.watch(currentOwnerPitchProvider).valueOrNull?.theme,
+      child: Scaffold(
+        extendBody: true,
+        body: shell,
+        bottomNavigationBar: OwnerNavBar(
+          currentIndex: shell.currentIndex,
+          pendingRequests: pending,
+          onTap: controller.selectTab,
+        ),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'core/l10n/app_strings.dart';
 import 'core/router/app_router.dart';
+import 'core/theme/active_theme.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/theme_mode.dart';
@@ -23,12 +24,32 @@ class _TaqsimaAppState extends ConsumerState<TaqsimaApp>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    ActiveTheme.changes.addListener(_onPitchTheme);
   }
 
   @override
   void dispose() {
+    ActiveTheme.changes.removeListener(_onPitchTheme);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  /// A pitch theme was opened / closed: rebuild every widget so they re-read
+  /// [AppColors]. Unlike a dark-mode switch, no state is reset (open screens,
+  /// scroll positions, typed text all stay). Deferred to after the current
+  /// frame because scopes change the theme while the tree is building.
+  void _onPitchTheme() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      void rebuild(Element e) {
+        e.markNeedsBuild();
+        e.visitChildren(rebuild);
+      }
+
+      setState(() {});
+      (context as Element).visitChildren(rebuild);
+    });
+    WidgetsBinding.instance.ensureVisualUpdate();
   }
 
   // Follow the phone's light/dark setting while in "auto" mode.

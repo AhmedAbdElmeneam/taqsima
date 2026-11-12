@@ -6,7 +6,7 @@ class OwnerProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final controller = OwnerProfileController();
+    final controller = OwnerProfileController(ref);
     final pitches = ref.watch(ownerPitchesProvider);
 
     return ProfileScreen(extra: [
@@ -22,6 +22,7 @@ class OwnerProfileScreen extends ConsumerWidget {
                   pitch: p,
                   onEdit: () => controller.editPitch(context, p),
                   onHours: () => controller.editHours(context, p),
+                  onTheme: () => controller.changeTheme(context, p),
                 ),
                 const SizedBox(height: 10),
               ],

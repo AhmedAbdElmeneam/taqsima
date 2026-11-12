@@ -112,7 +112,8 @@ class MockDb {
           pricePerHour: 600,
           photos: ['p2a', 'p2b'],
           amenities: all,
-          status: PitchStatus.active),
+          status: PitchStatus.active,
+          theme: PitchTheme.navy),
       Pitch(
           id: 'p3',
           ownerId: 'o3',
@@ -130,7 +131,8 @@ class MockDb {
             Amenity.lighting,
             Amenity.parking
           ],
-          status: PitchStatus.active),
+          status: PitchStatus.active,
+          theme: PitchTheme.maroon),
       Pitch(
           id: 'p4',
           ownerId: 'o4',
@@ -144,7 +146,8 @@ class MockDb {
           pricePerHour: 700,
           photos: ['p4a', 'p4b', 'p4c'],
           amenities: all,
-          status: PitchStatus.active),
+          status: PitchStatus.active,
+          theme: PitchTheme.teal),
       Pitch(
           id: 'p5',
           ownerId: 'o2',
@@ -161,7 +164,8 @@ class MockDb {
             Amenity.lighting,
             Amenity.toilets
           ],
-          status: PitchStatus.active),
+          status: PitchStatus.active,
+          theme: PitchTheme.orange),
       Pitch(
           id: 'p6',
           ownerId: 'o3',
@@ -174,7 +178,8 @@ class MockDb {
           pricePerHour: 300,
           photos: ['p6a', 'p6b'],
           amenities: [Amenity.artificialGrass, Amenity.lighting],
-          status: PitchStatus.active),
+          status: PitchStatus.active,
+          theme: PitchTheme.gold),
       Pitch(
           id: 'p7',
           ownerId: 'o4',

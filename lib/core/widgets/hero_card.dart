@@ -108,7 +108,7 @@ class CountdownChip extends StatelessWidget {
         ),
         child: Text(text,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: const Color(0xFF0F5C26), fontWeight: FontWeight.w800)),
+                color: AppColors.primaryDark, fontWeight: FontWeight.w800)),
       );
 }
 
@@ -209,7 +209,7 @@ class HeroStripBooking extends StatelessWidget {
     return Row(
       children: [
         PulseDot(
-            color: live ? const Color(0xFFFF5A5A) : const Color(0xFFB9F6CA)),
+            color: live ? const Color(0xFFFF5A5A) : Color.lerp(Colors.white, AppColors.primary, .25)!),
         const SizedBox(width: 6),
         Expanded(
           child: Column(

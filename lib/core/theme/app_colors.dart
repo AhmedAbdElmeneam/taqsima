@@ -1,22 +1,38 @@
 import 'package:flutter/material.dart';
 
+import '../../data/models/models.dart';
+import 'pitch_palettes.dart';
+
 /// Taqsima color palette with a light and a dark variant.
 ///
 /// Every color is a getter that reads [isDark], which the app root sets
-/// before building (see `app.dart`). The whole app is rebuilt when the mode
-/// changes, so widgets can keep using `AppColors.x` directly.
+/// before building (see `app.dart`), and [theme] — the pitch look currently
+/// shown (see `ActiveTheme`). The whole app is rebuilt when either changes,
+/// so widgets can keep using `AppColors.x` directly.
 abstract final class AppColors {
   static bool isDark = false;
+
+  /// Brand colors in use. Changed only through `ActiveTheme`.
+  static PitchTheme theme = PitchTheme.green;
 
   /// Fixed dark text for chips drawn over pitch photos (same in both modes).
   static const onPhotoInk = Color(0xFF1A2332);
 
   static Color _c(int light, int dark) => Color(isDark ? dark : light);
 
-  // Brand — football pitch green (brighter in dark mode for contrast).
-  static Color get primary => _c(0xFF1B8A3A, 0xFF22A04E);
-  static Color get primaryDark => _c(0xFF0F5C26, 0xFF167A3A);
-  static Color get primaryLight => _c(0xFFE6F4EA, 0xFF173525);
+  static PitchPalette get palette => theme.palette;
+
+  // Brand — the pitch theme (brighter in dark mode for contrast).
+  static Color get primary =>
+      isDark ? palette.primaryNight : palette.primary;
+  static Color get primaryDark =>
+      isDark ? palette.primaryDarkNight : palette.primaryDark;
+  static Color get primaryLight =>
+      isDark ? palette.primaryLightNight : palette.primaryLight;
+
+  /// Top / middle / bottom tint of the app background.
+  static List<Color> get backgroundWash =>
+      isDark ? palette.washNight : palette.washLight;
 
   /// Text/icons drawn on top of [primary].
   static Color get onPrimary => const Color(0xFFFFFFFF);
@@ -51,7 +67,7 @@ abstract final class AppColors {
   /// Stronger outline for the floating nav bar.
   static Color get glassBorderStrong => isDark
       ? Colors.white.withOpacity(.16)
-      : const Color(0xFF1B8A3A).withOpacity(.22);
+      : primary.withOpacity(.22);
 
   /// Top-to-bottom sheen for glass surfaces.
   static List<Color> get glassSheen => isDark

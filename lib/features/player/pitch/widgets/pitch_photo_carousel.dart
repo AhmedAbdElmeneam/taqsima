@@ -1,6 +1,6 @@
 part of 'pitch_details_widgets_imports.dart';
 
-/// Swipeable photos with page dots.
+/// Swipeable photos with page dots; tap to open them full screen.
 class PitchPhotoCarousel extends StatefulWidget {
   const PitchPhotoCarousel({super.key, required this.photos});
   final List<String> photos;
@@ -26,7 +26,11 @@ class _PitchPhotoCarouselState extends State<PitchPhotoCarousel> {
         PageView.builder(
           itemCount: photos.length,
           onPageChanged: (i) => _index.value = i,
-          itemBuilder: (_, i) => PitchImage(photoKey: photos[i]),
+          itemBuilder: (context, i) => GestureDetector(
+            onTap: () => showPhotoGallery(context, widget.photos,
+                initialIndex: i),
+            child: PitchImage(photoKey: photos[i]),
+          ),
         ),
         Positioned(
           bottom: 14,

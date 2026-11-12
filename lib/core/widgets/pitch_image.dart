@@ -1,22 +1,44 @@
+import 'dart:io';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
 import '../theme/app_spacing.dart';
 
-/// Placeholder pitch photo drawn in code (no network or assets needed).
-/// [photoKey] picks a stable variation; swap for Image.network with a backend.
+/// Pitch photo. [photoKey] is either a real photo (a file picked from the
+/// phone, or an http(s) URL from a backend) or, for the demo data, a key that
+/// picks a stable placeholder drawn in code.
 class PitchImage extends StatelessWidget {
   const PitchImage({
     super.key,
     required this.photoKey,
     this.height,
     this.borderRadius = BorderRadius.zero,
+    this.fit = BoxFit.cover,
+    this.cacheWidth,
   });
 
   final String photoKey;
   final double? height;
   final BorderRadius borderRadius;
+
+  /// How a real photo fills the box ([BoxFit.contain] in the full-screen
+  /// viewer). Placeholders always fill it.
+  final BoxFit fit;
+
+  /// Decode real photos at this pixel width (saves memory for thumbnails).
+  final int? cacheWidth;
+
+  static bool isNetwork(String key) =>
+      key.startsWith('http://') || key.startsWith('https://');
+
+  static bool isFile(String key) =>
+      key.startsWith('/') ||
+      key.startsWith('file://') ||
+      RegExp(r'^[A-Za-z]:[\\/]').hasMatch(key);
+
+  Widget get _placeholder =>
+      CustomPaint(painter: _PitchPainter(photoKey.hashCode));
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +47,17 @@ class PitchImage extends StatelessWidget {
       child: SizedBox(
         height: height,
         width: double.infinity,
-        child: CustomPaint(painter: _PitchPainter(photoKey.hashCode)),
+        child: isNetwork(photoKey)
+            ? Image.network(photoKey,
+                fit: fit,
+                cacheWidth: cacheWidth,
+                errorBuilder: (_, __, ___) => _placeholder)
+            : isFile(photoKey)
+                ? Image.file(File(photoKey.replaceFirst('file://', '')),
+                    fit: fit,
+                    cacheWidth: cacheWidth,
+                    errorBuilder: (_, __, ___) => _placeholder)
+                : _placeholder,
       ),
     );
   }
@@ -136,6 +168,7 @@ class PitchThumb extends StatelessWidget {
         child: PitchImage(
           photoKey: photoKey,
           borderRadius: BorderRadius.circular(radius),
+          cacheWidth: (size * 3).round(),
         ),
       );
 }

@@ -37,6 +37,12 @@ class PitchDetailsBody extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
+              if (pitch.photos.isNotEmpty) ...[
+                Text(S.pitchPhotos, style: t.titleLarge),
+                const SizedBox(height: 10),
+                PhotoStrip(photos: pitch.photos),
+                const SizedBox(height: 20),
+              ],
               Text(S.about, style: t.titleLarge),
               const SizedBox(height: 6),
               Text(pitch.description,

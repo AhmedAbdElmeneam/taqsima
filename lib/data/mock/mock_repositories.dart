@@ -122,6 +122,7 @@ class MockPitchRepository implements PitchRepository {
         type: pitch.type,
         pricePerHour: pitch.pricePerHour,
         photos: pitch.photos,
+        theme: pitch.theme,
         amenities: pitch.amenities,
         status: PitchStatus.pending,
       );

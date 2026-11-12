@@ -4,6 +4,11 @@ enum Amenity { artificialGrass, lighting, toilets, parking }
 
 enum PitchStatus { pending, active }
 
+/// Fixed set of looks an owner can pick for their pitch. The app (owner
+/// side, and the player while on that pitch's screens) uses its colors.
+/// Colors live in `core/theme/pitch_palettes.dart`.
+enum PitchTheme { green, teal, navy, maroon, orange, gold }
+
 class Pitch {
   const Pitch({
     required this.id,
@@ -18,6 +23,7 @@ class Pitch {
     required this.photos,
     required this.amenities,
     required this.status,
+    this.theme = PitchTheme.green,
   });
 
   final String id;
@@ -36,6 +42,7 @@ class Pitch {
   final List<String> photos;
   final List<Amenity> amenities;
   final PitchStatus status;
+  final PitchTheme theme;
 
   /// Photo shown on cards and thumbnails. Falls back to the pitch id so the
   /// placeholder image stays stable when there are no photos yet.
@@ -52,6 +59,7 @@ class Pitch {
     List<String>? photos,
     List<Amenity>? amenities,
     PitchStatus? status,
+    PitchTheme? theme,
   }) =>
       Pitch(
         id: id,
@@ -66,5 +74,6 @@ class Pitch {
         photos: photos ?? this.photos,
         amenities: amenities ?? this.amenities,
         status: status ?? this.status,
+        theme: theme ?? this.theme,
       );
 }

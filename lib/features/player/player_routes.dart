@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/router/routes.dart';
 import '../../data/models/models.dart';
+import '../pitch_themed.dart';
 import '../profile/profile_imports.dart';
 import 'booking/booking_confirm/booking_confirm_imports.dart';
 import 'booking/booking_success/booking_success_imports.dart';
@@ -39,8 +40,11 @@ List<RouteBase> playerRoutes(GlobalKey<NavigatorState> rootKey) => [
                 GoRoute(
                   path: ':id',
                   parentNavigatorKey: rootKey,
-                  builder: (_, s) => PlayerBookingDetailsScreen(
-                      bookingId: s.pathParameters['id']!),
+                  builder: (_, s) => BookingPitchThemed(
+                    bookingId: s.pathParameters['id']!,
+                    child: PlayerBookingDetailsScreen(
+                        bookingId: s.pathParameters['id']!),
+                  ),
                 ),
               ],
             ),
@@ -56,25 +60,36 @@ List<RouteBase> playerRoutes(GlobalKey<NavigatorState> rootKey) => [
       GoRoute(
         path: '/player/pitch/:id',
         parentNavigatorKey: rootKey,
-        builder: (_, s) => PitchDetailsScreen(pitchId: s.pathParameters['id']!),
+        builder: (_, s) => PitchThemed(
+          pitchId: s.pathParameters['id']!,
+          child: PitchDetailsScreen(pitchId: s.pathParameters['id']!),
+        ),
         routes: [
           GoRoute(
             path: 'slots',
             parentNavigatorKey: rootKey,
-            builder: (_, s) =>
-                SlotPickerScreen(pitchId: s.pathParameters['id']!),
+            builder: (_, s) => PitchThemed(
+              pitchId: s.pathParameters['id']!,
+              child: SlotPickerScreen(pitchId: s.pathParameters['id']!),
+            ),
           ),
         ],
       ),
       GoRoute(
         path: Routes.confirmBooking,
         parentNavigatorKey: rootKey,
-        builder: (_, s) => BookingConfirmScreen(slot: s.extra! as TimeSlot),
+        builder: (_, s) {
+          final slot = s.extra! as TimeSlot;
+          return PitchThemed(
+              pitchId: slot.pitchId, child: BookingConfirmScreen(slot: slot));
+        },
       ),
       GoRoute(
         path: '/player/success/:id',
         parentNavigatorKey: rootKey,
-        builder: (_, s) =>
-            BookingSuccessScreen(bookingId: s.pathParameters['id']!),
+        builder: (_, s) => BookingPitchThemed(
+          bookingId: s.pathParameters['id']!,
+          child: BookingSuccessScreen(bookingId: s.pathParameters['id']!),
+        ),
       ),
     ];

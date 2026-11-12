@@ -5,8 +5,8 @@ class PitchFormController {
   PitchFormController(this.ref, this.initial)
       : name = TextEditingController(text: initial?.name),
         description = TextEditingController(text: initial?.description),
-        price = TextEditingController(
-            text: initial?.pricePerHour.toString() ?? ''),
+        price =
+            TextEditingController(text: initial?.pricePerHour.toString() ?? ''),
         area = ValueNotifier(initial?.area),
         type = ValueNotifier(initial?.type ?? PitchType.fiveASide),
         amenities = ValueNotifier({
@@ -14,6 +14,7 @@ class PitchFormController {
           if (initial == null) Amenity.artificialGrass,
         }),
         photos = ValueNotifier([...?initial?.photos]),
+        theme = ValueNotifier(initial?.theme ?? PitchTheme.green),
         location = ValueNotifier(
             initial == null ? null : (lat: initial.lat, lng: initial.lng));
 
@@ -22,7 +23,13 @@ class PitchFormController {
   /// The pitch being edited, or null when adding a new one.
   final Pitch? initial;
 
-  static const steps = [S.stepInfo, S.stepPhotos, S.stepLocation, S.stepPrice];
+  static const steps = [
+    S.stepInfo,
+    S.stepPhotos,
+    S.stepLocation,
+    S.stepPrice,
+    S.stepTheme,
+  ];
 
   final infoKey = GlobalKey<FormState>();
   final priceKey = GlobalKey<FormState>();
@@ -34,6 +41,9 @@ class PitchFormController {
   final ValueNotifier<PitchType> type;
   final ValueNotifier<Set<Amenity>> amenities;
   final ValueNotifier<List<String>> photos;
+
+  /// Look of the pitch; previewed live while the form is open.
+  final ValueNotifier<PitchTheme> theme;
   final ValueNotifier<({double lat, double lng})?> location;
 
   final step = ValueNotifier(0);
@@ -47,11 +57,21 @@ class PitchFormController {
 
   /// Everything the screen rebuilds on.
   late final Listenable changes = Listenable.merge([
-    price, area, type, amenities, photos, location, step, saving, stepError,
+    price,
+    area,
+    type,
+    amenities,
+    photos,
+    theme,
+    location,
+    step,
+    saving,
+    stepError,
   ]);
 
   void setArea(String a) => area.value = a;
   void setType(PitchType t) => type.value = t;
+  void setTheme(PitchTheme t) => theme.value = t;
 
   void toggleAmenity(Amenity a, bool on) {
     final next = {...amenities.value};
@@ -59,14 +79,28 @@ class PitchFormController {
     amenities.value = next;
   }
 
-  /// Mock: adds a placeholder image.
-  void addPhoto() => photos.value = [
-        ...photos.value,
-        'new_${DateTime.now().microsecondsSinceEpoch}',
-      ];
+  /// Picks photos from the phone's gallery. With a backend, upload each file
+  /// here and keep the returned URLs instead of the local paths.
+  Future<void> addPhotos(BuildContext context) async {
+    try {
+      final picked = await ImagePicker()
+          .pickMultiImage(imageQuality: 85, maxWidth: 1600);
+      if (_disposed || picked.isEmpty) return;
+      photos.value = [...photos.value, ...picked.map((f) => f.path)];
+    } catch (_) {
+      if (context.mounted) showSnack(context, S.photosPickFailed);
+    }
+  }
 
-  void removePhoto(String p) =>
-      photos.value = [...photos.value]..remove(p);
+  void removePhoto(String p) => photos.value = [...photos.value]..remove(p);
+
+  /// The first photo is the cover shown on cards and at the top of details.
+  void makeCover(String p) =>
+      photos.value = [p, ...photos.value.where((x) => x != p)];
+
+  void viewPhoto(BuildContext context, String p) => showPhotoGallery(
+      context, photos.value,
+      initialIndex: photos.value.indexOf(p));
 
   void pickLocation(double lat, double lng) {
     location.value = (lat: lat, lng: lng);
@@ -126,6 +160,7 @@ class PitchFormController {
         photos: photos.value,
         amenities: Amenity.values.where(amenities.value.contains).toList(),
         status: base?.status ?? PitchStatus.pending,
+        theme: theme.value,
       );
       final saved = await ref.read(pitchRepositoryProvider).savePitch(pitch);
       ref.read(selectedPitchIdProvider.notifier).state = saved.id;
@@ -144,7 +179,15 @@ class PitchFormController {
       c.dispose();
     }
     for (final n in <ChangeNotifier>[
-      area, type, amenities, photos, location, step, saving, stepError,
+      area,
+      type,
+      amenities,
+      photos,
+      theme,
+      location,
+      step,
+      saving,
+      stepError,
     ]) {
       n.dispose();
     }

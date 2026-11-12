@@ -1,17 +1,19 @@
 part of 'owner_profile_widgets_imports.dart';
 
-/// Pitch thumb, name, area, status and edit / hours buttons.
+/// Pitch thumb, name, area, status, photos and edit / hours / theme buttons.
 class OwnerPitchCard extends StatelessWidget {
   const OwnerPitchCard({
     super.key,
     required this.pitch,
     required this.onEdit,
     required this.onHours,
+    required this.onTheme,
   });
 
   final Pitch pitch;
   final VoidCallback onEdit;
   final VoidCallback onHours;
+  final VoidCallback onTheme;
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +51,10 @@ class OwnerPitchCard extends StatelessWidget {
               ),
             ],
           ),
+          if (p.photos.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            PhotoStrip(photos: p.photos, size: 64),
+          ],
           if (p.status == PitchStatus.pending)
             Padding(
               padding: const EdgeInsets.only(top: 8),
@@ -65,6 +71,13 @@ class OwnerPitchCard extends StatelessWidget {
               Expanded(
                 child: SmallOutlinedButton(
                     icon: AppIcons.clock, label: S.hours, onPressed: onHours),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: SmallOutlinedButton(
+                    icon: AppIcons.palette,
+                    label: S.stepTheme,
+                    onPressed: onTheme),
               ),
             ],
           ),

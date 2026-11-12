@@ -105,6 +105,9 @@ abstract final class S {
   static const location = 'الموقع';
   static const amenities = 'المرافق';
   static const about = 'عن الملعب';
+  static const pitchPhotos = 'صور الملعب';
+  static const close = 'إغلاق';
+  static String photoCounter(int i, int n) => '$i / $n';
   static const book = 'احجز';
   static const startingFrom = 'السعر';
   static const amenityTurf = 'عشب صناعي';
@@ -262,14 +265,24 @@ abstract final class S {
   static const stepPhotos = 'الصور';
   static const stepLocation = 'الموقع';
   static const stepPrice = 'السعر';
+  static const stepTheme = 'المظهر';
+  static const pitchTheme = 'مظهر الملعب';
+  static const themeSaved = 'تم تغيير مظهر الملعب';
+  static const themeHint =
+      'اختر ألوان ملعبك. سيظهر التطبيق بها لك، وللاعبين وهم يحجزون عندك.';
+  static const themePreviewTitle = 'معاينة';
+  static const themePreviewButton = 'احجز الآن';
   static const pitchName = 'اسم الملعب';
   static const pitchNameHint = 'مثال: ملعب النصر';
   static const description = 'وصف الملعب';
   static const descriptionHint = 'اكتب ما يميّز ملعبك';
   static const chooseArea = 'اختر المنطقة';
-  static const addPhoto = 'إضافة صورة';
+  static const addPhoto = 'إضافة صور';
   static const photosHint =
-      'أضف صورًا واضحة للملعب (تجريبي — ستُضاف صورة نموذجية)';
+      'أضف صورًا واضحة للملعب من معرض الصور. أول صورة هي صورة الغلاف، واضغط على أي صورة لعرضها.';
+  static const coverPhoto = 'الغلاف';
+  static const makeCover = 'اجعلها الغلاف';
+  static const photosPickFailed = 'تعذّر فتح معرض الصور';
   static const tapMapToPin = 'اضغط على الخريطة لتحديد موقع الملعب';
   static const locationSet = 'تم تحديد الموقع';
   static const priceHint = 'السعر بالجنيه للساعة';
